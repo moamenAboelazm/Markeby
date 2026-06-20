@@ -19,6 +19,7 @@ namespace Identity.Authentication.Repositories
                     var errors = string.Join(" | ", result.Errors.Select(e => e.Description));
                     throw new Exception($"UserManager Error: {errors}");
                 }
+                user.UserName = user.FirstName;
 
                 return true;
             }

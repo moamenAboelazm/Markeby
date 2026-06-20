@@ -11,6 +11,7 @@ E:\Markeby\Back-End\DataBase\obj\Debug\net9.0\DataBase.GeneratedMSBuildEditorCon
 E:\Markeby\Back-End\DataBase\obj\Debug\net9.0\DataBase.AssemblyInfoInputs.cache
 E:\Markeby\Back-End\DataBase\obj\Debug\net9.0\DataBase.AssemblyInfo.cs
 E:\Markeby\Back-End\DataBase\obj\Debug\net9.0\DataBase.csproj.CoreCompileInputs.cache
+E:\Markeby\Back-End\DataBase\obj\Debug\net9.0\DataBase.sourcelink.json
 E:\Markeby\Back-End\DataBase\obj\Debug\net9.0\DataBase.csproj.Up2Date
 E:\Markeby\Back-End\DataBase\obj\Debug\net9.0\DataBase.dll
 E:\Markeby\Back-End\DataBase\obj\Debug\net9.0\refint\DataBase.dll

@@ -3,14 +3,55 @@
   "WorkspaceRootPath": "E:\\Markeby\\Back-End\\Markeby.API\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{C7EC4A45-99DA-4C1B-9163-D076E2856B52}|Markeby.API.csproj|e:\\markeby\\back-end\\markeby.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{C7EC4A45-99DA-4C1B-9163-D076E2856B52}|Markeby.API.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{F1CE24A9-2B82-4AF9-B9A9-FB403FC9109C}|..\\DataBase\\DataBase.csproj|e:\\markeby\\back-end\\database\\repository\\unitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F1CE24A9-2B82-4AF9-B9A9-FB403FC9109C}|..\\DataBase\\DataBase.csproj|e:\\markeby\\back-end\\database\\service\\servicecontainer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CD4F78AA-2633-4A09-8E13-B9FA134CCF3F}|..\\Library\\Library.csproj|e:\\markeby\\back-end\\library\\irepository\\iunitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F1CE24A9-2B82-4AF9-B9A9-FB403FC9109C}|..\\DataBase\\DataBase.csproj|e:\\markeby\\back-end\\database\\repository\\genericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CD4F78AA-2633-4A09-8E13-B9FA134CCF3F}|..\\Library\\Library.csproj|e:\\markeby\\back-end\\library\\irepository\\igenericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CD4F78AA-2633-4A09-8E13-B9FA134CCF3F}|..\\Library\\Library.csproj|e:\\markeby\\back-end\\library\\configurations\\bookingconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CD4F78AA-2633-4A09-8E13-B9FA134CCF3F}|..\\Library\\Library.csproj|e:\\markeby\\back-end\\library\\configurations\\tripconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CD4F78AA-2633-4A09-8E13-B9FA134CCF3F}|..\\Library\\Library.csproj|e:\\markeby\\back-end\\library\\configurations\\boatconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CD4F78AA-2633-4A09-8E13-B9FA134CCF3F}|..\\Library\\Library.csproj|e:\\markeby\\back-end\\library\\configurations\\captainconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CD4F78AA-2633-4A09-8E13-B9FA134CCF3F}|..\\Library\\Library.csproj|e:\\markeby\\back-end\\library\\configurations\\appuserconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{F1CE24A9-2B82-4AF9-B9A9-FB403FC9109C}|..\\DataBase\\DataBase.csproj|e:\\markeby\\back-end\\database\\contexts\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F1CE24A9-2B82-4AF9-B9A9-FB403FC9109C}|..\\DataBase\\DataBase.csproj|e:\\markeby\\back-end\\database\\service\\servicecontainer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{CD4F78AA-2633-4A09-8E13-B9FA134CCF3F}|..\\Library\\Library.csproj|e:\\markeby\\back-end\\library\\enums\\enums.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CD4F78AA-2633-4A09-8E13-B9FA134CCF3F}|..\\Library\\Library.csproj|e:\\markeby\\back-end\\library\\models\\booking.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CD4F78AA-2633-4A09-8E13-B9FA134CCF3F}|..\\Library\\Library.csproj|e:\\markeby\\back-end\\library\\models\\boat.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CD4F78AA-2633-4A09-8E13-B9FA134CCF3F}|..\\Library\\Library.csproj|e:\\markeby\\back-end\\library\\models\\captain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CD4F78AA-2633-4A09-8E13-B9FA134CCF3F}|..\\Library\\Library.csproj|e:\\markeby\\back-end\\library\\models\\appuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CD4F78AA-2633-4A09-8E13-B9FA134CCF3F}|..\\Library\\Library.csproj|e:\\markeby\\back-end\\library\\models\\trip.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C7EC4A45-99DA-4C1B-9163-D076E2856B52}|Markeby.API.csproj|e:\\markeby\\back-end\\markeby.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -24,58 +65,240 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "E:\\Markeby\\Back-End\\Markeby.API\\appsettings.json",
-              "RelativeDocumentMoniker": "appsettings.json",
-              "ToolTip": "E:\\Markeby\\Back-End\\Markeby.API\\appsettings.json*",
-              "RelativeToolTip": "appsettings.json*",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAACfAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-06-20T11:23:34.549Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Program.cs",
-              "DocumentMoniker": "E:\\Markeby\\Back-End\\Markeby.API\\Program.cs",
-              "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "E:\\Markeby\\Back-End\\Markeby.API\\Program.cs",
-              "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAABwAAAAAAAAAAAAAAEkAAAAbAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-20T11:08:37.559Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "ServiceContainer.cs",
               "DocumentMoniker": "E:\\Markeby\\Back-End\\DataBase\\Service\\ServiceContainer.cs",
               "RelativeDocumentMoniker": "..\\DataBase\\Service\\ServiceContainer.cs",
               "ToolTip": "E:\\Markeby\\Back-End\\DataBase\\Service\\ServiceContainer.cs",
               "RelativeToolTip": "..\\DataBase\\Service\\ServiceContainer.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAABgAAAAAAAAAAAAzwEkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-20T10:17:05.153Z",
+              "WhenOpened": "2026-06-20T18:42:40.595Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
+              "Title": "UnitOfWork.cs",
+              "DocumentMoniker": "E:\\Markeby\\Back-End\\DataBase\\Repository\\UnitOfWork.cs",
+              "RelativeDocumentMoniker": "..\\DataBase\\Repository\\UnitOfWork.cs",
+              "ToolTip": "E:\\Markeby\\Back-End\\DataBase\\Repository\\UnitOfWork.cs",
+              "RelativeToolTip": "..\\DataBase\\Repository\\UnitOfWork.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAACAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-20T18:42:08.917Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "GenericRepository.cs",
+              "DocumentMoniker": "E:\\Markeby\\Back-End\\DataBase\\Repository\\GenericRepository.cs",
+              "RelativeDocumentMoniker": "..\\DataBase\\Repository\\GenericRepository.cs",
+              "ToolTip": "E:\\Markeby\\Back-End\\DataBase\\Repository\\GenericRepository.cs",
+              "RelativeToolTip": "..\\DataBase\\Repository\\GenericRepository.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAAwBgAAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-20T18:34:15.43Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "IUnitOfWork.cs",
+              "DocumentMoniker": "E:\\Markeby\\Back-End\\Library\\IRepository\\IUnitOfWork.cs",
+              "RelativeDocumentMoniker": "..\\Library\\IRepository\\IUnitOfWork.cs",
+              "ToolTip": "E:\\Markeby\\Back-End\\Library\\IRepository\\IUnitOfWork.cs",
+              "RelativeToolTip": "..\\Library\\IRepository\\IUnitOfWork.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-20T18:33:33.452Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "IGenericRepository.cs",
+              "DocumentMoniker": "E:\\Markeby\\Back-End\\Library\\IRepository\\IGenericRepository.cs",
+              "RelativeDocumentMoniker": "..\\Library\\IRepository\\IGenericRepository.cs",
+              "ToolTip": "E:\\Markeby\\Back-End\\Library\\IRepository\\IGenericRepository.cs",
+              "RelativeToolTip": "..\\Library\\IRepository\\IGenericRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-20T18:33:11.887Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "BookingConfiguration.cs",
+              "DocumentMoniker": "E:\\Markeby\\Back-End\\Library\\Configurations\\BookingConfiguration.cs",
+              "RelativeDocumentMoniker": "..\\Library\\Configurations\\BookingConfiguration.cs",
+              "ToolTip": "E:\\Markeby\\Back-End\\Library\\Configurations\\BookingConfiguration.cs",
+              "RelativeToolTip": "..\\Library\\Configurations\\BookingConfiguration.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-20T18:26:34.855Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "TripConfiguration.cs",
+              "DocumentMoniker": "E:\\Markeby\\Back-End\\Library\\Configurations\\TripConfiguration.cs",
+              "RelativeDocumentMoniker": "..\\Library\\Configurations\\TripConfiguration.cs",
+              "ToolTip": "E:\\Markeby\\Back-End\\Library\\Configurations\\TripConfiguration.cs",
+              "RelativeToolTip": "..\\Library\\Configurations\\TripConfiguration.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-20T18:26:08.132Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "BoatConfiguration.cs",
+              "DocumentMoniker": "E:\\Markeby\\Back-End\\Library\\Configurations\\BoatConfiguration.cs",
+              "RelativeDocumentMoniker": "..\\Library\\Configurations\\BoatConfiguration.cs",
+              "ToolTip": "E:\\Markeby\\Back-End\\Library\\Configurations\\BoatConfiguration.cs",
+              "RelativeToolTip": "..\\Library\\Configurations\\BoatConfiguration.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-20T18:25:41.731Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "CaptainConfiguration.cs",
+              "DocumentMoniker": "E:\\Markeby\\Back-End\\Library\\Configurations\\CaptainConfiguration.cs",
+              "RelativeDocumentMoniker": "..\\Library\\Configurations\\CaptainConfiguration.cs",
+              "ToolTip": "E:\\Markeby\\Back-End\\Library\\Configurations\\CaptainConfiguration.cs",
+              "RelativeToolTip": "..\\Library\\Configurations\\CaptainConfiguration.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-20T18:25:17.49Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "AppUserConfiguration.cs",
+              "DocumentMoniker": "E:\\Markeby\\Back-End\\Library\\Configurations\\AppUserConfiguration.cs",
+              "RelativeDocumentMoniker": "..\\Library\\Configurations\\AppUserConfiguration.cs",
+              "ToolTip": "E:\\Markeby\\Back-End\\Library\\Configurations\\AppUserConfiguration.cs",
+              "RelativeToolTip": "..\\Library\\Configurations\\AppUserConfiguration.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-20T18:24:41.719Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Booking.cs",
+              "DocumentMoniker": "E:\\Markeby\\Back-End\\Library\\Models\\Booking.cs",
+              "RelativeDocumentMoniker": "..\\Library\\Models\\Booking.cs",
+              "ToolTip": "E:\\Markeby\\Back-End\\Library\\Models\\Booking.cs",
+              "RelativeToolTip": "..\\Library\\Models\\Booking.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-20T18:06:30.401Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "Trip.cs",
+              "DocumentMoniker": "E:\\Markeby\\Back-End\\Library\\Models\\Trip.cs",
+              "RelativeDocumentMoniker": "..\\Library\\Models\\Trip.cs",
+              "ToolTip": "E:\\Markeby\\Back-End\\Library\\Models\\Trip.cs",
+              "RelativeToolTip": "..\\Library\\Models\\Trip.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAB8AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-20T18:06:08.651Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "Boat.cs",
+              "DocumentMoniker": "E:\\Markeby\\Back-End\\Library\\Models\\Boat.cs",
+              "RelativeDocumentMoniker": "..\\Library\\Models\\Boat.cs",
+              "ToolTip": "E:\\Markeby\\Back-End\\Library\\Models\\Boat.cs",
+              "RelativeToolTip": "..\\Library\\Models\\Boat.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-20T18:05:34.652Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "Captain.cs",
+              "DocumentMoniker": "E:\\Markeby\\Back-End\\Library\\Models\\Captain.cs",
+              "RelativeDocumentMoniker": "..\\Library\\Models\\Captain.cs",
+              "ToolTip": "E:\\Markeby\\Back-End\\Library\\Models\\Captain.cs",
+              "RelativeToolTip": "..\\Library\\Models\\Captain.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-20T18:05:09.496Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "AppUser.cs",
+              "DocumentMoniker": "E:\\Markeby\\Back-End\\Library\\Models\\AppUser.cs",
+              "RelativeDocumentMoniker": "..\\Library\\Models\\AppUser.cs",
+              "ToolTip": "E:\\Markeby\\Back-End\\Library\\Models\\AppUser.cs",
+              "RelativeToolTip": "..\\Library\\Models\\AppUser.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-20T18:03:42.68Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Enums.cs",
+              "DocumentMoniker": "E:\\Markeby\\Back-End\\Library\\Enums\\Enums.cs",
+              "RelativeDocumentMoniker": "..\\Library\\Enums\\Enums.cs",
+              "ToolTip": "E:\\Markeby\\Back-End\\Library\\Enums\\Enums.cs",
+              "RelativeToolTip": "..\\Library\\Enums\\Enums.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-20T18:02:27.415Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
               "Title": "AppDbContext.cs",
               "DocumentMoniker": "E:\\Markeby\\Back-End\\DataBase\\Contexts\\AppDbContext.cs",
               "RelativeDocumentMoniker": "..\\DataBase\\Contexts\\AppDbContext.cs",
               "ToolTip": "E:\\Markeby\\Back-End\\DataBase\\Contexts\\AppDbContext.cs",
               "RelativeToolTip": "..\\DataBase\\Contexts\\AppDbContext.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAABTAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-20T10:17:54.04Z",
+              "WhenOpened": "2026-06-20T17:58:55.153Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "Program.cs",
+              "DocumentMoniker": "E:\\Markeby\\Back-End\\Markeby.API\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "E:\\Markeby\\Back-End\\Markeby.API\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEQAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-20T15:31:35.435Z",
               "EditorCaption": ""
             },
             {

@@ -1,0 +1,26 @@
+﻿using Library.Enums;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Library.Models
+{
+    public class Boat
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public int Capacity { get; set; }
+        public string? MainImageUrl { get; set; }
+        public int YearBuilt { get; set; }
+        public bool HasWifi { get; set; }
+        public bool HasFoodFacility { get; set; }
+        public bool HasToilet { get; set; }
+        public BoatStatus Status { get; set; }
+
+        public ICollection<Captain> Captains { get; set; } = new List<Captain>();
+        public ICollection<Trip> Trips { get; set; } = new List<Trip>();
+    }
+}

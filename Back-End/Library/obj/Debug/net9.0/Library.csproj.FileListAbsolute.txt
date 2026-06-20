@@ -7,6 +7,7 @@ E:\Markeby\Back-End\Library\obj\Debug\net9.0\Library.GeneratedMSBuildEditorConfi
 E:\Markeby\Back-End\Library\obj\Debug\net9.0\Library.AssemblyInfoInputs.cache
 E:\Markeby\Back-End\Library\obj\Debug\net9.0\Library.AssemblyInfo.cs
 E:\Markeby\Back-End\Library\obj\Debug\net9.0\Library.csproj.CoreCompileInputs.cache
+E:\Markeby\Back-End\Library\obj\Debug\net9.0\Library.sourcelink.json
 E:\Markeby\Back-End\Library\obj\Debug\net9.0\Library.dll
 E:\Markeby\Back-End\Library\obj\Debug\net9.0\refint\Library.dll
 E:\Markeby\Back-End\Library\obj\Debug\net9.0\Library.pdb
