@@ -1,0 +1,15 @@
+E:\Markeby\Back-End\Identity\bin\Debug\net9.0\Identity.deps.json
+E:\Markeby\Back-End\Identity\bin\Debug\net9.0\Identity.dll
+E:\Markeby\Back-End\Identity\bin\Debug\net9.0\Identity.pdb
+E:\Markeby\Back-End\Identity\bin\Debug\net9.0\Library.dll
+E:\Markeby\Back-End\Identity\bin\Debug\net9.0\Library.pdb
+E:\Markeby\Back-End\Identity\obj\Debug\net9.0\Identity.csproj.AssemblyReference.cache
+E:\Markeby\Back-End\Identity\obj\Debug\net9.0\Identity.GeneratedMSBuildEditorConfig.editorconfig
+E:\Markeby\Back-End\Identity\obj\Debug\net9.0\Identity.AssemblyInfoInputs.cache
+E:\Markeby\Back-End\Identity\obj\Debug\net9.0\Identity.AssemblyInfo.cs
+E:\Markeby\Back-End\Identity\obj\Debug\net9.0\Identity.csproj.CoreCompileInputs.cache
+E:\Markeby\Back-End\Identity\obj\Debug\net9.0\Identity.csproj.Up2Date
+E:\Markeby\Back-End\Identity\obj\Debug\net9.0\Identity.dll
+E:\Markeby\Back-End\Identity\obj\Debug\net9.0\refint\Identity.dll
+E:\Markeby\Back-End\Identity\obj\Debug\net9.0\Identity.pdb
+E:\Markeby\Back-End\Identity\obj\Debug\net9.0\ref\Identity.dll
