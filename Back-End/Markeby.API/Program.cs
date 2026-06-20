@@ -1,5 +1,4 @@
 using DataBase.Service;
-using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using System.Text.Json.Serialization;
@@ -59,6 +58,16 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddInjectionOptionsDB(builder.Configuration);
 
+builder.Services.AddCors(options =>
+    options.AddPolicy("FrontendPolicy",
+        policy =>
+        {
+            policy.WithOrigins("Https://markeby.netlify.app",
+                                "http://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+        })
+    );
 
 try
 {
@@ -75,6 +84,9 @@ try
     //}
 
     app.UseHttpsRedirection();
+
+    app.UseRouting();
+    app.UseCors("FrontendPolicy");
 
     app.UseAuthentication();
     app.UseAuthorization();

@@ -1,4 +1,5 @@
 ﻿
+using Library.Enums;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
@@ -17,21 +18,19 @@ namespace Library.Models
         [Required]
         public DateTime BirthDate { get; set; }
 
-        public enum GenderType { Male, Female }
         public GenderType Gender { get; set; }
 
-        public enum NationalityType { Egyptian, Saudi, Moroccan, Tunisian, Algerian, Libyan, Sudanese, Another }
         public NationalityType Nationality { get; set; }
 
+        public RoleType Role { get; set; }
+
         public string? Address { get; set; }
-        
-        public enum Role { Admin , User }
-        
-        public double Rating { get; set; } = 5.00;
-        
+                
         public string? ProfileImgUrl { get; set; }
 
 
-       
+        public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
+        public ICollection<Trip> Trips { get; set; } = new List<Trip>();
+
     }
 }

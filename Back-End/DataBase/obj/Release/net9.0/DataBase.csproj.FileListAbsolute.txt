@@ -17,3 +17,4 @@ E:\Markeby\Back-End\DataBase\obj\Release\net9.0\refint\DataBase.dll
 E:\Markeby\Back-End\DataBase\obj\Release\net9.0\DataBase.pdb
 E:\Markeby\Back-End\DataBase\obj\Release\net9.0\DataBase.genruntimeconfig.cache
 E:\Markeby\Back-End\DataBase\obj\Release\net9.0\ref\DataBase.dll
+E:\Markeby\Back-End\DataBase\obj\Release\net9.0\DataBase.sourcelink.json

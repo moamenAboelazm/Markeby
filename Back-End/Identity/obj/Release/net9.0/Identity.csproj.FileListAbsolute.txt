@@ -13,3 +13,4 @@ E:\Markeby\Back-End\Identity\obj\Release\net9.0\Identity.dll
 E:\Markeby\Back-End\Identity\obj\Release\net9.0\refint\Identity.dll
 E:\Markeby\Back-End\Identity\obj\Release\net9.0\Identity.pdb
 E:\Markeby\Back-End\Identity\obj\Release\net9.0\ref\Identity.dll
+E:\Markeby\Back-End\Identity\obj\Release\net9.0\Identity.sourcelink.json

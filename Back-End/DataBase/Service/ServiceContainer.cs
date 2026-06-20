@@ -1,9 +1,13 @@
 ﻿using DataBase.Contexts;
+using DataBase.Repository;
 using FluentValidation;
 using Identity.Authentication.Base;
 using Identity.Authentication.Repositories;
 using library.AppLoger;
 using Library.AppLoger;
+using Library.Features.Users.Queries;
+using Library.IRepository;
+using Library.MappingProfiles;
 using Library.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -65,7 +69,8 @@ namespace DataBase.Service
             });
 
             services.AddScoped(typeof(IAppLoger<>), typeof(SerilogerAppAdapter<>));
-            //services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IUserManagement, UserManagement>();
             services.AddScoped<ITokenManagement, TokenManagement>();
             services.AddScoped<IRoleManagement, RoleManagement>();
@@ -75,9 +80,9 @@ namespace DataBase.Service
 
             services.AddAutoMapper(cfg =>
             {
-                //cfg.AddProfile<ProductProfile>();
+                cfg.AddProfile<UserProfile>();
             });
-            //services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAllProducts).Assembly));
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAllUsers).Assembly));
 
             services.AddScoped<IValidator<library.DTOs.DtoLoginUser>, Identity.Validation.LoginUserValidator>();
             services.AddScoped<IValidator<library.DTOs.DtoCreateUser>, Identity.Validation.CreateUserValidator>();

@@ -8,6 +8,7 @@ E:\Markeby\Back-End\Identity\obj\Debug\net9.0\Identity.GeneratedMSBuildEditorCon
 E:\Markeby\Back-End\Identity\obj\Debug\net9.0\Identity.AssemblyInfoInputs.cache
 E:\Markeby\Back-End\Identity\obj\Debug\net9.0\Identity.AssemblyInfo.cs
 E:\Markeby\Back-End\Identity\obj\Debug\net9.0\Identity.csproj.CoreCompileInputs.cache
+E:\Markeby\Back-End\Identity\obj\Debug\net9.0\Identity.sourcelink.json
 E:\Markeby\Back-End\Identity\obj\Debug\net9.0\Identity.csproj.Up2Date
 E:\Markeby\Back-End\Identity\obj\Debug\net9.0\Identity.dll
 E:\Markeby\Back-End\Identity\obj\Debug\net9.0\refint\Identity.dll

@@ -2,11 +2,6 @@
 using Library.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataBase.Contexts
 {
@@ -16,6 +11,10 @@ namespace DataBase.Contexts
 
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<AppUser> AppUsers{ get; set; }
+        public DbSet<Boat> Boats { get; set; }
+        public DbSet<Booking> Bookings { get; set; }
+        public DbSet<Trip> Trips { get; set; }
+        public DbSet<Captain> Captains { get; set; }
 
 
 
@@ -25,7 +24,7 @@ namespace DataBase.Contexts
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-
+            builder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
         }
 
     }

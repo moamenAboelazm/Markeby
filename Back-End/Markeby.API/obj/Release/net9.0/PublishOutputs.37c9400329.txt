@@ -2,7 +2,6 @@ E:\Markeby\Back-End\Markeby.API\obj\Release\net9.0\PubTmp\Out\Markeby.API.exe
 E:\Markeby\Back-End\Markeby.API\obj\Release\net9.0\PubTmp\Out\appsettings.Development.json
 E:\Markeby\Back-End\Markeby.API\obj\Release\net9.0\PubTmp\Out\appsettings.json
 E:\Markeby\Back-End\Markeby.API\obj\Release\net9.0\PubTmp\Out\Markeby.API.dll
-E:\Markeby\Back-End\Markeby.API\obj\Release\net9.0\PubTmp\Out\Markeby.API.deps.json
 E:\Markeby\Back-End\Markeby.API\obj\Release\net9.0\PubTmp\Out\Markeby.API.runtimeconfig.json
 E:\Markeby\Back-End\Markeby.API\obj\Release\net9.0\PubTmp\Out\Markeby.API.pdb
 E:\Markeby\Back-End\Markeby.API\obj\Release\net9.0\PubTmp\Out\AutoMapper.dll
@@ -101,3 +100,4 @@ E:\Markeby\Back-End\Markeby.API\obj\Release\net9.0\PubTmp\Out\Library.dll
 E:\Markeby\Back-End\Markeby.API\obj\Release\net9.0\PubTmp\Out\DataBase.pdb
 E:\Markeby\Back-End\Markeby.API\obj\Release\net9.0\PubTmp\Out\Identity.pdb
 E:\Markeby\Back-End\Markeby.API\obj\Release\net9.0\PubTmp\Out\Library.pdb
+E:\Markeby\Back-End\Markeby.API\obj\Release\net9.0\PubTmp\Out\Markeby.API.deps.json
