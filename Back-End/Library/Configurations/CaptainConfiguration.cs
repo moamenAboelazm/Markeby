@@ -15,13 +15,12 @@ namespace Library.Configurations
         {
             builder.HasKey(c => c.Id);
 
-            builder.Property(c => c.Name)
-                .IsRequired()
-                .HasMaxLength(100);
-
-            builder.HasMany(c => c.Boats)
-                .WithMany(b => b.Captains)
-                .UsingEntity(j => j.ToTable("BoatCaptains"));
+            builder.Property(c => c.FullName).IsRequired().HasMaxLength(150);
+            builder.Property(c => c.Email).IsRequired().HasMaxLength(100);
+            builder.Property(c => c.PhoneNumber).IsRequired().HasMaxLength(20);
+            builder.Property(c => c.Rank).HasMaxLength(100);
+            builder.Property(c => c.Languages).HasMaxLength(200);
+            builder.Property(c => c.Bio).HasMaxLength(1000);
         }
     }
 }

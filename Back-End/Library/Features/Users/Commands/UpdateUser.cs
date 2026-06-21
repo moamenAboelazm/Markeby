@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Library.Enums;
+using Library.IRepository;
 using Library.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -17,10 +18,10 @@ namespace Library.Features.Users.Commands
         public NationalityType Nationality { get; set; }
         public string? Address { get; set; }
         public string? PhoneNumber { get; set; }
-        public string? ProfileImgUrl { get; set; }
+        public IFormFile? ProfileImgUrl { get; set; }
     }
 
-    public class UpdateProfileCommandHandler(UserManager<AppUser> _userManager,IHttpContextAccessor _httpContextAccessor,IMapper _mapper) : IRequestHandler<UpdateProfileCommand, bool>
+    public class UpdateProfileCommandHandler(UserManager<AppUser> _userManager,IHttpContextAccessor _httpContextAccessor,IMapper _mapper, IFileService _fileService) : IRequestHandler<UpdateProfileCommand, bool>
     {
         public async Task<bool> Handle(UpdateProfileCommand data, CancellationToken cancellationToken)
         {
@@ -34,6 +35,16 @@ namespace Library.Features.Users.Commands
                 throw new Exception("User not found.");
 
             _mapper.Map(data, user);
+
+            if (data.ProfileImgUrl != null)
+            {
+                if (!string.IsNullOrEmpty(user.ProfileImgUrl))
+                {
+                    _fileService.DeleteFile(user.ProfileImgUrl);
+                }
+
+                user.ProfileImgUrl = await _fileService.SaveFileAsync(data.ProfileImgUrl, "users");
+            }
 
             var result = await _userManager.UpdateAsync(user);
             if (!result.Succeeded)

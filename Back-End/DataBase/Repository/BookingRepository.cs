@@ -22,7 +22,7 @@ namespace DataBase.Repository
             _cache = cache;
         }
 
-        public async Task<IReadOnlyList<Booking>> GetUserBookingsAsync(Guid userId)
+        public async Task<IReadOnlyList<Booking>> GetUserBookingsAsync(string userId)
         {
             string cacheKey = $"UserBookingsCacheKey_{userId}";
 
@@ -81,7 +81,7 @@ namespace DataBase.Repository
                 .SumAsync(b => b.TotalPrice);
         }
 
-        public async Task<bool> HasUserBookedTripAsync(Guid userId, Guid tripId)
+        public async Task<bool> HasUserBookedTripAsync(string userId, Guid tripId)
         {
             return await _context.Set<Booking>()
                 .AnyAsync(b => b.UserId == userId && b.TripId == tripId);

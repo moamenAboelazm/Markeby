@@ -3,6 +3,9 @@
   "WorkspaceRootPath": "E:\\Markeby\\Back-End\\Markeby.API\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{F1CE24A9-2B82-4AF9-B9A9-FB403FC9109C}|..\\DataBase\\DataBase.csproj|e:\\markeby\\back-end\\database\\service\\fileservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{C7EC4A45-99DA-4C1B-9163-D076E2856B52}|Markeby.API.csproj|e:\\markeby\\back-end\\markeby.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C7EC4A45-99DA-4C1B-9163-D076E2856B52}|Markeby.API.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
@@ -14,20 +17,33 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Program.cs",
               "DocumentMoniker": "E:\\Markeby\\Back-End\\Markeby.API\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
               "ToolTip": "E:\\Markeby\\Back-End\\Markeby.API\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAArAAAAAAAAAA==",
+              "ViewState": "AgIAAEYAAAAAAAAAAAAuwFAAAAAHAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-06-20T15:31:35.435Z",
               "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "FileService.cs",
+              "DocumentMoniker": "E:\\Markeby\\Back-End\\DataBase\\Service\\FileService.cs",
+              "RelativeDocumentMoniker": "..\\DataBase\\Service\\FileService.cs",
+              "ToolTip": "E:\\Markeby\\Back-End\\DataBase\\Service\\FileService.cs",
+              "RelativeToolTip": "..\\DataBase\\Service\\FileService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADkAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-21T12:43:25.244Z",
               "EditorCaption": ""
             },
             {

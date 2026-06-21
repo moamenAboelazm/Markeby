@@ -17,10 +17,12 @@ namespace Library.Mapping_Profiles
             CreateMap<Captain, DtoCaptain>();
 
             CreateMap<CreateCaptainCommand, Captain>()
+                .ForMember(dest => dest.ProfilePhotoUrl, opt => opt.Ignore())
                 .ForMember(dest => dest.Boats, opt => opt.Ignore())
                 .ForMember(dest => dest.Trips, opt => opt.Ignore());
 
             CreateMap<UpdateCaptainCommand, Captain>()
+                .ForMember(dest => dest.ProfilePhotoUrl, opt => opt.Ignore())
                 .ForMember(dest => dest.Boats, opt => opt.Ignore())
                 .ForMember(dest => dest.Trips, opt => opt.Ignore());
         }
