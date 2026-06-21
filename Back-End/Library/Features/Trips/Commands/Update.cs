@@ -5,11 +5,6 @@ using Library.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Library.Features.Trips.Commands
 {
@@ -30,9 +25,9 @@ namespace Library.Features.Trips.Commands
         public string? ExcludedItems { get; set; }
         public TripType Type { get; set; }
         public TripStatus Status { get; set; }
-
         public List<IFormFile>? Images { get; set; }
     }
+
     public class UpdateTripCommandHandler : IRequestHandler<UpdateTripCommand, bool>
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -50,7 +45,7 @@ namespace Library.Features.Trips.Commands
 
         public async Task<bool> Handle(UpdateTripCommand data, CancellationToken cancellationToken)
         {
-            var trip = await _unitOfWork.Trips.GetByIdAsync(data.Id);
+            var trip = await _unitOfWork.Trips.GetTripWithDetailsByIdAsync(data.Id);
             if (trip == null) return false;
 
             if (trip.BoatId != data.BoatId || trip.StartTime != data.StartTime || trip.EndTime != data.EndTime)
@@ -66,10 +61,11 @@ namespace Library.Features.Trips.Commands
             }
 
             _mapper.Map(data, trip);
+            trip.Images ??= new List<TripImage>();
 
             if (data.Images != null && data.Images.Any())
             {
-                if (trip.Images != null)
+                if (trip.Images.Any())
                 {
                     foreach (var oldImage in trip.Images)
                     {

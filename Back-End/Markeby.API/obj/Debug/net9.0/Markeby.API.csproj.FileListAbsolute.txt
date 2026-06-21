@@ -1,5 +1,6 @@
 E:\Markeby\Back-End\Markeby.API\bin\Debug\net9.0\appsettings.Development.json
 E:\Markeby\Back-End\Markeby.API\bin\Debug\net9.0\appsettings.json
+E:\Markeby\Back-End\Markeby.API\bin\Debug\net9.0\Markeby.API.staticwebassets.runtime.json
 E:\Markeby\Back-End\Markeby.API\bin\Debug\net9.0\Markeby.API.staticwebassets.endpoints.json
 E:\Markeby\Back-End\Markeby.API\bin\Debug\net9.0\Markeby.API.exe
 E:\Markeby\Back-End\Markeby.API\bin\Debug\net9.0\Markeby.API.deps.json

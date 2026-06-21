@@ -1,11 +1,6 @@
 ﻿using Library.IRepository;
 using MediatR;
 using Microsoft.Extensions.Caching.Memory;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Library.Features.Bookings.Commands
 {
@@ -32,11 +27,15 @@ namespace Library.Features.Bookings.Commands
             var booking = await _unitOfWork.Bookings.GetByIdAsync(request.Id);
             if (booking == null) return false;
 
+            if (!string.IsNullOrEmpty(booking.CancellationReason))
+                throw new InvalidOperationException("Cannot update an already cancelled booking.");
+
             booking.SpecialRequests = request.SpecialRequests;
 
-            if (string.IsNullOrEmpty(booking.CancellationReason) && !string.IsNullOrEmpty(request.CancellationReason))
+            if (!string.IsNullOrEmpty(request.CancellationReason))
             {
                 booking.CancellationReason = request.CancellationReason;
+
                 var trip = await _unitOfWork.Trips.GetByIdAsync(booking.TripId);
                 if (trip != null)
                 {

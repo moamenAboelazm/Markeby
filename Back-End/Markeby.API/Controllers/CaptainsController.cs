@@ -1,4 +1,5 @@
 ﻿using Library.Dashboards.Captains;
+using Library.Features.Bookings.Commands;
 using Library.Features.Captains.Commands;
 using Library.Features.Captains.Queries;
 using MediatR;
@@ -12,7 +13,7 @@ namespace Library.Controllers
     public class CaptainsController(IMediator _mediator) : ControllerBase
     {
 
-        [Authorize("Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet("dashboard-stats")]
         public async Task<IActionResult> GetDashboardStats()
         {
@@ -20,7 +21,7 @@ namespace Library.Controllers
             return Ok(stats);
         }
 
-        [Authorize("Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet("paged")]
         public async Task<IActionResult> GetPagedCaptains([FromQuery] GetPagedCaptainsQuery query)
         {
@@ -28,7 +29,7 @@ namespace Library.Controllers
             return Ok(result);
         }
 
-        [Authorize("Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCaptain(Guid id)
         {
@@ -41,7 +42,7 @@ namespace Library.Controllers
             return Ok(captain);
         }
 
-        [Authorize("Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> CreateCaptain([FromForm] CreateCaptainCommand command)
         {
@@ -49,7 +50,7 @@ namespace Library.Controllers
             return CreatedAtAction(nameof(GetCaptain), new { id = captainId }, new { Id = captainId, Message = "Captain profile created successfully." });
         }
 
-        [Authorize("Admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCaptain(Guid id, [FromForm] UpdateCaptainCommand command)
         {
@@ -62,6 +63,18 @@ namespace Library.Controllers
                 return NotFound(new { Message = "Captain not found." });
 
             return Ok(new { Message = "Captain profile updated successfully." });
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCaptain(Guid id)
+        {
+            var result = await _mediator.Send(new DeleteCaptainCommand { Id = id });
+
+            if (!result)
+                return NotFound(new { Message = "Captain not found." });
+
+            return Ok(new { Message = "Captain deleted successfully" });
         }
     }
 }
