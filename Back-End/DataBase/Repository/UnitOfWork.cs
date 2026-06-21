@@ -1,6 +1,7 @@
 ﻿using DataBase.Contexts;
 using Library.IRepository;
 using Library.Models;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,20 +13,22 @@ namespace DataBase.Repository
     public class UnitOfWork : IUnitOfWork
     {
         private readonly AppDbContext _context;
+        private readonly IMemoryCache _cache;
 
-        public IGenericRepository<Boat> Boats { get; private set; }
-        public IGenericRepository<Trip> Trips { get; private set; }
-        public IGenericRepository<Booking> Bookings { get; private set; }
-        public IGenericRepository<Captain> Captains { get; private set; }
+        public IBoatRepository Boats { get; private set; }
+        public ITripRepository Trips { get; private set; }
+        public IBookingRepository Bookings { get; private set; }
+        public ICaptainRepository Captains { get; private set; }
 
-        public UnitOfWork(AppDbContext context)
+        public UnitOfWork(AppDbContext context, IMemoryCache cache)
         {
             _context = context;
+            _cache = cache;
 
-            Boats = new GenericRepository<Boat>(_context);
-            Trips = new GenericRepository<Trip>(_context);
-            Bookings = new GenericRepository<Booking>(_context);
-            Captains = new GenericRepository<Captain>(_context);
+            Boats = new BoatRepository(_context, _cache);
+            Trips = new TripRepository(_context, _cache);
+            Bookings = new BookingRepository(_context, _cache);
+            Captains = new CaptainRepository(_context, _cache);
         }
 
         public async Task<int> CompleteAsync()
