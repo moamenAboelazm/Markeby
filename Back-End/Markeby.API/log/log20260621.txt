@@ -1,0 +1,26 @@
+2026-06-21 15:07:33.993 +03:00 [INF] Markeby API just started ......
+2026-06-21 15:07:58.012 +03:00 [INF] Markeby API just started ......
+2026-06-21 15:16:52.025 +03:00 [INF] Markeby API just started ......
+2026-06-21 15:16:54.515 +03:00 [ERR] Markeby API has been stopped .......
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at System.Diagnostics.DiagnosticSource.Write[T](String name, T value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in E:\Markeby\Back-End\Markeby.API\Program.cs:line 74
+2026-06-21 15:16:54.530 +03:00 [INF] Markeby API is closed ........
+2026-06-21 15:17:11.963 +03:00 [INF] Markeby API just started ......
+2026-06-21 15:17:12.055 +03:00 [ERR] Markeby API has been stopped .......
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at System.Diagnostics.DiagnosticSource.Write[T](String name, T value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in E:\Markeby\Back-End\Markeby.API\Program.cs:line 74
+2026-06-21 15:17:12.072 +03:00 [INF] Markeby API is closed ........

@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Text;
 
 namespace DataBase.Service
@@ -26,6 +27,7 @@ namespace DataBase.Service
         {
             string MyConnectionStr = "MyConnectionStr";
 
+            // 1. Database Context
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(conf.GetConnectionString(MyConnectionStr),
                 sqlOption =>
@@ -36,7 +38,8 @@ namespace DataBase.Service
                 ServiceLifetime.Scoped
             );
 
-            services.AddDefaultIdentity<AppUser>(options =>
+            // 2. Identity Configuration (Fixed Roles to use Guid)
+            services.AddIdentity<AppUser, IdentityRole>(options =>
             {
                 options.SignIn.RequireConfirmedPhoneNumber = true;
                 options.Tokens.EmailConfirmationTokenProvider = TokenOptions.DefaultEmailProvider;
@@ -44,9 +47,11 @@ namespace DataBase.Service
                 options.Password.RequireNonAlphanumeric = true;
                 options.Password.RequireUppercase = true;
                 options.Password.RequiredLength = 8;
-            }).AddRoles<IdentityRole<Guid>>()
-              .AddRoles<IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
+            })
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders();
 
+            // 3. Authentication & JWT
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -71,6 +76,14 @@ namespace DataBase.Service
 
             services.AddMemoryCache();
 
+            // 4. AutoMapper Registration
+            //services.AddAutoMapper(typeof(UserProfile));
+            services.AddAutoMapper(cfg => { }, typeof(UserProfile).Assembly);
+
+            // 5. MediatR Registration
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAllUsers).Assembly));
+
+            // 6. Repositories & Unit of Work
             services.AddScoped(typeof(IAppLoger<>), typeof(SerilogerAppAdapter<>));
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
@@ -78,20 +91,22 @@ namespace DataBase.Service
             services.AddScoped<ITripRepository, TripRepository>();
             services.AddScoped<IBookingRepository, BookingRepository>();
             services.AddScoped<ICaptainRepository, CaptainRepository>();
-
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+            // 7. Services & Managements
             services.AddScoped<IUserManagement, UserManagement>();
             services.AddScoped<ITokenManagement, TokenManagement>();
             services.AddScoped<IRoleManagement, RoleManagement>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IValidationService, ValidationService>();
 
+            // 8. File Service Registration (Missing in your code)
+            services.AddScoped<IFileService, FileService>();
+
             services.AddHttpContextAccessor();
 
 
-            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAllUsers).Assembly));
-
+            // 9. Fluent Validation
             services.AddScoped<IValidator<library.DTOs.DtoLoginUser>, Identity.Validation.LoginUserValidator>();
             services.AddScoped<IValidator<library.DTOs.DtoCreateUser>, Identity.Validation.CreateUserValidator>();
 

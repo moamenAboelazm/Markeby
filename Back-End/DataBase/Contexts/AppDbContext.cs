@@ -15,6 +15,8 @@ namespace DataBase.Contexts
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Trip> Trips { get; set; }
         public DbSet<Captain> Captains { get; set; }
+        public DbSet<TripImage> TripImages { get; set; }
+        public DbSet<BoatImage> BoatImages { get; set; }
 
 
 

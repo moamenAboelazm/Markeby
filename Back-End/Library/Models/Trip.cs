@@ -1,9 +1,6 @@
 ﻿using Library.Enums;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Library.Models
 {
@@ -27,6 +24,7 @@ namespace Library.Models
 
         public Boat Boat { get; set; } = null!;
         public Captain Captain { get; set; } = null!;
+        public ICollection<TripImage> Images { get; set; } = new List<TripImage>();
         public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
         public ICollection<AppUser> Passengers { get; set; } = new List<AppUser>();
     }

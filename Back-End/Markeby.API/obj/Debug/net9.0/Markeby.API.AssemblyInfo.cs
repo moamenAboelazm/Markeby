@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Markeby.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6e712a0158545a54dd7eece0f7572b2d1d9d4d19")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fdae83466f13d873bfd524d165cdd60b7500caca")]
 [assembly: System.Reflection.AssemblyProductAttribute("Markeby.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Markeby.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
