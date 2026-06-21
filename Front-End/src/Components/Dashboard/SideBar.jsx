@@ -4,6 +4,8 @@ import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import { FaUsers } from "react-icons/fa6";
 import { FaRegCompass } from "react-icons/fa";
 import { IoSettingsSharp } from "react-icons/io5";
+import { GiCaptainHatProfile } from "react-icons/gi";
+import { GiPirateCaptain } from "react-icons/gi";
 import { Link, NavLink } from "react-router-dom";
 import LogOut from "../../Pages/Auth/LogOut";
 const SideBar = () => {
@@ -21,17 +23,24 @@ const SideBar = () => {
       icon: <FaRegCompass className="text-[18px]" />,
     },
     {
+      name: "Captains",
+      icon: <GiCaptainHatProfile className="text-[18px]" />,
+    },{
+      name:"Add Captain",
+      icon:<GiPirateCaptain className="text-[18px]" />
+    },
+    {
       name: "Settings",
       icon: <IoSettingsSharp className="text-[18px]" />,
     },
   ];
   return (
-    <div className="w-64 z-10 h-full fixed inset-0 bg-primary text-white px-[20px] py-4 border-r-[1px] border-gray-300 shadow-2xl">
+    <div className="side-bar w-64 z-10 h-full fixed inset-0 bg-primary text-white px-[20px] py-4 border-r-[1px] border-gray-300 shadow-2xl">
       <div className="flex items-center gap-2 p-4 mt-[80px]">
         <MdOutlineAdminPanelSettings className="text-[20px]" />
         <h2 className="text-[25px]">Control Panel</h2>
       </div>
-      <div className="flex flex-col mt-11 border-y-[1px] border-secondary pt-4">
+      <div className="flex flex-col mt-11 border-y-[1px] border-secondary pt-4 overflow-y-auto h-[calc(100vh-300px)] scrollbar-thumb-secondary">
         {menuItems.map((item, index) => (
           <NavLink
             to={`${item.name.toLowerCase().replace(/\s/g, "")}`}
