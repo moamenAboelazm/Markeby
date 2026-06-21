@@ -9,10 +9,10 @@ namespace Library.IRepository
 {
     public interface IUnitOfWork : IDisposable
     {
-        IGenericRepository<Boat> Boats { get; }
-        IGenericRepository<Trip> Trips { get; }
-        IGenericRepository<Booking> Bookings { get; }
-        IGenericRepository<Captain> Captains { get; }
+        IBoatRepository Boats { get; }
+        ITripRepository Trips { get; }
+        IBookingRepository Bookings { get; }
+        ICaptainRepository Captains { get; }
 
         Task<int> CompleteAsync();
     }

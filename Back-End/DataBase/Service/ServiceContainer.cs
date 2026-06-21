@@ -44,7 +44,8 @@ namespace DataBase.Service
                 options.Password.RequireNonAlphanumeric = true;
                 options.Password.RequireUppercase = true;
                 options.Password.RequiredLength = 8;
-            }).AddRoles<IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
+            }).AddRoles<IdentityRole<Guid>>()
+              .AddRoles<IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
 
             services.AddAuthentication(options =>
             {
@@ -68,20 +69,27 @@ namespace DataBase.Service
                 };
             });
 
+            services.AddMemoryCache();
+
             services.AddScoped(typeof(IAppLoger<>), typeof(SerilogerAppAdapter<>));
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+            services.AddScoped<IBoatRepository, BoatRepository>();
+            services.AddScoped<ITripRepository, TripRepository>();
+            services.AddScoped<IBookingRepository, BookingRepository>();
+            services.AddScoped<ICaptainRepository, CaptainRepository>();
+
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
             services.AddScoped<IUserManagement, UserManagement>();
             services.AddScoped<ITokenManagement, TokenManagement>();
             services.AddScoped<IRoleManagement, RoleManagement>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IValidationService, ValidationService>();
+
             services.AddHttpContextAccessor();
 
-            services.AddAutoMapper(cfg =>
-            {
-                cfg.AddProfile<UserProfile>();
-            });
+
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAllUsers).Assembly));
 
             services.AddScoped<IValidator<library.DTOs.DtoLoginUser>, Identity.Validation.LoginUserValidator>();

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Library.Enums;
 using Library.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -12,8 +13,8 @@ namespace Library.Features.Users.Commands
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public DateTime BirthDate { get; set; }
-        public AppUser.GenderType Gender { get; set; }
-        public AppUser.NationalityType Nationality { get; set; }
+        public GenderType Gender { get; set; }
+        public NationalityType Nationality { get; set; }
         public string? Address { get; set; }
         public string? PhoneNumber { get; set; }
         public string? ProfileImgUrl { get; set; }
