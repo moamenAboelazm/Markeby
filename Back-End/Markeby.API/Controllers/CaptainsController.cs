@@ -2,6 +2,7 @@
 using Library.Features.Captains.Commands;
 using Library.Features.Captains.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.Controllers
@@ -11,6 +12,7 @@ namespace Library.Controllers
     public class CaptainsController(IMediator _mediator) : ControllerBase
     {
 
+        [Authorize("Admin")]
         [HttpGet("dashboard-stats")]
         public async Task<IActionResult> GetDashboardStats()
         {
@@ -18,6 +20,7 @@ namespace Library.Controllers
             return Ok(stats);
         }
 
+        [Authorize("Admin")]
         [HttpGet("paged")]
         public async Task<IActionResult> GetPagedCaptains([FromQuery] GetPagedCaptainsQuery query)
         {
@@ -25,6 +28,7 @@ namespace Library.Controllers
             return Ok(result);
         }
 
+        [Authorize("Admin")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCaptain(Guid id)
         {
@@ -37,6 +41,7 @@ namespace Library.Controllers
             return Ok(captain);
         }
 
+        [Authorize("Admin")]
         [HttpPost]
         public async Task<IActionResult> CreateCaptain([FromForm] CreateCaptainCommand command)
         {
@@ -44,6 +49,7 @@ namespace Library.Controllers
             return CreatedAtAction(nameof(GetCaptain), new { id = captainId }, new { Id = captainId, Message = "Captain profile created successfully." });
         }
 
+        [Authorize("Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCaptain(Guid id, [FromForm] UpdateCaptainCommand command)
         {
