@@ -5,11 +5,6 @@ using Library.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Library.Features.Trips.Commands
 {
@@ -28,9 +23,9 @@ namespace Library.Features.Trips.Commands
         public string? IncludedItems { get; set; }
         public string? ExcludedItems { get; set; }
         public TripType Type { get; set; }
-
         public List<IFormFile>? Images { get; set; }
     }
+
     public class CreateTripCommandHandler : IRequestHandler<CreateTripCommand, Guid>
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -58,6 +53,7 @@ namespace Library.Features.Trips.Commands
 
             var trip = _mapper.Map<Trip>(data);
             trip.Status = TripStatus.Scheduled;
+            trip.Images ??= new List<TripImage>();
 
             if (data.Images != null && data.Images.Any())
             {

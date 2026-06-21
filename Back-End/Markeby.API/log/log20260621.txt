@@ -24,3 +24,13 @@ Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
    at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
    at Program.<Main>$(String[] args) in E:\Markeby\Back-End\Markeby.API\Program.cs:line 74
 2026-06-21 15:17:12.072 +03:00 [INF] Markeby API is closed ........
+2026-06-21 17:57:47.176 +03:00 [INF] Markeby API just started ......
+2026-06-21 17:57:50.369 +03:00 [INF] Markeby API trying to work now ........
+2026-06-21 17:57:50.424 +03:00 [INF] User profile is available. Using 'C:\Users\moame\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-06-21 17:57:50.499 +03:00 [INF] Creating key {9b185364-a607-41f1-a1e1-6a117105072d} with creation date 2026-06-21 14:57:50Z, activation date 2026-06-23 21:25:03Z, and expiration date 2026-09-19 14:57:50Z.
+2026-06-21 17:57:50.514 +03:00 [INF] Writing data to file 'C:\Users\moame\AppData\Local\ASP.NET\DataProtection-Keys\key-9b185364-a607-41f1-a1e1-6a117105072d.xml'.
+2026-06-21 17:57:50.800 +03:00 [INF] Now listening on: https://localhost:7096
+2026-06-21 17:57:50.802 +03:00 [INF] Now listening on: http://localhost:5297
+2026-06-21 17:57:51.006 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-06-21 17:57:51.008 +03:00 [INF] Hosting environment: Development
+2026-06-21 17:57:51.009 +03:00 [INF] Content root path: E:\Markeby\Back-End\Markeby.API

@@ -1,11 +1,6 @@
 ﻿using Library.IRepository;
 using MediatR;
 using Microsoft.Extensions.Caching.Memory;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Library.Features.Trips.Commands
 {
@@ -18,17 +13,27 @@ namespace Library.Features.Trips.Commands
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMemoryCache _cache;
+        private readonly IFileService _fileService;
 
-        public DeleteTripCommandHandler(IUnitOfWork unitOfWork, IMemoryCache cache)
+        public DeleteTripCommandHandler(IUnitOfWork unitOfWork, IMemoryCache cache, IFileService fileService)
         {
             _unitOfWork = unitOfWork;
             _cache = cache;
+            _fileService = fileService;
         }
 
         public async Task<bool> Handle(DeleteTripCommand data, CancellationToken cancellationToken)
         {
-            var trip = await _unitOfWork.Trips.GetByIdAsync(data.Id);
+            var trip = await _unitOfWork.Trips.GetTripWithDetailsByIdAsync(data.Id);
             if (trip == null) return false;
+
+            if (trip.Images != null && trip.Images.Any())
+            {
+                foreach (var image in trip.Images)
+                {
+                    _fileService.DeleteFile(image.ImageUrl);
+                }
+            }
 
             _unitOfWork.Trips.Delete(trip);
             await _unitOfWork.CompleteAsync();

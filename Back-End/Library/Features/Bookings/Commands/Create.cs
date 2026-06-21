@@ -1,19 +1,15 @@
 ﻿using AutoMapper;
+using Library.Enums;
 using Library.IRepository;
 using Library.Models;
 using MediatR;
 using Microsoft.Extensions.Caching.Memory;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Library.Features.Bookings.Commands
 {
     public class CreateBookingCommand : IRequest<Guid>
     {
-        public string UserId { get; set; }
+        public string UserId { get; set; } = string.Empty;
         public Guid TripId { get; set; }
         public int NumberOfTickets { get; set; }
         public string? SpecialRequests { get; set; }
@@ -36,6 +32,12 @@ namespace Library.Features.Bookings.Commands
         {
             var trip = await _unitOfWork.Trips.GetByIdAsync(request.TripId);
             if (trip == null) throw new InvalidOperationException("Trip not found.");
+
+            if (trip.StartTime <= DateTime.UtcNow)
+                throw new InvalidOperationException("Cannot book a past or currently running trip.");
+
+            if (trip.Status != TripStatus.Scheduled)
+                throw new InvalidOperationException("This trip is currently not available for booking.");
 
             if (trip.AvailableSeats < request.NumberOfTickets)
                 throw new InvalidOperationException("Not enough available seats.");

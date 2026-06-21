@@ -68,4 +68,5 @@ namespace Library.Features.Boats.Commands
             return boat.Id;
         }
     }
+
 }
