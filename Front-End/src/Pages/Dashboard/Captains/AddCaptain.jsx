@@ -1,0 +1,286 @@
+import React, { useRef, useState } from "react";
+import { FaRegUser } from "react-icons/fa";
+import { LuContact } from "react-icons/lu";
+import { MdAddAPhoto } from "react-icons/md";
+import { FaCloudUploadAlt } from "react-icons/fa";
+import Btn from "../../../Components/Utils/Btn";
+import * as Yup from "yup";
+import { useFormik } from "formik";
+import { api } from "../../../Api/Axios";
+import axios from "axios";
+import { useRole } from "../../../Hooks/UseRole";
+const AddCaptain = () => {
+  const { token } = useRole();
+  const yup = Yup.object().shape({
+    FullName: Yup.string()
+      .min(2, "Full Name must be at least 2 characters")
+      .max(100, "Full Name must be less than 100 characters")
+      .required("Full Name is required"),
+    Email: Yup
+      .email("Invalid email address")
+      .required("Email is required"),
+    PhoneNumber: Yup.string()
+      .required("Please Enter A Phone Number To Call You")
+      .required("Phone Number is Required")
+      .max(11, "Phone number Must have 11 number"),
+    YearsOfExperience: Yup.number().required(
+      "Please Enter A Years Of Experience",
+    ),
+    Languages: Yup.string().required("Please Enter A Languages"),
+    ProfilePhoto: Yup.string().required("Photo for captain is Required"),
+    Bio: Yup.string(),
+    Rank: Yup.string().required("Captain must Have A Rank"),
+  });
+  const formik = useFormik({
+    initialValues: {
+      FullName: "",
+      YearsOfExperience: 2,
+      Rank: "",
+      Languages: "",
+      Email: "",
+      PhoneNumber: "",
+      Bio: "",
+      IsAvailable: true,
+      ProfilePhoto: "",
+    },
+    validationSchema: yup,
+    validateOnBlur: true,
+    validateOnChange: true,
+    onSubmit: async (values, FormikHelper) => {
+      try {
+        const res = await api.post("/Captains", formik.values);
+        console.log(res);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+  });
+  const Rank = ["Master", "Cheif Mate", "Second Officer", "Third Officer"];
+  const [image, setImage] = useState();
+
+  function handelimage(e) {
+    const file = e.target.files.item(0);
+    if (file) {
+      setImage(URL.createObjectURL(file));
+      formik.setFieldValue("ProfilePhoto", URL.createObjectURL(file));
+    }
+  }
+  const imageRef = useRef("");
+  return (
+    <form onSubmit={formik.handleSubmit} className="p-4">
+      <div>
+        <h3 className="text-[50px] text-primary font-bold">Add New Captain</h3>
+        <p className="text-[16px] text-gray-600 mt-2">
+          Onboard a new expedition leader to the martian fleet. Ensure all
+          professional <br /> credentials are verified.
+        </p>
+      </div>
+      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="flex flex-col gap-y-6">
+          <div className="personal-info bg-white shadow-md p-4 rounded-md">
+            <h3 className="text-[20px] font-light mb-4 flex items-center text-[25px] gap-2 ">
+              {" "}
+              <FaRegUser className="text-secondry" /> Captain Information
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              <div>
+                <label
+                  htmlFor=""
+                  className="text-[15px] my-2 font-light text-gray-800 block"
+                >
+                  Full legal Name :{" "}
+                </label>
+                <input
+                  value={formik.values.FullName}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  name="FullName"
+                  type="text"
+                  placeholder="Full Name"
+                  className="border border-gray-400 rounded-[20px] py-2 px-3 focus:outline-none focus:ring-2 focus:border-secondary valid:ring-secondary w-full"
+                />
+                {formik.touched.FullName && formik.errors.FullName && (
+                  <span className="text-[14px] text-red-500">{formik.errors.FullName}</span>
+                )}
+              </div>
+              <div>
+                <label
+                  className="text-[15px] my-2 font-light text-gray-800 block"
+                  htmlFor=""
+                >
+                  RANK
+                </label>
+                <select
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.Rank}
+                  name="Rank"
+                  className="border border-gray-400 rounded-[20px] py-2 px-3 focus:outline-none focus:ring-2 focus:border-secondary valid:ring-secondary w-full"
+                >
+                  {Rank.map((i, k) => (
+                    <option key={k} value={i}>
+                      {i}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="text-[15px] my-2 font-light text-gray-800 block">
+                  Years Of Experiance
+                </label>
+                <input
+                  value={formik.values.YearsOfExperience}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  name="YearsOfExperience"
+                  type="text"
+                  placeholder="+20"
+                  className="border border-gray-400 rounded-[20px] py-2 px-3 focus:outline-none focus:ring-2 focus:border-secondary valid:ring-secondary w-full"
+                />
+                {formik.touched.YearsOfExperience &&
+                  formik.errors.YearsOfExperience && (
+                    <span className="text-[14px] text-red-500">{formik.errors.YearsOfExperience}</span>
+                  )}
+              </div>
+              <div>
+                <label className="text-[15px] my-2 font-light text-gray-800 block">
+                  Primary Language
+                </label>
+                <input
+                  value={formik.values.Languages}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  name="Languages"
+                  type="text"
+                  placeholder="English"
+                  className="border border-gray-400 rounded-[20px] py-2 px-3 focus:outline-none focus:ring-2 focus:border-secondary valid:ring-secondary w-full"
+                />
+                {formik.touched.Languages && formik.errors.Languages && (
+                  <span className="text-red-500 text-[14px]">
+                    {formik.errors.Languages}
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+          <div className="contact-info bg-white shadow-md p-4 rounded-md">
+            <h3 className="text-[20px] font-light mb-4 flex items-center text-[25px] gap-2 ">
+              {" "}
+              <LuContact className="text-secondary" /> Contact Information
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              <div>
+                <label
+                  className="text-[15px] my-2 font-light text-gray-800 block"
+                  htmlFor=""
+                >
+                  Email Address :{" "}
+                </label>
+                <input
+                  value={formik.values.Email}
+                  onChange={formik.handleChange}
+                  name="Email"
+                  type="email"
+                  placeholder="captain@gmail.com"
+                  id=""
+                  className="border border-gray-400 rounded-[20px] py-2 px-3 focus:outline-none focus:ring-2 focus:border-secondary valid:ring-secondary w-full"
+                />
+                {formik.touched.Email&&formik.errors.Email (
+                  <span className="text-[14px] text-red-500">
+                    {formik.errors.Email}
+                  </span>
+                )}
+              </div>
+              <div>
+                <label
+                  className="text-[15px] my-2 font-light text-gray-800 block"
+                  htmlFor=""
+                >
+                  Phone Number :{" "}
+                </label>
+                <input
+                  value={formik.values.PhoneNumber}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  name="PhoneNumber"
+                  className="border border-gray-400 rounded-[20px] py-2 px-3 focus:outline-none focus:ring-2 focus:border-secondary valid:ring-secondary w-full"
+                  type="tel"
+                  placeholder="0101010100"
+                  id=""
+                />
+                {formik.touched.PhoneNumber && formik.errors.PhoneNumber && (
+                  <span className="text-[14px] text-red-500">
+                    {formik.errors.PhoneNumber}
+                  </span>
+                )}
+              </div>
+            </div>
+            <textarea
+              value={formik.values.Bio}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              name="Bio"
+              placeholder="Dtail the captain sailing hisory, notable expreditions, and leadership..."
+              cols="52"
+              rows="10"
+              className="my-5 border border-gray-400 rounded-[20px] py-2 px-3 focus:outline-none focus:ring-2 focus:border-secondary valid:ring-secondary w-full"
+            ></textarea>
+            {formik.touched.Bio && formik.errors.Bio && (
+              <span className="text-red-500 text-[14px]">
+                {formik.errors.Bio}
+              </span>
+            )}
+          </div>
+        </div>
+        <div className="flex flex-col gap-y-6">
+          <div
+            className="image w-4/5 mx-auto bg-background shadow-md"
+            onClick={() => imageRef.current.click()}
+          >
+            <input
+              ref={imageRef}
+              onChange={handelimage}
+              type="file"
+              name="image"
+              id="image"
+              hidden
+            />
+            <h3 className="text-[23px] text-tertiary flex justify-center items-center gap-x-2.5">
+              <MdAddAPhoto /> Captain Photo
+            </h3>
+            {image ? (
+              <img src={image} className="w-full h-[350px] object-cover" />
+            ) : (
+              <div className="box cursor-pointer bg-gray-300 w-[90%] mx-auto rounded-md my-3 flex flex-col items-center">
+                <span className="text-[100px] text-secondary">
+                  <FaCloudUploadAlt />
+                </span>
+                <p className="text-gray-700 text-[18px] my-2">
+                  Drag && Drop Image
+                </p>
+                <p className="text-gray-500 text-[14px] my-1">
+                  Recommended 800x800px
+                </p>
+                {formik.touched.ProfilePhoto && formik.errors.ProfilePhoto && (
+                  <span>{formik.errors.ProfilePhoto}</span>
+                )}
+              </div>
+            )}
+          </div>
+          <div className="guideline w-4/5 mx-auto py-5 px-2 bg-primary rounded-md">
+            <h4 className="text-background text-[25px] font-bold">GuideLine</h4>
+            <p className="text-[16px] text-gray-300">
+              Complete Profiles increase expeditions booking rates by 45%.
+              Ensure high-quailty photo and details.{" "}
+            </p>
+          </div>
+          <button type="submit">
+            <Btn text={"Add Captain"} class={"ml-12"} />
+          </button>
+        </div>
+      </div>
+    </form>
+  );
+};
+
+export default AddCaptain;

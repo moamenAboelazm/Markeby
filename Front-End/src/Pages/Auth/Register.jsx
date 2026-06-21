@@ -79,22 +79,23 @@ const Register = () => {
       <div className="flex flex-col md:flex-row items-center justify-between min-h-screen">
         <div className="w-full md:w-1/2">
           <h2 className="text-[37px] text-center md:text-start lg:text-[50px] font-bold mb-4">
-            Markby on Your Next
-            <span className="text-secondary"> Great Voyage</span>.
+            Discover The Magic Beneath The Waves with{" "}
+            <span className="text-secondary">Markby</span>.
           </h2>
           <p className="text-md mb-4">
-            Join A Community of Travel Enthusiasts and Create Unforgettable
-            Memories.
+            Experience the beauty of Hurghada’s Red Sea, where vibrant fish,
+            stunning coral reefs, and endless blue waters await you.
           </p>
           <p className="text-md mb-4">
-            From the moment you step into our world, you'll be immersed in a
-            community of passionate travelers who share your love for adventure.
+            Set sail with Markby and create unforgettable moments with family
+            and friends.
           </p>
+          <p className="text-md mb-4">Your Next Sea Adventure Starts Here.</p>
           <div className="flex flex-col md:flex-row items-center gap-4">
             <div className="flex flex-wrap justify-center -space-x-3">
               <img
-                className="size-12 rounded-full"
-                src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=200"
+                className="size-12 rounded-full object-cover"
+                src="./public/assets/Bony.jpeg"
                 alt="userImage1"
               />
               <img

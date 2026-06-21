@@ -44,6 +44,7 @@ const Login = () => {
           decodedToken[
             "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
           ];
+        cookies.set("reftoken", response.data.refreshToken);
         if (roleFromToken === "Admin") {
           cookies.set("role", roleFromToken);
           nav("/dashboard");
