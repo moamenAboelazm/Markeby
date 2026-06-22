@@ -19,6 +19,9 @@ const Home = () => {
       ) : (
         role
       )}
+      <Link to="/dashboard" className="text-blue-500 hover:underline">
+        Dashboard
+      </Link>
     </div>
   );
 };
