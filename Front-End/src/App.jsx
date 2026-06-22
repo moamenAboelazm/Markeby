@@ -7,6 +7,8 @@ import GoBack from "./Pages/Auth/GoBack";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import AddCaptain from "./Pages/Dashboard/Captains/AddCaptain";
 import "./App.css";
+import Captains from "./Pages/Dashboard/Captains/Captains";
+import ProtectedRoutes from "./Pages/Auth/ProtectedRoutes";
 const App = () => {
   return (
     <div className="bg-background min-h-screen">
@@ -16,8 +18,11 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         {/* </Route> */}
-        <Route path="/dashboard" element={<Dashboard />}>
-        <Route path="addcaptain" element={<AddCaptain />} />
+        <Route element={<ProtectedRoutes />}>
+          <Route path="/dashboard" element={<Dashboard />}>
+            <Route path="captains" element={<Captains />} />
+            <Route path="addcaptain" element={<AddCaptain />} />
+          </Route>
         </Route>
       </Routes>
     </div>

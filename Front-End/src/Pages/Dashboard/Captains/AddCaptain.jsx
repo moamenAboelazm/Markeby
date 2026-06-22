@@ -9,14 +9,16 @@ import { useFormik } from "formik";
 import { api } from "../../../Api/Axios";
 import axios from "axios";
 import { useRole } from "../../../Hooks/UseRole";
+import { useNavigate } from "react-router-dom";
 const AddCaptain = () => {
   const { token } = useRole();
+  const nav = useNavigate();
   const yup = Yup.object().shape({
     FullName: Yup.string()
       .min(2, "Full Name must be at least 2 characters")
       .max(100, "Full Name must be less than 100 characters")
       .required("Full Name is required"),
-    Email: Yup
+    Email: Yup.string()
       .email("Invalid email address")
       .required("Email is required"),
     PhoneNumber: Yup.string()
@@ -27,7 +29,7 @@ const AddCaptain = () => {
       "Please Enter A Years Of Experience",
     ),
     Languages: Yup.string().required("Please Enter A Languages"),
-    ProfilePhoto: Yup.string().required("Photo for captain is Required"),
+    ProfilePhoto: Yup.mixed().required("Photo is required"),
     Bio: Yup.string(),
     Rank: Yup.string().required("Captain must Have A Rank"),
   });
@@ -48,10 +50,20 @@ const AddCaptain = () => {
     validateOnChange: true,
     onSubmit: async (values, FormikHelper) => {
       try {
-        const res = await api.post("/Captains", formik.values);
-        console.log(res);
+        const data = new FormData();
+        data.append("FullName", formik.values.FullName);
+        data.append("Email", formik.values.Email);
+        data.append("IsAvailable", formik.values.IsAvailable);
+        data.append("Languages", formik.values.Languages);
+        data.append("Bio", formik.values.Bio);
+        data.append("PhoneNumber", formik.values.PhoneNumber);
+        data.append("Rank", formik.values.Rank);
+        data.append("YearsOfExperience", formik.values.YearsOfExperience);
+        data.append("ProfilePhoto", formik.values.ProfilePhoto);
+        const res = await api.post("/Captains", data);
+        nav("/dashboard/captains");
       } catch (err) {
-        console.log(err);
+        console.log(err.response?.data);
       }
     },
   });
@@ -62,7 +74,7 @@ const AddCaptain = () => {
     const file = e.target.files.item(0);
     if (file) {
       setImage(URL.createObjectURL(file));
-      formik.setFieldValue("ProfilePhoto", URL.createObjectURL(file));
+      formik.setFieldValue("ProfilePhoto", file);
     }
   }
   const imageRef = useRef("");
@@ -100,7 +112,9 @@ const AddCaptain = () => {
                   className="border border-gray-400 rounded-[20px] py-2 px-3 focus:outline-none focus:ring-2 focus:border-secondary valid:ring-secondary w-full"
                 />
                 {formik.touched.FullName && formik.errors.FullName && (
-                  <span className="text-[14px] text-red-500">{formik.errors.FullName}</span>
+                  <span className="text-[14px] text-red-500">
+                    {formik.errors.FullName}
+                  </span>
                 )}
               </div>
               <div>
@@ -139,7 +153,9 @@ const AddCaptain = () => {
                 />
                 {formik.touched.YearsOfExperience &&
                   formik.errors.YearsOfExperience && (
-                    <span className="text-[14px] text-red-500">{formik.errors.YearsOfExperience}</span>
+                    <span className="text-[14px] text-red-500">
+                      {formik.errors.YearsOfExperience}
+                    </span>
                   )}
               </div>
               <div>
@@ -185,7 +201,7 @@ const AddCaptain = () => {
                   id=""
                   className="border border-gray-400 rounded-[20px] py-2 px-3 focus:outline-none focus:ring-2 focus:border-secondary valid:ring-secondary w-full"
                 />
-                {formik.touched.Email&&formik.errors.Email (
+                {formik.touched.Email && formik.errors.Email && (
                   <span className="text-[14px] text-red-500">
                     {formik.errors.Email}
                   </span>
@@ -220,7 +236,7 @@ const AddCaptain = () => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               name="Bio"
-              placeholder="Dtail the captain sailing hisory, notable expreditions, and leadership..."
+              placeholder="Details the captain sailing history, notable expreditions, and leadership..."
               cols="52"
               rows="10"
               className="my-5 border border-gray-400 rounded-[20px] py-2 px-3 focus:outline-none focus:ring-2 focus:border-secondary valid:ring-secondary w-full"
