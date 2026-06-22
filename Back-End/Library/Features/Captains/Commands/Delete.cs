@@ -1,11 +1,6 @@
 ﻿using Library.IRepository;
 using MediatR;
 using Microsoft.Extensions.Caching.Memory;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Library.Features.Captains.Commands
 {
@@ -14,20 +9,11 @@ namespace Library.Features.Captains.Commands
         public Guid Id { get; set; }
     }
 
-    public class DeleteCaptainCommandHandler : IRequestHandler<DeleteCaptainCommand, bool>
+    public class DeleteCaptainCommandHandler(IUnitOfWork _unitOfWork, IMemoryCache _cache) : IRequestHandler<DeleteCaptainCommand, bool>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMemoryCache _cache;
-
-        public DeleteCaptainCommandHandler(IUnitOfWork unitOfWork, IMemoryCache cache)
+        public async Task<bool> Handle(DeleteCaptainCommand data, CancellationToken cancellationToken)
         {
-            _unitOfWork = unitOfWork;
-            _cache = cache;
-        }
-
-        public async Task<bool> Handle(DeleteCaptainCommand request, CancellationToken cancellationToken)
-        {
-            var captain = await _unitOfWork.Captains.GetByIdAsync(request.Id);
+            var captain = await _unitOfWork.Captains.GetByIdAsync(data.Id);
 
             if (captain == null) return false;
 
@@ -35,7 +21,7 @@ namespace Library.Features.Captains.Commands
             await _unitOfWork.CompleteAsync();
 
             _cache.Remove("AllCaptainsCacheKey");
-            _cache.Remove($"CaptainDetailsCacheKey_{request.Id}");
+            _cache.Remove($"CaptainDetailsCacheKey_{data.Id}");
 
             return true;
         }

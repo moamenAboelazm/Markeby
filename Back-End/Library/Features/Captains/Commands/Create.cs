@@ -25,21 +25,8 @@ namespace Library.Features.Captains.Commands
         public IFormFile? ProfilePhoto { get; set; }
     }
 
-    public class CreateCaptainCommandHandler : IRequestHandler<CreateCaptainCommand, Guid>
+    public class CreateCaptainCommandHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IMemoryCache _cache, IFileService _fileService) : IRequestHandler<CreateCaptainCommand, Guid>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-        private readonly IMemoryCache _cache;
-        private readonly IFileService _fileService;
-
-        public CreateCaptainCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IMemoryCache cache, IFileService fileService)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-            _cache = cache;
-            _fileService = fileService;
-        }
-
         public async Task<Guid> Handle(CreateCaptainCommand data, CancellationToken cancellationToken)
         {
             var captain = _mapper.Map<Captain>(data);

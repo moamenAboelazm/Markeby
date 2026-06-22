@@ -1,16 +1,22 @@
 ﻿using AutoMapper;
+using AutoMapper.Configuration.Annotations;
 using Library.Enums;
 using Library.IRepository;
 using Library.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Library.Features.Boats.Commands
 {
     public class UpdateBoatCommand : IRequest<bool>
     {
+        [JsonIgnore]
+        [BindNever]
         public Guid Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
@@ -20,8 +26,6 @@ namespace Library.Features.Boats.Commands
         public bool HasFoodFacility { get; set; }
         public bool HasToilet { get; set; }
         public BoatStatus Status { get; set; }
-        public List<Guid> CaptainIds { get; set; } = new List<Guid>();
-
         public List<IFormFile>? Images { get; set; }
     }
 
@@ -30,12 +34,14 @@ namespace Library.Features.Boats.Commands
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IFileService _fileService;
+        private readonly IMemoryCache _cache;
 
-        public UpdateBoatCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IFileService fileService)
+        public UpdateBoatCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IFileService fileService, IMemoryCache cache)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _fileService = fileService;
+            _cache = cache;
         }
 
         public async Task<bool> Handle(UpdateBoatCommand data, CancellationToken cancellationToken)
@@ -48,7 +54,8 @@ namespace Library.Features.Boats.Commands
 
             boat.Captains.Clear();
 
-            if (data.CaptainIds != null && data.CaptainIds.Any())
+            /*
+                         if (data.CaptainIds != null && data.CaptainIds.Any())
             {
                 foreach (var captainId in data.CaptainIds)
                 {
@@ -59,6 +66,7 @@ namespace Library.Features.Boats.Commands
                     }
                 }
             }
+             */
 
             if (data.Images != null && data.Images.Any())
             {
@@ -78,6 +86,10 @@ namespace Library.Features.Boats.Commands
 
             _unitOfWork.Boats.Update(boat);
             await _unitOfWork.CompleteAsync();
+
+            _cache.Remove("AllBoatsCacheKey");
+            _cache.Remove("ActiveBoatsCacheKey");
+            _cache.Remove($"BoatDetailsCacheKey_{data.Id}");
 
             return true;
         }

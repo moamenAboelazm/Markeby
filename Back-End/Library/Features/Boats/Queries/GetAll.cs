@@ -2,15 +2,10 @@
 using Library.IRepository;
 using Library.Models;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Library.Features.Boats.Queries
 {
-    public class GetAllActiveBoatsQuery : IRequest<PagedResult<DtoBoat>>
+    public class GetAllBoatsQuery : IRequest<PagedResult<DtoBoat>>
     {
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
@@ -18,71 +13,65 @@ namespace Library.Features.Boats.Queries
         public int? Capacity { get; set; }
         public string? Status { get; set; }
         public int? YearBuilt { get; set; }
-        public string? SortBy { get; set; }
+        //public string? SortBy { get; set; }
         public bool SortDescending { get; set; } = false;
     }
 
-    public class GetAllActiveBoatsQueryHandler : IRequestHandler<GetAllActiveBoatsQuery, PagedResult<DtoBoat>>
+    public class GetAllBoatsQueryHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequestHandler<GetAllBoatsQuery, PagedResult<DtoBoat>>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-
-        public GetAllActiveBoatsQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
+        public async Task<PagedResult<DtoBoat>> Handle(GetAllBoatsQuery data, CancellationToken cancellationToken)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-        }
-
-        public async Task<PagedResult<DtoBoat>> Handle(GetAllActiveBoatsQuery request, CancellationToken cancellationToken)
-        {
-            var boats = await _unitOfWork.Boats.GetActiveBoatsAsync();
+            var boats = await _unitOfWork.Boats.GetAllBoatsAsync();
             var queryableBoats = boats.AsQueryable();
 
-            if (!string.IsNullOrEmpty(request.Name))
+            if (!string.IsNullOrEmpty(data.Name))
             {
-                queryableBoats = queryableBoats.Where(b => b.Name.Contains(request.Name, StringComparison.OrdinalIgnoreCase));
+                queryableBoats = queryableBoats.Where(b => b.Name.Contains(data.Name, StringComparison.OrdinalIgnoreCase));
             }
 
-            if (request.Capacity.HasValue)
+            if (data.Capacity.HasValue)
             {
-                queryableBoats = queryableBoats.Where(b => b.Capacity >= request.Capacity.Value);
+                queryableBoats = queryableBoats.Where(b => b.Capacity >= data.Capacity.Value);
             }
 
-            if (!string.IsNullOrEmpty(request.Status))
+            if (!string.IsNullOrEmpty(data.Status))
             {
-                queryableBoats = queryableBoats.Where(b => b.Status.ToString().Equals(request.Status, StringComparison.OrdinalIgnoreCase));
+                queryableBoats = queryableBoats.Where(b => b.Status.ToString().Equals(data.Status, StringComparison.OrdinalIgnoreCase));
             }
 
-            if (request.YearBuilt.HasValue)
+            if (data.YearBuilt.HasValue)
             {
-                queryableBoats = queryableBoats.Where(b => b.YearBuilt == request.YearBuilt.Value);
+                queryableBoats = queryableBoats.Where(b => b.YearBuilt == data.YearBuilt.Value);
             }
 
-            if (!string.IsNullOrEmpty(request.SortBy))
-            {
-                queryableBoats = request.SortBy.ToLower() switch
-                {
-                    "name" => request.SortDescending ? queryableBoats.OrderByDescending(b => b.Name) : queryableBoats.OrderBy(b => b.Name),
-                    "capacity" => request.SortDescending ? queryableBoats.OrderByDescending(b => b.Capacity) : queryableBoats.OrderBy(b => b.Capacity),
-                    "status" => request.SortDescending ? queryableBoats.OrderByDescending(b => b.Status) : queryableBoats.OrderBy(b => b.Status),
-                    "yearbuilt" => request.SortDescending ? queryableBoats.OrderByDescending(b => b.YearBuilt) : queryableBoats.OrderBy(b => b.YearBuilt),
-                    _ => request.SortDescending ? queryableBoats.OrderByDescending(b => b.Id) : queryableBoats.OrderBy(b => b.Id)
-                };
-            }
-            else
-                queryableBoats = request.SortDescending ? queryableBoats.OrderByDescending(b => b.Id) : queryableBoats.OrderBy(b => b.Id);
-            
+            /*
+               if (!string.IsNullOrEmpty(data.SortBy))
+              {
+                  queryableBoats = data.SortBy.ToLower() switch
+                  {
+                      "name" => data.SortDescending ? queryableBoats.OrderByDescending(b => b.Name) : queryableBoats.OrderBy(b => b.Name),
+                      "capacity" => data.SortDescending ? queryableBoats.OrderByDescending(b => b.Capacity) : queryableBoats.OrderBy(b => b.Capacity),
+                      "status" => data.SortDescending ? queryableBoats.OrderByDescending(b => b.Status) : queryableBoats.OrderBy(b => b.Status),
+                      "yearbuilt" => data.SortDescending ? queryableBoats.OrderByDescending(b => b.YearBuilt) : queryableBoats.OrderBy(b => b.YearBuilt),
+                      _ => data.SortDescending ? queryableBoats.OrderByDescending(b => b.Id) : queryableBoats.OrderBy(b => b.Id)
+                  };
+              }
+              else
+                  queryableBoats = data.SortDescending ? queryableBoats.OrderByDescending(b => b.Id) : queryableBoats.OrderBy(b => b.Id);
+             */
+
 
             var totalCount = queryableBoats.Count();
-            var pagedBoats = queryableBoats.Skip((request.PageNumber - 1) * request.PageSize).Take(request.PageSize).ToList();
+            var pagedBoats = queryableBoats.Skip((data.PageNumber - 1) * data.PageSize).Take(data.PageSize).ToList();
 
             return new PagedResult<DtoBoat>
             {
                 Items = _mapper.Map<List<DtoBoat>>(pagedBoats),
                 TotalCount = totalCount,
-                PageNumber = request.PageNumber,
-                PageSize = request.PageSize
+                PageNumber = data.PageNumber,
+                PageSize = data.PageSize
             };
         }
     }
+
 }

@@ -12,16 +12,9 @@ namespace Library.Dashboards.Captains
     {
     }
 
-    public class GetCaptainDashboardStatsQueryHandler : IRequestHandler<GetCaptainDashboardStatsQuery, CaptainDashboardStatsDto>
+    public class GetCaptainDashboardStatsQueryHandler(IUnitOfWork _unitOfWork) : IRequestHandler<GetCaptainDashboardStatsQuery, CaptainDashboardStatsDto>
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        public GetCaptainDashboardStatsQueryHandler(IUnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
-
-        public async Task<CaptainDashboardStatsDto> Handle(GetCaptainDashboardStatsQuery request, CancellationToken cancellationToken)
+        public async Task<CaptainDashboardStatsDto> Handle(GetCaptainDashboardStatsQuery data, CancellationToken cancellationToken)
         {
             var captains = await _unitOfWork.Captains.GetAllCaptainsWithDetailsAsync();
             var now = DateTime.UtcNow;

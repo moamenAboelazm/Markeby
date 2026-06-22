@@ -21,6 +21,7 @@ namespace Library.Dashboards.Captains
         public string Rank { get; set; } = string.Empty;
         public string Vessel { get; set; } = string.Empty;
         public string Status { get; set; } = string.Empty;
+        public string PhoneNumber { get; set; } = string.Empty;
         public string? ProfilePhotoUrl { get; set; }
     }
 }

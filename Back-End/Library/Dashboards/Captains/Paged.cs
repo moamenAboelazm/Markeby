@@ -17,24 +17,17 @@ namespace Library.Dashboards.Captains
         public int PageSize { get; set; } = 5;
     }
 
-    public class GetPagedCaptainsQueryHandler : IRequestHandler<GetPagedCaptainsQuery, PagedResult<CaptainListDto>>
+    public class GetPagedCaptainsQueryHandler(IUnitOfWork _unitOfWork) : IRequestHandler<GetPagedCaptainsQuery, PagedResult<CaptainListDto>>
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        public GetPagedCaptainsQueryHandler(IUnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
-
-        public async Task<PagedResult<CaptainListDto>> Handle(GetPagedCaptainsQuery request, CancellationToken cancellationToken)
+        public async Task<PagedResult<CaptainListDto>> Handle(GetPagedCaptainsQuery data, CancellationToken cancellationToken)
         {
             var allCaptains = await _unitOfWork.Captains.GetAllCaptainsWithDetailsAsync();
             var query = allCaptains.AsEnumerable();
 
-            if (!string.IsNullOrWhiteSpace(request.SearchTerm))
+            if (!string.IsNullOrWhiteSpace(data.SearchTerm))
             {
-                var term = request.SearchTerm.ToLower();
-                query = query.Where(c => c.FullName.ToLower().Contains(term) || c.Email.ToLower().Contains(term));
+                var term = data.SearchTerm.ToLower();
+                query = query.Where(c => c.FullName.ToLower().Contains(term) || c.Email.ToLower().Contains(term) || c.PhoneNumber.Contains(term));
             }
 
             var now = DateTime.UtcNow;
@@ -53,29 +46,28 @@ namespace Library.Dashboards.Captains
                     Rank = c.Rank,
                     Vessel = vessel,
                     Status = status,
+                    PhoneNumber = c.PhoneNumber,
                     ProfilePhotoUrl = c.ProfilePhotoUrl
                 };
             });
 
-            if (!string.IsNullOrWhiteSpace(request.Status))
-            {
-                pagedDataList = pagedDataList.Where(c => c.Status.Equals(request.Status, StringComparison.OrdinalIgnoreCase));
-            }
-
+            if (!string.IsNullOrWhiteSpace(data.Status))
+                pagedDataList = pagedDataList.Where(c => c.Status.Equals(data.Status, StringComparison.OrdinalIgnoreCase));
+            
             var totalCount = pagedDataList.Count();
 
             var pagedData = pagedDataList
                 .OrderBy(c => c.FullName)
-                .Skip((request.PageNumber - 1) * request.PageSize)
-                .Take(request.PageSize)
+                .Skip((data.PageNumber - 1) * data.PageSize)
+                .Take(data.PageSize)
                 .ToList();
 
             return new PagedResult<CaptainListDto>
             {
                 Items = pagedData,
                 TotalCount = totalCount,
-                PageNumber = request.PageNumber,
-                PageSize = request.PageSize
+                PageNumber = data.PageNumber,
+                PageSize = data.PageSize
             };
         }
     }
