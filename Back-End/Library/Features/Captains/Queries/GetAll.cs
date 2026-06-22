@@ -1,11 +1,6 @@
 ﻿using AutoMapper;
 using Library.IRepository;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Library.Features.Captains.Queries
 {
@@ -13,18 +8,9 @@ namespace Library.Features.Captains.Queries
     {
     }
 
-    public class GetAllCaptainsWithDetailsQueryHandler : IRequestHandler<GetAllCaptainsWithDetailsQuery, IReadOnlyList<DtoCaptain>>
+    public class GetAllCaptainsWithDetailsQueryHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequestHandler<GetAllCaptainsWithDetailsQuery, IReadOnlyList<DtoCaptain>>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-
-        public GetAllCaptainsWithDetailsQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-        }
-
-        public async Task<IReadOnlyList<DtoCaptain>> Handle(GetAllCaptainsWithDetailsQuery request, CancellationToken cancellationToken)
+        public async Task<IReadOnlyList<DtoCaptain>> Handle(GetAllCaptainsWithDetailsQuery data, CancellationToken cancellationToken)
         {
             var captains = await _unitOfWork.Captains.GetAllCaptainsWithDetailsAsync();
             return _mapper.Map<IReadOnlyList<DtoCaptain>>(captains);

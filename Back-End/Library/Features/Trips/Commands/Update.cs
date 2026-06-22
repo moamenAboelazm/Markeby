@@ -81,6 +81,18 @@ namespace Library.Features.Trips.Commands
                 }
             }
 
+            var boat = await _unitOfWork.Boats.GetBoatWithDetailsAsync(data.BoatId);
+            var captain = await _unitOfWork.Captains.GetByIdAsync(data.CaptainId);
+
+            if (boat != null && captain != null)
+            {
+                if (!boat.Captains.Any(c => c.Id == data.CaptainId))
+                {
+                    boat.Captains.Add(captain);
+                    _unitOfWork.Boats.Update(boat);
+                }
+            }
+
             _unitOfWork.Trips.Update(trip);
             await _unitOfWork.CompleteAsync();
 

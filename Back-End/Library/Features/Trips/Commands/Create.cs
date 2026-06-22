@@ -51,6 +51,18 @@ namespace Library.Features.Trips.Commands
             if (!isCaptainAvailable)
                 throw new InvalidOperationException("Captain is not available.");
 
+            var boat = await _unitOfWork.Boats.GetBoatWithDetailsAsync(data.BoatId);
+            var captain = await _unitOfWork.Captains.GetByIdAsync(data.CaptainId);
+
+            if (boat != null && captain != null)
+            {
+                if (!boat.Captains.Any(c => c.Id == data.CaptainId))
+                {
+                    boat.Captains.Add(captain);
+                    _unitOfWork.Boats.Update(boat);
+                }
+            }
+
             var trip = _mapper.Map<Trip>(data);
             trip.Status = TripStatus.Scheduled;
             trip.Images ??= new List<TripImage>();

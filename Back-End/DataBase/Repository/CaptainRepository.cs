@@ -4,11 +4,6 @@ using Library.IRepository;
 using Library.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataBase.Repository
 {
@@ -29,10 +24,7 @@ namespace DataBase.Repository
 
             if (!_cache.TryGetValue(cacheKey, out IReadOnlyList<Captain>? captains))
             {
-                captains = await _context.Set<Captain>()
-                    .Include(c => c.Boats)
-                    .AsNoTracking()
-                    .ToListAsync();
+                captains = await _context.Set<Captain>().Include(c => c.Boats).AsNoTracking().ToListAsync();
 
                 var cacheOptions = new MemoryCacheEntryOptions()
                     .SetSlidingExpiration(TimeSpan.FromHours(1))
@@ -50,10 +42,7 @@ namespace DataBase.Repository
 
             if (!_cache.TryGetValue(cacheKey, out Captain? captain))
             {
-                captain = await _context.Set<Captain>()
-                    .Include(c => c.Boats)
-                    .Include(c => c.Trips)
-                    .FirstOrDefaultAsync(c => c.Id == id);
+                captain = await _context.Set<Captain>().Include(c => c.Boats).Include(c => c.Trips).FirstOrDefaultAsync(c => c.Id == id);
 
                 if (captain != null)
                 {
@@ -70,10 +59,7 @@ namespace DataBase.Repository
         public async Task<bool> IsCaptainAvailableAsync(Guid captainId, DateTime startTime, DateTime endTime)
         {
             var hasConflict = await _context.Set<Trip>()
-                .AnyAsync(t => t.CaptainId == captainId &&
-                               t.Status != TripStatus.Cancelled &&
-                               t.StartTime < endTime &&
-                               t.EndTime > startTime);
+                .AnyAsync(t => t.CaptainId == captainId && t.Status != TripStatus.Cancelled && t.StartTime < endTime && t.EndTime > startTime);
 
             return !hasConflict;
         }

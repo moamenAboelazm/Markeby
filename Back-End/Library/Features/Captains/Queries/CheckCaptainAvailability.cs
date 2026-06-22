@@ -1,10 +1,5 @@
 ﻿using Library.IRepository;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Library.Features.Captains.Queries
 {
@@ -15,22 +10,11 @@ namespace Library.Features.Captains.Queries
         public DateTime EndTime { get; set; }
     }
 
-    public class CheckCaptainAvailabilityQueryHandler : IRequestHandler<CheckCaptainAvailabilityQuery, bool>
+    public class CheckCaptainAvailabilityQueryHandler(IUnitOfWork _unitOfWork) : IRequestHandler<CheckCaptainAvailabilityQuery, bool>
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        public CheckCaptainAvailabilityQueryHandler(IUnitOfWork unitOfWork)
+        public async Task<bool> Handle(CheckCaptainAvailabilityQuery data, CancellationToken cancellationToken)
         {
-            _unitOfWork = unitOfWork;
-        }
-
-        public async Task<bool> Handle(CheckCaptainAvailabilityQuery request, CancellationToken cancellationToken)
-        {
-            return await _unitOfWork.Captains.IsCaptainAvailableAsync(
-                request.CaptainId,
-                request.StartTime,
-                request.EndTime
-            );
+            return await _unitOfWork.Captains.IsCaptainAvailableAsync(data.CaptainId, data.StartTime, data.EndTime);
         }
     }
 }

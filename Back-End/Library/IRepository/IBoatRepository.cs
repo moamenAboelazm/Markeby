@@ -5,6 +5,7 @@ namespace Library.IRepository
     public interface IBoatRepository : IGenericRepository<Boat>
     {
         Task<IReadOnlyList<Boat>> GetActiveBoatsAsync();
+        Task<IReadOnlyList<Boat>> GetAllBoatsAsync();
         Task<Boat?> GetBoatWithDetailsAsync(Guid id);
         Task<IReadOnlyList<Boat>> GetBoatsByCapacityAsync(int minimumCapacity);
         Task<IReadOnlyList<Boat>> GetBoatsByCaptainIdAsync(Guid captainId);

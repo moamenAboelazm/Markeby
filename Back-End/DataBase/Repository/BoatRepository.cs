@@ -31,6 +31,7 @@ namespace DataBase.Repository
             {
                 activeBoats = await _context.Set<Boat>()
                     .Include(b => b.Captains)
+                    .Include(b => b.Images)
                     .Where(b => b.Status == BoatStatus.Active)
                     .AsNoTracking()
                     .ToListAsync();
@@ -45,6 +46,28 @@ namespace DataBase.Repository
             return activeBoats ?? new List<Boat>();
         }
 
+        public async Task<IReadOnlyList<Boat>> GetAllBoatsAsync()
+        {
+            string cacheKey = "AllBoatsCacheKey";
+
+            if (!_cache.TryGetValue(cacheKey, out IReadOnlyList<Boat>? allBoats))
+            {
+                allBoats = await _context.Set<Boat>()
+                    .Include(b => b.Captains)
+                    .Include(b => b.Images)
+                    .AsNoTracking()
+                    .ToListAsync();
+
+                var cacheOptions = new MemoryCacheEntryOptions()
+                    .SetSlidingExpiration(TimeSpan.FromMinutes(30))
+                    .SetAbsoluteExpiration(TimeSpan.FromHours(12));
+
+                _cache.Set(cacheKey, allBoats, cacheOptions);
+            }
+
+            return allBoats ?? new List<Boat>();
+        }
+
         public async Task<Boat?> GetBoatWithDetailsAsync(Guid id)
         {
             string cacheKey = $"BoatDetailsCacheKey_{id}";
@@ -54,6 +77,7 @@ namespace DataBase.Repository
                 boat = await _context.Set<Boat>()
                     .Include(b => b.Captains)
                     .Include(b => b.Trips)
+                    .Include(b => b.Images)
                     .FirstOrDefaultAsync(b => b.Id == id);
 
                 if (boat != null)
@@ -72,6 +96,7 @@ namespace DataBase.Repository
         {
             return await _context.Set<Boat>()
                 .Where(b => b.Capacity >= minimumCapacity && b.Status == BoatStatus.Active)
+                .Include(b => b.Images)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -80,6 +105,7 @@ namespace DataBase.Repository
         {
             return await _context.Set<Boat>()
                 .Where(b => b.Captains.Any(c => c.Id == captainId))
+                .Include(b => b.Images)
                 .AsNoTracking()
                 .ToListAsync();
         }

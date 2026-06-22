@@ -3,11 +3,6 @@ using Library.IRepository;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Library.Features.Captains.Commands
 {
@@ -26,21 +21,8 @@ namespace Library.Features.Captains.Commands
     }
 
 
-    public class UpdateCaptainCommandHandler : IRequestHandler<UpdateCaptainCommand, bool>
+    public class UpdateCaptainCommandHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IMemoryCache _cache, IFileService _fileService) : IRequestHandler<UpdateCaptainCommand, bool>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-        private readonly IMemoryCache _cache;
-        private readonly IFileService _fileService;
-
-        public UpdateCaptainCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IMemoryCache cache, IFileService fileService)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-            _cache = cache;
-            _fileService = fileService;
-        }
-
         public async Task<bool> Handle(UpdateCaptainCommand data, CancellationToken cancellationToken)
         {
             var captain = await _unitOfWork.Captains.GetByIdAsync(data.Id);
@@ -52,10 +34,8 @@ namespace Library.Features.Captains.Commands
             if (data.ProfilePhoto != null)
             {
                 if (!string.IsNullOrEmpty(captain.ProfilePhotoUrl))
-                {
                     _fileService.DeleteFile(captain.ProfilePhotoUrl);
-                }
-
+      
                 captain.ProfilePhotoUrl = await _fileService.SaveFileAsync(data.ProfilePhoto, "captains");
             }
 

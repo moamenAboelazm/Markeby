@@ -18,6 +18,12 @@ namespace Markeby.API.Controllers
             return Ok(new { Message = "Boat created successfully", Id = result });
         }
 
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllBoats([FromQuery] GetAllBoatsQuery query)
+        {
+            var result = await _mediator.Send(query);
+            return Ok(result);
+        }
 
         [HttpGet("active")]
         public async Task<IActionResult> GetAllActiveBoats([FromQuery] GetAllActiveBoatsQuery query)
@@ -37,13 +43,6 @@ namespace Markeby.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("capacity/{minimumCapacity}")]
-        public async Task<IActionResult> GetBoatsByCapacity(int minimumCapacity)
-        {
-            var result = await _mediator.Send(new GetBoatsByCapacityQuery { MinimumCapacity = minimumCapacity });
-            return Ok(result);
-        }
-
         [HttpGet("{id}/availability")]
         public async Task<IActionResult> CheckBoatAvailability(Guid id, [FromQuery] DateTime startTime, [FromQuery] DateTime endTime)
         {
@@ -58,15 +57,16 @@ namespace Markeby.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBoat(Guid id, [FromForm] UpdateBoatCommand command)
+        public async Task<IActionResult> UpdateBoat([FromRoute] Guid id, [FromForm] UpdateBoatCommand command)
         {
             command.Id = id;
+
             var result = await _mediator.Send(command);
 
             if (!result)
-                return NotFound(new { Message = "Boat not found." });
+                return NotFound($"No boat found with ID: {id}");
 
-            return Ok(new { Message = "Boat updated successfully" });
+            return Ok("Boat updated successfully.");
         }
 
         [HttpDelete("{id}")]
