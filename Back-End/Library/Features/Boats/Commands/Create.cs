@@ -5,8 +5,6 @@ using Library.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
-using System;
-using System.Collections.Generic;
 
 namespace Library.Features.Boats.Commands
 {
@@ -14,35 +12,23 @@ namespace Library.Features.Boats.Commands
     {
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
+        public string Type { get; set; } = string.Empty;
         public int Capacity { get; set; }
         public int YearBuilt { get; set; }
+        public double MaxSpeed { get; set; }
         public bool HasWifi { get; set; }
         public bool HasFoodFacility { get; set; }
-        public bool HasToilet { get; set; }
         //public List<Guid> CaptainIds { get; set; } = new List<Guid>();
 
         public List<IFormFile>? Images { get; set; }
     }
 
-    public class CreateBoatCommandHandler : IRequestHandler<CreateBoatCommand, Guid>
+    public class CreateBoatCommandHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IFileService _fileService, IMemoryCache _cache) : IRequestHandler<CreateBoatCommand, Guid>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-        private readonly IFileService _fileService;
-        private readonly IMemoryCache _cache;
-
-        public CreateBoatCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IFileService fileService, IMemoryCache cache)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-            _fileService = fileService;
-            _cache = cache;
-        }
-
         public async Task<Guid> Handle(CreateBoatCommand data, CancellationToken cancellationToken)
         {
             var boat = _mapper.Map<Boat>(data);
-            boat.Status = BoatStatus.Active;
+            boat.Status = BoatStatus.AtSea;
 
             /* if (data.CaptainIds != null && data.CaptainIds.Any())
             {

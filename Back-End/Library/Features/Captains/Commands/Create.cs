@@ -4,11 +4,6 @@ using Library.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Library.Features.Captains.Commands
 {

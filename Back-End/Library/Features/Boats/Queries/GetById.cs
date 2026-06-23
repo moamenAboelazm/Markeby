@@ -1,12 +1,6 @@
 ﻿using AutoMapper;
 using Library.IRepository;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Library.Features.Boats.Queries
 {
     public class GetBoatByIdQuery : IRequest<DtoBoat?>

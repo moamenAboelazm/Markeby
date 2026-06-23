@@ -1,12 +1,6 @@
 ﻿using Library.IRepository;
 using MediatR;
 using Microsoft.Extensions.Caching.Memory;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Library.Features.Boats.Commands
 {
@@ -15,22 +9,21 @@ namespace Library.Features.Boats.Commands
         public Guid Id { get; set; }
     }
 
-    public class DeleteBoatCommandHandler : IRequestHandler<DeleteBoatCommand, bool>
+    public class DeleteBoatCommandHandler(IUnitOfWork _unitOfWork, IMemoryCache _cache, IFileService _fileService) : IRequestHandler<DeleteBoatCommand, bool>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMemoryCache _cache;
-
-        public DeleteBoatCommandHandler(IUnitOfWork unitOfWork , IMemoryCache cache)
-        {
-            _unitOfWork = unitOfWork;
-            _cache = cache;
-        }
-
         public async Task<bool> Handle(DeleteBoatCommand data, CancellationToken cancellationToken)
         {
             var boat = await _unitOfWork.Boats.GetByIdAsync(data.Id);
 
             if (boat == null) return false;
+
+            if (boat.Images != null && boat.Images.Any())
+            {
+                foreach (var image in boat.Images)
+                {
+                    _fileService.DeleteFile(image.ImageUrl);
+                }
+            }
 
             _unitOfWork.Boats.Delete(boat);
             await _unitOfWork.CompleteAsync();

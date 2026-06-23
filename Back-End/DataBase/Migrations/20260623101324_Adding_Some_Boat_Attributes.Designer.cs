@@ -4,6 +4,7 @@ using DataBase.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataBase.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260623101324_Adding_Some_Boat_Attributes")]
+    partial class Adding_Some_Boat_Attributes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +37,7 @@ namespace DataBase.Migrations
 
                     b.HasIndex("TripsId");
 
-                    b.ToTable("AppUserTrip", (string)null);
+                    b.ToTable("AppUserTrip");
                 });
 
             modelBuilder.Entity("BoatCaptain", b =>
@@ -49,7 +52,7 @@ namespace DataBase.Migrations
 
                     b.HasIndex("CaptainsId");
 
-                    b.ToTable("BoatCaptain", (string)null);
+                    b.ToTable("BoatCaptain");
                 });
 
             modelBuilder.Entity("Identity.Models.RefreshToken", b =>
@@ -68,7 +71,7 @@ namespace DataBase.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RefreshTokens", (string)null);
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("Library.Models.AppUser", b =>
@@ -202,7 +205,7 @@ namespace DataBase.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Boats", (string)null);
+                    b.ToTable("Boats");
                 });
 
             modelBuilder.Entity("Library.Models.BoatImage", b =>
@@ -222,7 +225,7 @@ namespace DataBase.Migrations
 
                     b.HasIndex("BoatId");
 
-                    b.ToTable("BoatImages", (string)null);
+                    b.ToTable("BoatImages");
                 });
 
             modelBuilder.Entity("Library.Models.Booking", b =>
@@ -259,7 +262,7 @@ namespace DataBase.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Bookings", (string)null);
+                    b.ToTable("Bookings");
                 });
 
             modelBuilder.Entity("Library.Models.Captain", b =>
@@ -303,7 +306,7 @@ namespace DataBase.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Captains", (string)null);
+                    b.ToTable("Captains");
                 });
 
             modelBuilder.Entity("Library.Models.Trip", b =>
@@ -363,7 +366,7 @@ namespace DataBase.Migrations
 
                     b.HasIndex("CaptainId");
 
-                    b.ToTable("Trips", (string)null);
+                    b.ToTable("Trips");
                 });
 
             modelBuilder.Entity("Library.Models.TripImage", b =>
@@ -383,7 +386,7 @@ namespace DataBase.Migrations
 
                     b.HasIndex("TripId");
 
-                    b.ToTable("TripImages", (string)null);
+                    b.ToTable("TripImages");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
