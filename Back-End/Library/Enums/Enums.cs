@@ -32,8 +32,8 @@ namespace Library.Enums
 
     public enum BoatStatus
     {
-        Active,
-        UnderMaintenance,
+        AtSea,
+        Available,
         OutOfService
     }
 

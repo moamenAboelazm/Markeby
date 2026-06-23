@@ -1,5 +1,4 @@
-﻿using Library.Dashboards.Captains;
-using Library.Features.Bookings.Commands;
+﻿using Library.Features.Bookings.Commands;
 using Library.Features.Captains.Commands;
 using Library.Features.Captains.Queries;
 using MediatR;

@@ -18,15 +18,15 @@ namespace Markeby.API.Controllers
             return Ok(new { Message = "Boat created successfully", Id = result });
         }
 
-        [HttpGet("all")]
-        public async Task<IActionResult> GetAllBoats([FromQuery] GetAllBoatsQuery query)
+        [HttpGet("dashboard-stats")]
+        public async Task<IActionResult> GetDashboardStats()
         {
-            var result = await _mediator.Send(query);
+            var result = await _mediator.Send(new GetBoatDashboardStatsQuery());
             return Ok(result);
         }
 
-        [HttpGet("active")]
-        public async Task<IActionResult> GetAllActiveBoats([FromQuery] GetAllActiveBoatsQuery query)
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllBoats([FromQuery] GetAllBoatsQuery query)
         {
             var result = await _mediator.Send(query);
             return Ok(result);
@@ -43,19 +43,6 @@ namespace Markeby.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{id}/availability")]
-        public async Task<IActionResult> CheckBoatAvailability(Guid id, [FromQuery] DateTime startTime, [FromQuery] DateTime endTime)
-        {
-            var result = await _mediator.Send(new CheckBoatAvailabilityQuery
-            {
-                BoatId = id,
-                StartTime = startTime,
-                EndTime = endTime
-            });
-
-            return Ok(new { IsAvailable = result });
-        }
-
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateBoat([FromRoute] Guid id, [FromForm] UpdateBoatCommand command)
         {
@@ -64,9 +51,9 @@ namespace Markeby.API.Controllers
             var result = await _mediator.Send(command);
 
             if (!result)
-                return NotFound($"No boat found with ID: {id}");
+                return NotFound(new { Message = $"No boat found with ID: {id}" });
 
-            return Ok("Boat updated successfully.");
+            return Ok(new { Message = "Boat updated successfully." });
         }
 
         [HttpDelete("{id}")]

@@ -9,13 +9,16 @@ namespace Library.Features.Captains.Commands
         public Guid Id { get; set; }
     }
 
-    public class DeleteCaptainCommandHandler(IUnitOfWork _unitOfWork, IMemoryCache _cache) : IRequestHandler<DeleteCaptainCommand, bool>
+    public class DeleteCaptainCommandHandler(IUnitOfWork _unitOfWork, IMemoryCache _cache, IFileService _fileService) : IRequestHandler<DeleteCaptainCommand, bool>
     {
         public async Task<bool> Handle(DeleteCaptainCommand data, CancellationToken cancellationToken)
         {
             var captain = await _unitOfWork.Captains.GetByIdAsync(data.Id);
 
             if (captain == null) return false;
+
+            if (!string.IsNullOrEmpty(captain.ProfilePhotoUrl))
+                _fileService.DeleteFile(captain.ProfilePhotoUrl);
 
             _unitOfWork.Captains.Delete(captain);
             await _unitOfWork.CompleteAsync();

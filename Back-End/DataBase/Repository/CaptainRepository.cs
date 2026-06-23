@@ -1,5 +1,6 @@
 ﻿using DataBase.Contexts;
 using Library.Enums;
+using Library.Features.Captains;
 using Library.IRepository;
 using Library.Models;
 using Microsoft.EntityFrameworkCore;
@@ -36,13 +37,13 @@ namespace DataBase.Repository
             return captains ?? new List<Captain>();
         }
 
-        public async Task<Captain?> GetCaptainWithBoatsAndTripsAsync(Guid id)
+        public async Task<Captain?> GetCaptainWithDetailsAsync(Guid id)
         {
             string cacheKey = $"CaptainDetailsCacheKey_{id}";
 
             if (!_cache.TryGetValue(cacheKey, out Captain? captain))
             {
-                captain = await _context.Set<Captain>().Include(c => c.Boats).Include(c => c.Trips).FirstOrDefaultAsync(c => c.Id == id);
+                captain = await _context.Set<Captain>().Include(c => c.Boats).Include(c => c.Trips).AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
 
                 if (captain != null)
                 {
@@ -54,6 +55,26 @@ namespace DataBase.Repository
             }
 
             return captain;
+        }
+
+        public async Task<CaptainDashboardStatsDto> GetDashboardStatsAsync()
+        {
+            var now = DateTime.UtcNow;
+
+            var total = await _context.Set<Captain>().CountAsync();
+
+            var onMission = await _context.Set<Captain>()
+                .CountAsync(c => c.Trips.Any(t =>t.StartTime <= now &&t.EndTime >= now &&t.Status != TripStatus.Cancelled));
+
+            var onShoreLeave = await _context.Set<Captain>()
+                .CountAsync(c => c.IsAvailable && !c.Trips.Any(t =>t.StartTime <= now &&t.EndTime >= now &&t.Status != TripStatus.Cancelled));
+
+            return new CaptainDashboardStatsDto
+            {
+                TotalCaptains = total,
+                OnMission = onMission,
+                OnShoreLeave = onShoreLeave
+            };
         }
 
         public async Task<bool> IsCaptainAvailableAsync(Guid captainId, DateTime startTime, DateTime endTime)

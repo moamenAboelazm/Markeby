@@ -1,4 +1,5 @@
-﻿using Library.Models;
+﻿using Library.Features.Captains;
+using Library.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,8 @@ namespace Library.IRepository
     public interface ICaptainRepository : IGenericRepository<Captain>
     {
         Task<IReadOnlyList<Captain>> GetAllCaptainsWithDetailsAsync();
-        Task<Captain?> GetCaptainWithBoatsAndTripsAsync(Guid id);
+        Task<Captain?> GetCaptainWithDetailsAsync(Guid id);
+        Task<CaptainDashboardStatsDto> GetDashboardStatsAsync();
         Task<bool> IsCaptainAvailableAsync(Guid captainId, DateTime startTime, DateTime endTime);
     }
 }
