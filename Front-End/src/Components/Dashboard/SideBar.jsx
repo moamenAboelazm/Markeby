@@ -6,6 +6,7 @@ import { FaRegCompass } from "react-icons/fa";
 import { IoSettingsSharp } from "react-icons/io5";
 import { GiCaptainHatProfile } from "react-icons/gi";
 import { GiPirateCaptain } from "react-icons/gi";
+import { FaShip } from "react-icons/fa";
 import { Link, NavLink } from "react-router-dom";
 import LogOut from "../../Pages/Auth/LogOut";
 const SideBar = () => {
@@ -15,7 +16,7 @@ const SideBar = () => {
       icon: <LuLayoutDashboard className="text-[18px]" />,
     },
     {
-      name: "Fleet Crew",
+      name: "Users",
       icon: <FaUsers className="text-[18px]" />,
     },
     {
@@ -28,6 +29,10 @@ const SideBar = () => {
     },{
       name:"Add Captain",
       icon:<GiPirateCaptain className="text-[18px]" />
+    },
+    {
+      name:"Add Vessel",
+      icon:<FaShip className="text-[18px]" />
     },
     {
       name: "Settings",

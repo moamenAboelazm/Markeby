@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FaRegUser } from "react-icons/fa";
 import { LuContact } from "react-icons/lu";
 import { MdAddAPhoto } from "react-icons/md";
@@ -9,29 +9,27 @@ import { useFormik } from "formik";
 import { api } from "../../../Api/Axios";
 import axios from "axios";
 import { useRole } from "../../../Hooks/UseRole";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import Switch from "../../../Components/Dashboard/Switch";
+import Loader from "../../../Components/Website/Loader";
 const AddCaptain = () => {
   const { token } = useRole();
+  const { id } = useParams();
   const nav = useNavigate();
+  const [loading, setLoading] = useState(false);
   const yup = Yup.object().shape({
     FullName: Yup.string()
       .min(2, "Full Name must be at least 2 characters")
-      .max(100, "Full Name must be less than 100 characters")
-      .required("Full Name is required"),
-    Email: Yup.string()
-      .email("Invalid email address")
-      .required("Email is required"),
-    PhoneNumber: Yup.string()
-      .required("Please Enter A Phone Number To Call You")
-      .required("Phone Number is Required")
-      .max(11, "Phone number Must have 11 number"),
-    YearsOfExperience: Yup.number().required(
-      "Please Enter A Years Of Experience",
-    ),
-    Languages: Yup.string().required("Please Enter A Languages"),
-    ProfilePhoto: Yup.mixed().required("Photo is required"),
+      .max(100, "Full Name must be less than 100 characters"),
+
+    Email: Yup.string().email("Invalid email address"),
+
+    PhoneNumber: Yup.string().max(11, "Phone number Must have 11 number"),
+    YearsOfExperience: Yup.number(),
+    Languages: Yup.string(),
+    ProfilePhoto: Yup.mixed(),
     Bio: Yup.string(),
-    Rank: Yup.string().required("Captain must Have A Rank"),
+    Rank: Yup.string(),
   });
   const formik = useFormik({
     initialValues: {
@@ -49,27 +47,54 @@ const AddCaptain = () => {
     validateOnBlur: true,
     validateOnChange: true,
     onSubmit: async (values, FormikHelper) => {
+      setLoading(true);
       try {
         const data = new FormData();
         data.append("FullName", formik.values.FullName);
         data.append("Email", formik.values.Email);
-        data.append("IsAvailable", formik.values.IsAvailable);
+        data.append("IsAvailable", formik.values.IsAvailable || true);
         data.append("Languages", formik.values.Languages);
         data.append("Bio", formik.values.Bio);
         data.append("PhoneNumber", formik.values.PhoneNumber);
         data.append("Rank", formik.values.Rank);
         data.append("YearsOfExperience", formik.values.YearsOfExperience);
         data.append("ProfilePhoto", formik.values.ProfilePhoto);
-        const res = await api.post("/Captains", data);
+        data.append("Id", id);
+        const res = await api.put(`/Captains/${id}`, data);
         nav("/dashboard/captains");
+        console.log(res);
       } catch (err) {
         console.log(err.response?.data);
+      } finally {
+        setLoading(false);
       }
     },
   });
   const Rank = ["Master", "Cheif Mate", "Second Officer", "Third Officer"];
   const [image, setImage] = useState();
 
+  useEffect(() => {
+    async function fetchCaptain() {
+      try {
+        const res = api.get(`Captains/${id}`);
+        res.then((d) => {
+          console.log(d.data);
+          formik.setFieldValue("FullName", d.data.fullName);
+          formik.setFieldValue("YearsOfExperience", d.data.yearsOfExperience);
+          formik.setFieldValue("Email", d.data.email);
+          formik.setFieldValue("Languages", d.data.languages);
+          formik.setFieldValue("Bio", d.data.bio);
+          formik.setFieldValue("PhoneNumber", d.data.phoneNumber);
+          formik.setFieldValue("Rank", d.data.rank);
+          formik.setFieldValue("IsAvailable", d.data.IsAvailable);
+          setImage(`https://markeby.runasp.net${d.data["profilePhotoUrl"]}`);
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    fetchCaptain();
+  }, [id]);
   function handelimage(e) {
     const file = e.target.files.item(0);
     if (file) {
@@ -78,16 +103,32 @@ const AddCaptain = () => {
     }
   }
   const imageRef = useRef("");
+  if (loading) {
+    return <Loader />;
+  }
   return (
     <form onSubmit={formik.handleSubmit} className="p-4">
-      <div>
-        <h3 className="text-[50px] text-primary font-bold">Add New Captain</h3>
-        <p className="text-[16px] text-gray-600 mt-2">
-          Onboard a new expedition leader to the martian fleet. Ensure all
-          professional <br /> credentials are verified.
-        </p>
+      <div className="flex justify-between items-end">
+        <div>
+          <h3 className="text-[50px] text-primary font-bold">
+            Edit Captain Profile
+          </h3>
+          <p className="text-[16px] text-gray-600 mt-2">
+            Manage Professional credentials and sea serivce records
+          </p>
+          {/* <div className="flex items-end text-[18px] gap-x-2">
+            Captain Status{" "}
+            <Switch enabled={formik.values.IsAvailable} formik={formik} />{" "}
+            {formik.values.IsAvailable ? "Active" : "On Leave"}
+          </div> */}
+        </div>
+        <div className="flex justify-between items-center flex-col gap-y-2">
+          <button type="submit">
+            <Btn text={"Update Captain"} class={"ml-12"} />
+          </button>
+        </div>
       </div>
-      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="mt-8 flex flex-col md:flex-row-reverse gap-4">
         <div className="flex flex-col gap-y-6">
           <div className="personal-info bg-white shadow-md p-4 rounded-md">
             <h3 className="text-[20px] font-light mb-4 flex items-center text-[25px] gap-2 ">
@@ -261,13 +302,16 @@ const AddCaptain = () => {
               id="image"
               hidden
             />
-            <h3 className="text-[23px] text-tertiary flex justify-center items-center gap-x-2.5">
+            <h3 className="text-[23px] text-tertiary flex  items-center gap-x-2.5">
               <MdAddAPhoto /> Captain Photo
             </h3>
             {image ? (
-              <img src={image} className="w-full h-[350px] object-cover" />
+              <img
+                src={image}
+                className="w-full h-[350px] object-cover rounded-md"
+              />
             ) : (
-              <div className="box cursor-pointer bg-gray-300 w-[90%] border-gray-600 border-dashed border-2 mx-auto rounded-md my-3 flex flex-col items-center">
+              <div className="box cursor-pointer bg-gray-300 w-[90%] mx-auto rounded-md my-3 flex flex-col items-center">
                 <span className="text-[100px] text-secondary">
                   <FaCloudUploadAlt />
                 </span>
@@ -290,9 +334,6 @@ const AddCaptain = () => {
               Ensure high-quailty photo and details.{" "}
             </p>
           </div>
-          <button type="submit">
-            <Btn text={"Add Captain"} class={"ml-12"} />
-          </button>
         </div>
       </div>
     </form>

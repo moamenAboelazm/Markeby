@@ -6,7 +6,7 @@ export const useRole = () => {
   const role = cookies.get("role");
   if (token) {
     const decodedToken = jwtDecode(token);
-    console.log(decodedToken);
+
     const roleFromToken =
       decodedToken[
         "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
