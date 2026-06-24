@@ -4,7 +4,7 @@ import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import { FaUsers } from "react-icons/fa6";
 import { FaRegCompass } from "react-icons/fa";
 import { IoSettingsSharp } from "react-icons/io5";
-import { GiCaptainHatProfile } from "react-icons/gi";
+import { GiCaptainHatProfile, GiSpeedBoat } from "react-icons/gi";
 import { GiPirateCaptain } from "react-icons/gi";
 import { FaShip } from "react-icons/fa";
 import { Link, NavLink } from "react-router-dom";
@@ -26,13 +26,18 @@ const SideBar = () => {
     {
       name: "Captains",
       icon: <GiCaptainHatProfile className="text-[18px]" />,
-    },{
-      name:"Add Captain",
-      icon:<GiPirateCaptain className="text-[18px]" />
     },
     {
-      name:"Add Vessel",
-      icon:<FaShip className="text-[18px]" />
+      name: "Add Captain",
+      icon: <GiPirateCaptain className="text-[18px]" />,
+    },
+    {
+      name: "Vessels",
+      icon: <GiSpeedBoat />,
+    },
+    {
+      name: "Add Vessel",
+      icon: <FaShip className="text-[18px]" />,
     },
     {
       name: "Settings",
