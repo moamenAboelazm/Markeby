@@ -267,7 +267,7 @@ const AddCaptain = () => {
             {image ? (
               <img src={image} className="w-full h-[350px] object-cover" />
             ) : (
-              <div className="box cursor-pointer bg-gray-300 w-[90%] mx-auto rounded-md my-3 flex flex-col items-center">
+              <div className="box cursor-pointer bg-gray-300 w-[90%] border-gray-600 border-dashed border-2 mx-auto rounded-md my-3 flex flex-col items-center">
                 <span className="text-[100px] text-secondary">
                   <FaCloudUploadAlt />
                 </span>

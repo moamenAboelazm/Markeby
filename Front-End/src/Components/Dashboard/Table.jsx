@@ -1,7 +1,9 @@
 import React from "react";
 import { PiDotOutlineFill } from "react-icons/pi";
 import { MdDelete } from "react-icons/md";
+import { FiEdit } from "react-icons/fi";
 import Pagenate from "./Pagenate";
+import { Link } from "react-router-dom";
 const Table = (props) => {
   const headShow = props.head.map((h, k) => {
     return (
@@ -24,7 +26,7 @@ const Table = (props) => {
                 <div className="flex gap-x-2 items-center">
                   {d["profilePhotoUrl"] !== null ? (
                     <img
-                      className="w-[40px] h-[40px] rounded-full object-cover"
+                      className="w-[50px] h-[50px] rounded-full object-cover"
                       src={`https://markeby.runasp.net${d["profilePhotoUrl"]}`}
                     />
                   ) : (
@@ -55,6 +57,7 @@ const Table = (props) => {
           );
         })}
         <td className="flex justify-between items-center px-4 py-6">
+          <Link to={d["id"]} className="text-secondary hover:text-primary hover:scale-110 text-[25px] transition-all ease-in duration-300"><FiEdit /></Link> 
           <MdDelete
             onClick={() => props.delete(d["id"])}
             className="text-red-500 hover:scale-110 cursor-pointer text-[30px] duration-300 "
@@ -77,7 +80,10 @@ const Table = (props) => {
       <div className="flex justify-between items-center my-[30px] mr-[20px]">
         <Pagenate navgate={props.navgate} setNavgate={props.setNavgate} />
         <div className="flex items-center gap-x-2">
-          <p>{window.location.pathname.replace("/dashboard/","").toUpperCase()} For Page : </p>
+          <p>
+            {window.location.pathname.replace("/dashboard/", "").toUpperCase()}{" "}
+            For Page :{" "}
+          </p>
           <select
             name=""
             id=""

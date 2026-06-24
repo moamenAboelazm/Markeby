@@ -4,6 +4,7 @@ import CaptainsCards from "../../../Components/Dashboard/CaptainsCards";
 import { Link } from "react-router-dom";
 import { LuUserPlus } from "react-icons/lu";
 import Table from "../../../Components/Dashboard/Table";
+import Loader from "../../../Components/Website/Loader";
 
 const Captains = () => {
   const head = ["fullName", "rank", "vessel", "status", "phoneNumber"];
@@ -84,6 +85,9 @@ const Captains = () => {
     } catch (err) {
       console.log(err);
     }
+  }
+  if (loading) {
+    return <Loader />;
   }
   return (
     <div>

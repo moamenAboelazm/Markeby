@@ -86,8 +86,8 @@ const Login = () => {
           <div className="flex flex-col md:flex-row items-center gap-4">
             <div className="flex flex-wrap justify-center -space-x-3">
               <img
-                className="size-12 rounded-full"
-                src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=200"
+                className="size-12 rounded-full object-cover"
+               src="./public/assets/Bony.jpeg"
                 alt="userImage1"
               />
               <img

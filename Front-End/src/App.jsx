@@ -9,6 +9,8 @@ import AddCaptain from "./Pages/Dashboard/Captains/AddCaptain";
 import "./App.css";
 import Captains from "./Pages/Dashboard/Captains/Captains";
 import ProtectedRoutes from "./Pages/Auth/ProtectedRoutes";
+import UpdateCaptain from "./Pages/Dashboard/Captains/UpdateCaptain";
+import AddShip from "./Pages/Dashboard/Ships/AddShip";
 const App = () => {
   return (
     <div className="bg-background min-h-screen">
@@ -21,7 +23,9 @@ const App = () => {
         <Route element={<ProtectedRoutes />}>
           <Route path="/dashboard" element={<Dashboard />}>
             <Route path="captains" element={<Captains />} />
+            <Route path="captains/:id" element={<UpdateCaptain />} />
             <Route path="addcaptain" element={<AddCaptain />} />
+            <Route path="addvessel" element={<AddShip />} />
           </Route>
         </Route>
       </Routes>
