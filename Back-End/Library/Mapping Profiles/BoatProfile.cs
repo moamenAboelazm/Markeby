@@ -19,10 +19,17 @@ namespace Library.Mapping_Profiles
                 .ForMember(dest => dest.Images, opt => opt.Ignore())
                 .ForMember(dest => dest.Trips, opt => opt.Ignore());
 
+            CreateMap<Boat, DtoBoats>()
+                .ForMember(dest => dest.MainImageUrl, opt => opt.MapFrom(src =>
+                    src.Images != null && src.Images.Any() ? src.Images.First().ImageUrl : null))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
+
             CreateMap<Boat, DtoBoat>()
                 .ForMember(dest => dest.MainImageUrl, opt => opt.MapFrom(src =>
                     src.Images != null && src.Images.Any() ? src.Images.First().ImageUrl : null))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
+            
+            CreateMap<BoatImage, DtoBoatImage>();
         }
     }
 }

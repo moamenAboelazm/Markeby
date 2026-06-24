@@ -1,5 +1,19 @@
-﻿namespace Library.Features.Boats
+﻿using Library.Models;
+
+namespace Library.Features.Boats
 {
+    public class DtoBoats
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Type { get; set; } = string.Empty;
+        public int Capacity { get; set; }
+        public string? MainImageUrl { get; set; }
+        public bool HasWifi { get; set; }
+        public bool HasFoodFacility { get; set; }
+        public string Status { get; set; } = string.Empty;
+    }
+
     public class DtoBoat
     {
         public Guid Id { get; set; }
@@ -13,7 +27,15 @@
         public bool HasWifi { get; set; }
         public bool HasFoodFacility { get; set; }
         public string Status { get; set; } = string.Empty;
+        public List<DtoBoatImage> Images { get; set; } = new();
     }
+
+    public class DtoBoatImage
+    {
+        public string ImageUrl { get; set; } = string.Empty;
+    }
+
+
     public class BoatDashboardStatsDto
     {
         public int TotalBoats { get; set; }
