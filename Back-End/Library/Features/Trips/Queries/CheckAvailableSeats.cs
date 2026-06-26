@@ -9,15 +9,8 @@ namespace Library.Features.Trips.Queries
         public int RequiredSeats { get; set; }
     }
 
-    public class CheckAvailableSeatsQueryHandler : IRequestHandler<CheckAvailableSeatsQuery, bool>
+    public class CheckAvailableSeatsQueryHandler(IUnitOfWork _unitOfWork) : IRequestHandler<CheckAvailableSeatsQuery, bool>
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        public CheckAvailableSeatsQueryHandler(IUnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
-
         public async Task<bool> Handle(CheckAvailableSeatsQuery data, CancellationToken cancellationToken)
         {
             return await _unitOfWork.Trips.HasAvailableSeatsAsync(data.TripId, data.RequiredSeats);

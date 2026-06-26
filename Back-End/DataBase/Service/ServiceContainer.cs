@@ -99,6 +99,7 @@ namespace DataBase.Service
             services.AddScoped<IRoleManagement, RoleManagement>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IValidationService, ValidationService>();
+            services.AddHostedService<TripStatusUpdaterService>();
 
             // 8. File Service Registration (Missing in your code)
             services.AddScoped<IFileService, FileService>();

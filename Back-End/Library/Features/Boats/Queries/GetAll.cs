@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Library.Features.Boats.Queries
 {
-    public class GetAllBoatsQuery : IRequest<PagedResult<DtoBoats>>
+    public class GetPagedBoatsQuery : IRequest<PagedResult<DtoBoats>>
     {
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 10;
@@ -17,9 +17,9 @@ namespace Library.Features.Boats.Queries
         public bool SortDescending { get; set; } = false;
     }
 
-    public class GetAllBoatsQueryHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequestHandler<GetAllBoatsQuery, PagedResult<DtoBoats>>
+    public class GetAllBoatsQueryHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequestHandler<GetPagedBoatsQuery, PagedResult<DtoBoats>>
     {
-        public async Task<PagedResult<DtoBoats>> Handle(GetAllBoatsQuery data, CancellationToken cancellationToken)
+        public async Task<PagedResult<DtoBoats>> Handle(GetPagedBoatsQuery data, CancellationToken cancellationToken)
         {
             var boats = await _unitOfWork.Boats.GetAllBoatsAsync();
             var queryableBoats = boats.AsQueryable();

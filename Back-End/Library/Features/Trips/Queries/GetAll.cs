@@ -1,102 +1,72 @@
 ﻿using AutoMapper;
+using Library.Enums;
 using Library.IRepository;
 using Library.Models;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Library.Features.Trips.Queries
 {
-    public class GetAllTripsQuery : IRequest<PagedResult<DtoTrip>>
+    public class GetPagedTripsQuery : IRequest<PagedResult<DtoTrip>>
     {
-        public int PageNumber { get; set; } = 1;
-        public int PageSize { get; set; } = 10;
         public string? SearchTerm { get; set; }
-        public Guid? BoatId { get; set; }
-        public Guid? CaptainId { get; set; }
+        public bool OnlyAvailableUpcoming { get; set; }
+        public string? BoatName { get; set; }
+        public string? CaptainName { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-        public string? Status { get; set; }
-        public string? Type { get; set; }
-        public bool? OnlyAvailableUpcoming { get; set; }
-        public string? SortBy { get; set; }
-        public bool SortDescending { get; set; } = false;
+        public bool SortDescending { get; set; } = true;
+        public int PageNumber { get; set; } = 1;
+        public int PageSize { get; set; } = 10;
     }
-    public class GetAllTripsQueryHandler : IRequestHandler<GetAllTripsQuery, PagedResult<DtoTrip>>
+
+    public class GetAllTripsQueryHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequestHandler<GetPagedTripsQuery, PagedResult<DtoTrip>>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-
-        public GetAllTripsQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
+        public async Task<PagedResult<DtoTrip>> Handle(GetPagedTripsQuery data, CancellationToken cancellationToken)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-        }
+            var allTrips = await _unitOfWork.Trips.GetAllTripsWithDetailsAsync();
+            var query = allTrips.AsEnumerable();
 
-        public async Task<PagedResult<DtoTrip>> Handle(GetAllTripsQuery data, CancellationToken cancellationToken)
-        {
-            var trips = await _unitOfWork.Trips.GetAllAsync();
-            var queryableTrips = trips.AsQueryable();
-
-            if (!string.IsNullOrEmpty(data.SearchTerm))
+            if (data.OnlyAvailableUpcoming)
             {
-                queryableTrips = queryableTrips.Where(t =>
-                    t.Title.Contains(data.SearchTerm, StringComparison.OrdinalIgnoreCase) ||
-                    t.StartLocation.Contains(data.SearchTerm, StringComparison.OrdinalIgnoreCase));
+                var now = DateTime.UtcNow.AddHours(3);
+                query = query.Where(t => t.StartTime > now && t.Status == TripStatus.Scheduled && t.AvailableSeats > 0);
             }
 
-            if (data.BoatId.HasValue)
-                queryableTrips = queryableTrips.Where(t => t.BoatId == data.BoatId.Value);
-            
+            if (!string.IsNullOrWhiteSpace(data.BoatName))
+            {
+                var boatName = data.BoatName.ToLower();
+                query = query.Where(t => t.Boat != null && t.Boat.Name != null && t.Boat.Name.ToLower().Contains(boatName));
+            }
 
-            if (data.CaptainId.HasValue)
-                queryableTrips = queryableTrips.Where(t => t.CaptainId == data.CaptainId.Value);
-            
+            if (!string.IsNullOrWhiteSpace(data.CaptainName))
+            {
+                var captainName = data.CaptainName.ToLower();
+                query = query.Where(t => t.Captain != null && t.Captain.FullName != null && t.Captain.FullName.ToLower().Contains(captainName));
+            }
 
             if (data.StartDate.HasValue)
-                queryableTrips = queryableTrips.Where(t => t.StartTime >= data.StartDate.Value);
-            
+                query = query.Where(t => t.StartTime >= data.StartDate.Value);
 
             if (data.EndDate.HasValue)
-                queryableTrips = queryableTrips.Where(t => t.EndTime <= data.EndDate.Value);
-            
+                query = query.Where(t => t.EndTime <= data.EndDate.Value);
 
-            if (!string.IsNullOrEmpty(data.Status))
-                queryableTrips = queryableTrips.Where(t => t.Status.ToString().Equals(data.Status, StringComparison.OrdinalIgnoreCase));
-            
-
-            if (!string.IsNullOrEmpty(data.Type))
-                queryableTrips = queryableTrips.Where(t => t.Type.ToString().Equals(data.Type, StringComparison.OrdinalIgnoreCase));
-          
-
-            if (data.OnlyAvailableUpcoming.HasValue && data.OnlyAvailableUpcoming.Value)
-                queryableTrips = queryableTrips.Where(t => t.StartTime > DateTime.UtcNow && t.AvailableSeats > 0);
-            
-
-            if (!string.IsNullOrEmpty(data.SortBy))
+            if (!string.IsNullOrWhiteSpace(data.SearchTerm))
             {
-                queryableTrips = data.SortBy.ToLower() switch
-                {
-                    "title" => data.SortDescending ? queryableTrips.OrderByDescending(t => t.Title) : queryableTrips.OrderBy(t => t.Title),
-                    "price" => data.SortDescending ? queryableTrips.OrderByDescending(t => t.Price) : queryableTrips.OrderBy(t => t.Price),
-                    "starttime" => data.SortDescending ? queryableTrips.OrderByDescending(t => t.StartTime) : queryableTrips.OrderBy(t => t.StartTime),
-                    "availableseats" => data.SortDescending ? queryableTrips.OrderByDescending(t => t.AvailableSeats) : queryableTrips.OrderBy(t => t.AvailableSeats),
-                    _ => data.SortDescending ? queryableTrips.OrderByDescending(t => t.Id) : queryableTrips.OrderBy(t => t.Id)
-                };
+                var term = data.SearchTerm.ToLower();
+                query = query.Where(t => (t.Title != null && t.Title.ToLower().Contains(term)) || (t.StartLocation != null && t.StartLocation.ToLower().Contains(term)));
             }
-            else
-                queryableTrips = data.SortDescending ? queryableTrips.OrderByDescending(t => t.StartTime) : queryableTrips.OrderBy(t => t.StartTime);
-            
 
-            var totalCount = queryableTrips.Count();
-            var pagedTrips = queryableTrips.Skip((data.PageNumber - 1) * data.PageSize).Take(data.PageSize).ToList();
+            query = data.SortDescending ? query.OrderByDescending(t => t.StartTime) : query.OrderBy(t => t.StartTime);
+
+            var totalCount = query.Count();
+
+            var pagedEntities = query.Skip((data.PageNumber - 1) * data.PageSize).Take(data.PageSize).ToList();
+
+            var mappedItems = _mapper.Map<List<DtoTrip>>(pagedEntities);
 
             return new PagedResult<DtoTrip>
             {
-                Items = _mapper.Map<List<DtoTrip>>(pagedTrips),
+                Items = mappedItems,
                 TotalCount = totalCount,
                 PageNumber = data.PageNumber,
                 PageSize = data.PageSize

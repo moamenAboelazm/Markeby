@@ -43,14 +43,4 @@ namespace Library.Features.Boats
         public int Available { get; set; }
         public int OutOfService { get; set; }
     }
-
-    public class BoatListDto
-    {
-        public Guid Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public string CaptainName { get; set; } = string.Empty;
-        public int Capacity { get; set; }
-        public string Status { get; set; } = string.Empty;
-        public string? ImageUrl { get; set; }
-    }
 }

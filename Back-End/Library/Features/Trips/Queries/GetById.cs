@@ -9,17 +9,8 @@ namespace Library.Features.Trips.Queries
         public Guid Id { get; set; }
     }
 
-    public class GetTripWithDetailsByIdQueryHandler : IRequestHandler<GetTripWithDetailsByIdQuery, DtoTrip?>
+    public class GetTripWithDetailsByIdQueryHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequestHandler<GetTripWithDetailsByIdQuery, DtoTrip?>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-
-        public GetTripWithDetailsByIdQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-        }
-
         public async Task<DtoTrip?> Handle(GetTripWithDetailsByIdQuery data, CancellationToken cancellationToken)
         {
             var trip = await _unitOfWork.Trips.GetTripWithDetailsByIdAsync(data.Id);

@@ -18,29 +18,13 @@ namespace Library.Features.Trips.Commands
         public decimal Price { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-        public DateTime? MeetingTime { get; set; }
         public int AvailableSeats { get; set; }
-        public string? IncludedItems { get; set; }
-        public string? ExcludedItems { get; set; }
         public TripType Type { get; set; }
         public List<IFormFile>? Images { get; set; }
     }
 
-    public class CreateTripCommandHandler : IRequestHandler<CreateTripCommand, Guid>
+    public class CreateTripCommandHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IMemoryCache _cache, IFileService _fileService) : IRequestHandler<CreateTripCommand, Guid>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-        private readonly IMemoryCache _cache;
-        private readonly IFileService _fileService;
-
-        public CreateTripCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IMemoryCache cache, IFileService fileService)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-            _cache = cache;
-            _fileService = fileService;
-        }
-
         public async Task<Guid> Handle(CreateTripCommand data, CancellationToken cancellationToken)
         {
             var isBoatAvailable = await _unitOfWork.Boats.IsBoatAvailableAsync(data.BoatId, data.StartTime, data.EndTime);
@@ -79,7 +63,9 @@ namespace Library.Features.Trips.Commands
             await _unitOfWork.Trips.AddAsync(trip);
             await _unitOfWork.CompleteAsync();
 
-            _cache.Remove("AvailableUpcomingTripsCacheKey");
+            _cache.Remove("AllTripsCacheKey");
+            _cache.Remove("AllCaptainsCacheKey");
+            _cache.Remove("AllBoatsCacheKey");
 
             return trip.Id;
         }

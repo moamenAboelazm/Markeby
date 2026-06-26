@@ -63,7 +63,8 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy.WithOrigins("Https://markeby.netlify.app",
-                                "http://localhost:5173")
+                                "http://localhost:5173",
+                                "https://markeby.vercel.app")
             .AllowAnyHeader()
             .AllowAnyMethod();
         })

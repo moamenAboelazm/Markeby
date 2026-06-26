@@ -9,19 +9,8 @@ namespace Library.Features.Trips.Commands
         public Guid Id { get; set; }
     }
 
-    public class DeleteTripCommandHandler : IRequestHandler<DeleteTripCommand, bool>
+    public class DeleteTripCommandHandler(IUnitOfWork _unitOfWork, IMemoryCache _cache, IFileService _fileService) : IRequestHandler<DeleteTripCommand, bool>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMemoryCache _cache;
-        private readonly IFileService _fileService;
-
-        public DeleteTripCommandHandler(IUnitOfWork unitOfWork, IMemoryCache cache, IFileService fileService)
-        {
-            _unitOfWork = unitOfWork;
-            _cache = cache;
-            _fileService = fileService;
-        }
-
         public async Task<bool> Handle(DeleteTripCommand data, CancellationToken cancellationToken)
         {
             var trip = await _unitOfWork.Trips.GetTripWithDetailsByIdAsync(data.Id);
@@ -38,8 +27,10 @@ namespace Library.Features.Trips.Commands
             _unitOfWork.Trips.Delete(trip);
             await _unitOfWork.CompleteAsync();
 
-            _cache.Remove("AvailableUpcomingTripsCacheKey");
+            _cache.Remove("AllTripsCacheKey");
             _cache.Remove($"TripDetailsCacheKey_{data.Id}");
+            _cache.Remove("AllCaptainsCacheKey");
+            _cache.Remove("AllBoatsCacheKey");
 
             return true;
         }
