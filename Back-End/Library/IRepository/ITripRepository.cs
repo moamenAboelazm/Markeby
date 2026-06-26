@@ -1,4 +1,6 @@
-﻿using Library.Models;
+﻿using Library.Features.Boats;
+using Library.Features.Trips;
+using Library.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,12 +11,9 @@ namespace Library.IRepository
 {
     public interface ITripRepository : IGenericRepository<Trip>
     {
-        Task<IReadOnlyList<Trip>> GetAvailableUpcomingTripsAsync();
         Task<Trip?> GetTripWithDetailsByIdAsync(Guid id);
-        Task<IReadOnlyList<Trip>> GetTripsByBoatIdAsync(Guid boatId);
-        Task<IReadOnlyList<Trip>> GetTripsByCaptainIdAsync(Guid captainId);
-        Task<IReadOnlyList<Trip>> GetTripsByDateRangeAsync(DateTime startDate, DateTime endDate);
-        Task<IReadOnlyList<Trip>> SearchTripsAsync(string searchTerm);
+        Task<IReadOnlyList<Trip>> GetAllTripsWithDetailsAsync();
         Task<bool> HasAvailableSeatsAsync(Guid tripId, int requiredSeats);
+        Task<TripDashboardStatsDto> GetDashboardStatsAsync();
     }
 }

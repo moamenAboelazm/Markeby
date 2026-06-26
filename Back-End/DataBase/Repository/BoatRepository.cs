@@ -67,27 +67,22 @@ namespace DataBase.Repository
 
         public async Task<BoatDashboardStatsDto> GetDashboardStatsAsync()
         {
-            var now = DateTime.UtcNow;
+            var now = DateTime.UtcNow.AddHours(3);
 
-            var total = await _context.Set<Boat>().CountAsync();
+            var stats = await _context.Boats
+                .GroupBy(x => 1)
+                .Select(g => new BoatDashboardStatsDto
+                {
+                    TotalBoats = g.Count(),
 
-            var atSea = await _context.Set<Boat>()
-                .CountAsync(b => b.Trips.Any(t => t.StartTime <= now && t.EndTime >= now));
+                    AtSea = g.Count(b => b.Trips.Any(t => t.StartTime <= now && t.EndTime >= now)),
 
-            var available = await _context.Set<Boat>()
-                .CountAsync(b => b.Status == BoatStatus.Available &&
-                                 !b.Trips.Any(t => t.StartTime <= now && t.EndTime >= now));
+                    Available = g.Count(b => b.Status == BoatStatus.Available && !b.Trips.Any(t => t.StartTime <= now && t.EndTime >= now)),
+                   
+                    OutOfService = g.Count(b => b.Status == BoatStatus.OutOfService)
+                }).FirstOrDefaultAsync();
 
-            var outOfService = await _context.Set<Boat>()
-                .CountAsync(b => b.Status == BoatStatus.OutOfService);
-
-            return new BoatDashboardStatsDto
-            {
-                TotalBoats = total,
-                AtSea = atSea,
-                Available = available,
-                OutOfService = outOfService
-            };
+            return stats ?? new BoatDashboardStatsDto();
         }
 
         public async Task<bool> IsBoatAvailableAsync(Guid boatId, DateTime startTime, DateTime endTime)

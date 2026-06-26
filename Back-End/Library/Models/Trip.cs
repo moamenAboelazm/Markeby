@@ -1,6 +1,4 @@
 ﻿using Library.Enums;
-using System;
-using System.Collections.Generic;
 
 namespace Library.Models
 {
@@ -15,10 +13,7 @@ namespace Library.Models
         public decimal Price { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-        public DateTime? MeetingTime { get; set; }
         public int AvailableSeats { get; set; }
-        public string? IncludedItems { get; set; }
-        public string? ExcludedItems { get; set; }
         public TripType Type { get; set; }
         public TripStatus Status { get; set; }
 

@@ -30,11 +30,25 @@ namespace Library.Enums
         User 
     }
 
+    public enum CaptainStatus
+    {
+        OnMission,
+        OnShoreLeave
+    }
+
     public enum BoatStatus
     {
         AtSea,
         Available,
         OutOfService
+    }
+
+    public enum TripStatus
+    {
+        Scheduled,
+        Ongoing,
+        Completed,
+        Cancelled
     }
 
     public enum TripType
@@ -44,14 +58,6 @@ namespace Library.Enums
         Fishing,
         Party,
         Private
-    }
-
-    public enum TripStatus
-    {
-        Scheduled,
-        Ongoing,
-        Completed,
-        Cancelled
     }
 
 }

@@ -1,31 +1,60 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Library.Features.Boats.Queries;
 using Library.Features.Trips.Commands;
 using Library.Features.Trips.Queries;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Markeby.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin")]
     public class TripsController(IMediator _mediator) : ControllerBase
     {
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateTrip([FromForm] CreateTripCommand command)
         {
             var result = await _mediator.Send(command);
             return Ok(new { Message = "Trip created successfully", Id = result });
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllTrips([FromQuery] GetAllTripsQuery query)
+        [HttpGet("available-resources")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetAvailableResources([FromQuery] DateTime startTime, [FromQuery] DateTime endTime)
+        {
+            if (startTime >= endTime)
+                return BadRequest(new { Message = "Start time must be before End Time" });
+            
+            if (startTime < DateTime.UtcNow.AddHours(3))
+                return BadRequest(new { Message = "A trip cannot be created for a past time." });
+
+            var result = await _mediator.Send(new GetAvailableResourcesQuery
+            {
+                StartTime = startTime,
+                EndTime = endTime
+            });
+
+            return Ok(result);
+        }
+
+        [HttpGet("dashboard-stats")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetDashboardStats()
+        {
+            var result = await _mediator.Send(new GetTripDashboardStatsQuery());
+            return Ok(result);
+        }
+
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllBoats([FromQuery] GetPagedTripsQuery query)
         {
             var result = await _mediator.Send(query);
             return Ok(result);
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetTripById(Guid id)
         {
             var result = await _mediator.Send(new GetTripWithDetailsByIdQuery { Id = id });
@@ -44,6 +73,7 @@ namespace Markeby.API.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateTrip(Guid id, [FromForm] UpdateTripCommand command)
         {
             command.Id = id;
@@ -56,6 +86,7 @@ namespace Markeby.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteTrip(Guid id)
         {
             var result = await _mediator.Send(new DeleteTripCommand { Id = id });

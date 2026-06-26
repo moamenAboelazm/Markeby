@@ -34,7 +34,7 @@ namespace DataBase.Migrations
 
                     b.HasIndex("TripsId");
 
-                    b.ToTable("AppUserTrip", (string)null);
+                    b.ToTable("AppUserTrip");
                 });
 
             modelBuilder.Entity("BoatCaptain", b =>
@@ -49,7 +49,7 @@ namespace DataBase.Migrations
 
                     b.HasIndex("CaptainsId");
 
-                    b.ToTable("BoatCaptain", (string)null);
+                    b.ToTable("BoatCaptain");
                 });
 
             modelBuilder.Entity("Identity.Models.RefreshToken", b =>
@@ -68,7 +68,7 @@ namespace DataBase.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RefreshTokens", (string)null);
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("Library.Models.AppUser", b =>
@@ -202,7 +202,7 @@ namespace DataBase.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Boats", (string)null);
+                    b.ToTable("Boats");
                 });
 
             modelBuilder.Entity("Library.Models.BoatImage", b =>
@@ -222,7 +222,7 @@ namespace DataBase.Migrations
 
                     b.HasIndex("BoatId");
 
-                    b.ToTable("BoatImages", (string)null);
+                    b.ToTable("BoatImages");
                 });
 
             modelBuilder.Entity("Library.Models.Booking", b =>
@@ -259,7 +259,7 @@ namespace DataBase.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Bookings", (string)null);
+                    b.ToTable("Bookings");
                 });
 
             modelBuilder.Entity("Library.Models.Captain", b =>
@@ -303,7 +303,7 @@ namespace DataBase.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Captains", (string)null);
+                    b.ToTable("Captains");
                 });
 
             modelBuilder.Entity("Library.Models.Trip", b =>
@@ -326,15 +326,6 @@ namespace DataBase.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("EndTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ExcludedItems")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IncludedItems")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("MeetingTime")
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("Price")
@@ -363,7 +354,7 @@ namespace DataBase.Migrations
 
                     b.HasIndex("CaptainId");
 
-                    b.ToTable("Trips", (string)null);
+                    b.ToTable("Trips");
                 });
 
             modelBuilder.Entity("Library.Models.TripImage", b =>
@@ -383,7 +374,7 @@ namespace DataBase.Migrations
 
                     b.HasIndex("TripId");
 
-                    b.ToTable("TripImages", (string)null);
+                    b.ToTable("TripImages");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

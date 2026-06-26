@@ -1,22 +1,14 @@
 ﻿using Library.Enums;
 using Library.IRepository;
+using Library.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace DataBase.Service
 {
-    public class TripStatusUpdaterService : BackgroundService
+    public class TripStatusUpdaterService(IServiceProvider _serviceProvider, ILogger<TripStatusUpdaterService> _logger) : BackgroundService
     {
-        private readonly IServiceProvider _serviceProvider;
-        private readonly ILogger<TripStatusUpdaterService> _logger;
-
-        public TripStatusUpdaterService(IServiceProvider serviceProvider, ILogger<TripStatusUpdaterService> logger)
-        {
-            _serviceProvider = serviceProvider;
-            _logger = logger;
-        }
-
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
@@ -27,22 +19,36 @@ namespace DataBase.Service
                     {
                         var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
 
-                        var trips = await unitOfWork.Trips.GetAllAsync();
+                        var trips = await unitOfWork.Trips.GetAllTripsWithDetailsAsync();
 
                         bool hasChanges = false;
+                        var currentTime = DateTime.UtcNow;
+                        currentTime = currentTime.AddHours(3);
 
                         foreach (var trip in trips)
                         {
-                            if (trip.Status == TripStatus.Scheduled && trip.StartTime <= DateTime.UtcNow)
+                            if (trip.Status == TripStatus.Scheduled && trip.StartTime <= currentTime && trip.EndTime > currentTime)
                             {
                                 trip.Status = TripStatus.Ongoing;
-                                unitOfWork.Trips.Update(trip);
+
+                                if (trip.Boat != null)
+                                {
+                                    trip.Boat.Status = BoatStatus.AtSea;
+                                    unitOfWork.Boats.Update(trip.Boat);
+                                }
+                                    
                                 hasChanges = true;
                             }
-                            else if (trip.Status == TripStatus.Ongoing && trip.EndTime <= DateTime.UtcNow)
+                            else if (trip.Status == TripStatus.Ongoing && trip.EndTime <= currentTime)
                             {
                                 trip.Status = TripStatus.Completed;
-                                unitOfWork.Trips.Update(trip);
+
+                                if (trip.Boat != null)
+                                {
+                                    trip.Boat.Status = BoatStatus.Available;
+                                    unitOfWork.Boats.Update(trip.Boat);
+                                }
+
                                 hasChanges = true;
                             }
                         }
@@ -50,6 +56,7 @@ namespace DataBase.Service
                         if (hasChanges)
                         {
                             await unitOfWork.CompleteAsync();
+                            _logger.LogInformation("Trip statuses updated successfully.");
                         }
                     }
                 }

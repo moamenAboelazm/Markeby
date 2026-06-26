@@ -26,7 +26,7 @@ namespace Markeby.API.Controllers
         }
 
         [HttpGet("all")]
-        public async Task<IActionResult> GetAllBoats([FromQuery] GetAllBoatsQuery query)
+        public async Task<IActionResult> GetAllBoats([FromQuery] GetPagedBoatsQuery query)
         {
             var result = await _mediator.Send(query);
             return Ok(result);

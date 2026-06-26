@@ -55,7 +55,7 @@ namespace Library.Features.Bookings.Queries
                 queryableBookings = queryableBookings.Where(b => b.BookingDate <= request.EndDate.Value);
             
             if (request.OnlyPastTrips.HasValue && request.OnlyPastTrips.Value)
-                queryableBookings = queryableBookings.Where(b => b.Trip != null && (b.Trip.Status == TripStatus.Completed || b.Trip.EndTime < DateTime.UtcNow));
+                queryableBookings = queryableBookings.Where(b => b.Trip != null && (b.Trip.Status == TripStatus.Completed || b.Trip.EndTime < DateTime.UtcNow.AddHours(3)));
             
             if (!string.IsNullOrEmpty(request.SortBy))
             {

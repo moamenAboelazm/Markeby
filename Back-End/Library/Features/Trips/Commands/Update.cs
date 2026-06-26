@@ -19,30 +19,14 @@ namespace Library.Features.Trips.Commands
         public decimal Price { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-        public DateTime? MeetingTime { get; set; }
         public int AvailableSeats { get; set; }
-        public string? IncludedItems { get; set; }
-        public string? ExcludedItems { get; set; }
         public TripType Type { get; set; }
         public TripStatus Status { get; set; }
         public List<IFormFile>? Images { get; set; }
     }
 
-    public class UpdateTripCommandHandler : IRequestHandler<UpdateTripCommand, bool>
+    public class UpdateTripCommandHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IMemoryCache _cache, IFileService _fileService) : IRequestHandler<UpdateTripCommand, bool>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-        private readonly IMemoryCache _cache;
-        private readonly IFileService _fileService;
-
-        public UpdateTripCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IMemoryCache cache, IFileService fileService)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-            _cache = cache;
-            _fileService = fileService;
-        }
-
         public async Task<bool> Handle(UpdateTripCommand data, CancellationToken cancellationToken)
         {
             var trip = await _unitOfWork.Trips.GetTripWithDetailsByIdAsync(data.Id);
@@ -68,9 +52,8 @@ namespace Library.Features.Trips.Commands
                 if (trip.Images.Any())
                 {
                     foreach (var oldImage in trip.Images)
-                    {
                         _fileService.DeleteFile(oldImage.ImageUrl);
-                    }
+                    
                     trip.Images.Clear();
                 }
 
@@ -96,9 +79,10 @@ namespace Library.Features.Trips.Commands
             _unitOfWork.Trips.Update(trip);
             await _unitOfWork.CompleteAsync();
 
-            _cache.Remove("AvailableUpcomingTripsCacheKey");
+            _cache.Remove("AllTripsCacheKey");
             _cache.Remove($"TripDetailsCacheKey_{data.Id}");
-
+            _cache.Remove("AllCaptainsCacheKey");
+            _cache.Remove("AllBoatsCacheKey");
             return true;
         }
     }

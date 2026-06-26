@@ -33,7 +33,7 @@ namespace Library.Features.Bookings.Commands
             var trip = await _unitOfWork.Trips.GetByIdAsync(request.TripId);
             if (trip == null) throw new InvalidOperationException("Trip not found.");
 
-            if (trip.StartTime <= DateTime.UtcNow)
+            if (trip.StartTime <= DateTime.UtcNow.AddHours(3))
                 throw new InvalidOperationException("Cannot book a past or currently running trip.");
 
             if (trip.Status != TripStatus.Scheduled)
@@ -44,7 +44,7 @@ namespace Library.Features.Bookings.Commands
 
             var booking = _mapper.Map<Booking>(request);
             booking.TotalPrice = trip.Price * request.NumberOfTickets;
-            booking.BookingDate = DateTime.UtcNow;
+            booking.BookingDate = DateTime.UtcNow.AddHours(3);
 
             trip.AvailableSeats -= request.NumberOfTickets;
             _unitOfWork.Trips.Update(trip);

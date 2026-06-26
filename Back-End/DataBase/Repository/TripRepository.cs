@@ -1,14 +1,10 @@
 ﻿using DataBase.Contexts;
 using Library.Enums;
+using Library.Features.Trips;
 using Library.IRepository;
 using Library.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataBase.Repository
 {
@@ -23,44 +19,14 @@ namespace DataBase.Repository
             _cache = cache;
         }
 
-        public async Task<IReadOnlyList<Trip>> GetAvailableUpcomingTripsAsync()
-        {
-            string cacheKey = "AvailableUpcomingTripsCacheKey";
-
-            if (!_cache.TryGetValue(cacheKey, out IReadOnlyList<Trip>? trips))
-            {
-                trips = await _context.Set<Trip>()
-                    .Include(t => t.Boat)
-                    .Include(t => t.Captain)
-                    .Where(t => t.StartTime > DateTime.UtcNow
-                             && t.Status == TripStatus.Scheduled
-                             && t.AvailableSeats > 0)
-                    .OrderBy(t => t.StartTime)
-                    .AsNoTracking()
-                    .ToListAsync();
-
-                var cacheOptions = new MemoryCacheEntryOptions()
-                    .SetSlidingExpiration(TimeSpan.FromMinutes(10))
-                    .SetAbsoluteExpiration(TimeSpan.FromHours(2));
-
-                _cache.Set(cacheKey, trips, cacheOptions);
-            }
-
-            return trips ?? new List<Trip>();
-        }
-
         public async Task<Trip?> GetTripWithDetailsByIdAsync(Guid id)
         {
             string cacheKey = $"TripDetailsCacheKey_{id}";
 
             if (!_cache.TryGetValue(cacheKey, out Trip? trip))
             {
-                trip = await _context.Set<Trip>()
-                    .Include(t => t.Boat)
-                    .Include(t => t.Captain)
-                    .Include(t => t.Bookings)
-                    .Include(t => t.Passengers)
-                    .FirstOrDefaultAsync(t => t.Id == id);
+                trip = await _context.Set<Trip>().Include(t => t.Boat).Include(t => t.Captain).Include(t => t.Bookings)
+                    .Include(t => t.Passengers).FirstOrDefaultAsync(t => t.Id == id);
 
                 if (trip != null)
                 {
@@ -74,48 +40,22 @@ namespace DataBase.Repository
             return trip;
         }
 
-        public async Task<IReadOnlyList<Trip>> GetTripsByBoatIdAsync(Guid boatId)
+        public async Task<IReadOnlyList<Trip>> GetAllTripsWithDetailsAsync()
         {
-            return await _context.Set<Trip>()
-                .Where(t => t.BoatId == boatId)
-                .OrderByDescending(t => t.StartTime)
-                .AsNoTracking()
-                .ToListAsync();
-        }
+            string cacheKey = "AllTripsCacheKey";
 
-        public async Task<IReadOnlyList<Trip>> GetTripsByCaptainIdAsync(Guid captainId)
-        {
-            return await _context.Set<Trip>()
-                .Where(t => t.CaptainId == captainId)
-                .OrderByDescending(t => t.StartTime)
-                .AsNoTracking()
-                .ToListAsync();
-        }
+            if (!_cache.TryGetValue(cacheKey, out IReadOnlyList<Trip>? trips))
+            {
+                trips = await _context.Set<Trip>().Include(t => t.Boat).Include(t => t.Captain).AsNoTracking().ToListAsync();
 
-        public async Task<IReadOnlyList<Trip>> GetTripsByDateRangeAsync(DateTime startDate, DateTime endDate)
-        {
-            return await _context.Set<Trip>()
-                .Include(t => t.Boat)
-                .Where(t => t.StartTime >= startDate && t.EndTime <= endDate)
-                .OrderBy(t => t.StartTime)
-                .AsNoTracking()
-                .ToListAsync();
-        }
+                var cacheOptions = new MemoryCacheEntryOptions()
+                    .SetSlidingExpiration(TimeSpan.FromHours(1))
+                    .SetAbsoluteExpiration(TimeSpan.FromHours(24));
 
-        public async Task<IReadOnlyList<Trip>> SearchTripsAsync(string searchTerm)
-        {
-            if (string.IsNullOrWhiteSpace(searchTerm))
-                return new List<Trip>();
+                _cache.Set(cacheKey, trips, cacheOptions);
+            }
 
-            searchTerm = searchTerm.ToLower();
-
-            return await _context.Set<Trip>()
-                .Include(t => t.Boat)
-                .Where(t => t.Title.ToLower().Contains(searchTerm) ||
-                            t.StartLocation.ToLower().Contains(searchTerm) ||
-                            (t.IncludedItems != null && t.IncludedItems.ToLower().Contains(searchTerm)))
-                .AsNoTracking()
-                .ToListAsync();
+            return trips ?? new List<Trip>();
         }
 
         public async Task<bool> HasAvailableSeatsAsync(Guid tripId, int requiredSeats)
@@ -125,6 +65,22 @@ namespace DataBase.Repository
                 .FirstOrDefaultAsync(t => t.Id == tripId);
 
             return trip != null && trip.AvailableSeats >= requiredSeats;
+        }
+
+        public async Task<TripDashboardStatsDto> GetDashboardStatsAsync()
+        {
+            var stats = await _context.Trips
+                .GroupBy(x => 1)
+                .Select(g => new TripDashboardStatsDto
+                {
+                    TotalTrips = g.Count(),
+                    ScheduledTrips = g.Count(t => t.Status == TripStatus.Scheduled),
+                    OngoingTrips = g.Count(t => t.Status == TripStatus.Ongoing),
+                    CompletedTrips = g.Count(t => t.Status == TripStatus.Completed),
+                    CancelledTrips = g.Count(t => t.Status == TripStatus.Cancelled)
+                }).FirstOrDefaultAsync();
+
+            return stats ?? new TripDashboardStatsDto();
         }
     }
 }

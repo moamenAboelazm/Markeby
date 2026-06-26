@@ -25,7 +25,7 @@ namespace DataBase.Repository
 
             if (!_cache.TryGetValue(cacheKey, out IReadOnlyList<Captain>? captains))
             {
-                captains = await _context.Set<Captain>().Include(c => c.Boats).AsNoTracking().ToListAsync();
+                captains = await _context.Set<Captain>().Include(c => c.Boats).Include(c => c.Trips).AsNoTracking().ToListAsync();
 
                 var cacheOptions = new MemoryCacheEntryOptions()
                     .SetSlidingExpiration(TimeSpan.FromHours(1))
@@ -59,22 +59,20 @@ namespace DataBase.Repository
 
         public async Task<CaptainDashboardStatsDto> GetDashboardStatsAsync()
         {
-            var now = DateTime.UtcNow;
+            var now = DateTime.UtcNow.AddHours(3);
 
-            var total = await _context.Set<Captain>().CountAsync();
+            var stats = await _context.Set<Captain>()
+                .GroupBy(x => 1)
+                .Select(g => new CaptainDashboardStatsDto
+                {
+                    TotalCaptains = g.Count(),
 
-            var onMission = await _context.Set<Captain>()
-                .CountAsync(c => c.Trips.Any(t =>t.StartTime <= now &&t.EndTime >= now &&t.Status != TripStatus.Cancelled));
+                    OnMission = g.Count(c => c.Trips.Any(t => t.StartTime <= now && t.EndTime >= now && t.Status != TripStatus.Cancelled)),
 
-            var onShoreLeave = await _context.Set<Captain>()
-                .CountAsync(c => c.IsAvailable && !c.Trips.Any(t =>t.StartTime <= now &&t.EndTime >= now &&t.Status != TripStatus.Cancelled));
+                    OnShoreLeave = g.Count(c => c.IsAvailable && !c.Trips.Any(t => t.StartTime <= now && t.EndTime >= now && t.Status != TripStatus.Cancelled))
+                }).FirstOrDefaultAsync();
 
-            return new CaptainDashboardStatsDto
-            {
-                TotalCaptains = total,
-                OnMission = onMission,
-                OnShoreLeave = onShoreLeave
-            };
+            return stats ?? new CaptainDashboardStatsDto();
         }
 
         public async Task<bool> IsCaptainAvailableAsync(Guid captainId, DateTime startTime, DateTime endTime)
