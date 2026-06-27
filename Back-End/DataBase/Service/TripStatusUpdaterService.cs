@@ -1,6 +1,7 @@
 ﻿using Library.Enums;
 using Library.IRepository;
 using Library.Models;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -17,9 +18,10 @@ namespace DataBase.Service
                 {
                     using (var scope = _serviceProvider.CreateScope())
                     {
-                        var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+                        var _unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+                        var _cache = scope.ServiceProvider.GetRequiredService<IMemoryCache>();
 
-                        var trips = await unitOfWork.Trips.GetAllTripsWithDetailsAsync();
+                        var trips = await _unitOfWork.Trips.GetAllTripsWithDetailsAsync();
 
                         bool hasChanges = false;
                         var currentTime = DateTime.UtcNow;
@@ -27,35 +29,47 @@ namespace DataBase.Service
 
                         foreach (var trip in trips)
                         {
+                            bool changed = false;
                             if (trip.Status == TripStatus.Scheduled && trip.StartTime <= currentTime && trip.EndTime > currentTime)
                             {
                                 trip.Status = TripStatus.Ongoing;
+                                _unitOfWork.Trips.Update(trip);
 
                                 if (trip.Boat != null)
                                 {
                                     trip.Boat.Status = BoatStatus.AtSea;
-                                    unitOfWork.Boats.Update(trip.Boat);
+                                    _unitOfWork.Boats.Update(trip.Boat);
                                 }
-                                    
-                                hasChanges = true;
+
+                                changed = true;
                             }
-                            else if (trip.Status == TripStatus.Ongoing && trip.EndTime <= currentTime)
+                            else if ( (trip.Status == TripStatus.Ongoing || trip.Status == TripStatus.Scheduled) && trip.EndTime <= currentTime)
                             {
                                 trip.Status = TripStatus.Completed;
+                                _unitOfWork.Trips.Update(trip);
 
                                 if (trip.Boat != null)
                                 {
                                     trip.Boat.Status = BoatStatus.Available;
-                                    unitOfWork.Boats.Update(trip.Boat);
+                                    _unitOfWork.Boats.Update(trip.Boat);
                                 }
 
-                                hasChanges = true;
+                                changed = true;
+                            }
+                            hasChanges |= changed;
+                            if (changed)
+                            {
+                                _cache.Remove($"BoatDetailsCacheKey_{trip.BoatId}");
+                                _cache.Remove($"TripDetailsCacheKey_{trip.Id}");
                             }
                         }
 
                         if (hasChanges)
                         {
-                            await unitOfWork.CompleteAsync();
+                            await _unitOfWork.CompleteAsync();
+                            _cache.Remove("AllTripsCacheKey");
+                            _cache.Remove("AllCaptainsCacheKey");
+                            _cache.Remove("AllBoatsCacheKey");
                             _logger.LogInformation("Trip statuses updated successfully.");
                         }
                     }

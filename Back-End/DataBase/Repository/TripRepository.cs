@@ -78,7 +78,7 @@ namespace DataBase.Repository
                     OngoingTrips = g.Count(t => t.Status == TripStatus.Ongoing),
                     CompletedTrips = g.Count(t => t.Status == TripStatus.Completed),
                     CancelledTrips = g.Count(t => t.Status == TripStatus.Cancelled)
-                }).FirstOrDefaultAsync();
+                }).AsNoTracking().FirstOrDefaultAsync();
 
             return stats ?? new TripDashboardStatsDto();
         }

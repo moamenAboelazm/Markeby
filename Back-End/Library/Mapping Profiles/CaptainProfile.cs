@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Library.Enums;
 using Library.Features.Captains;
 using Library.Features.Captains.Commands;
 using Library.Models;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
 
 namespace Library.Mapping_Profiles
 {
@@ -23,9 +25,11 @@ namespace Library.Mapping_Profiles
 
             CreateMap<Captain, CaptainListDto>()
                 .ForMember(dest => dest.Vessel, opt => opt.MapFrom(src =>
-                    src.Boats != null && src.Boats.Any() ? src.Boats.First().Name : "Unassigned"))
+                    src.Trips != null && src.Trips.FirstOrDefault(t => t.Status == TripStatus.Ongoing) != null ?
+                    src.Trips.FirstOrDefault(t => t.Status == TripStatus.Ongoing).Boat.Name : "UnAssigned"))
+                    
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src =>
-                    (src.Trips != null && src.Trips.Any(t => t.StartTime <= DateTime.UtcNow.AddHours(3) && t.EndTime >= DateTime.UtcNow.AddHours(3)))
+                    (src.Trips != null && src.Trips.Any(t => t.Status == TripStatus.Ongoing))
                     ? "ON MISSION" : (src.IsAvailable ? "AVAILABLE" : "ON LEAVE")));
         }
     }

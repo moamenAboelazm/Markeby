@@ -1,5 +1,4 @@
-﻿using Library.Features.Boats;
-using Library.IRepository;
+﻿using Library.IRepository;
 using MediatR;
 
 namespace Library.Features.Trips.Queries

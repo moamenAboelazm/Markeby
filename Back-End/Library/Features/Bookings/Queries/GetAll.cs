@@ -1,87 +1,56 @@
 ﻿using AutoMapper;
-using Library.Enums;
 using Library.IRepository;
 using Library.Models;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Library.Features.Bookings.Queries
 {
-    public class GetAllBookingsQuery : IRequest<PagedResult<DtoBooking>>
+    public class GetPagedBookingsQuery : IRequest<PagedResult<DtoBooking>>
     {
-        public int PageNumber { get; set; } = 1;
-        public int PageSize { get; set; } = 10;
-
         public string? UserId { get; set; }
         public Guid? TripId { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-        public bool? OnlyPastTrips { get; set; }
-
-        public string? SortBy { get; set; }
-        public bool SortDescending { get; set; } = false;
+        public bool OnlyActiveBookings { get; set; }
+        public bool SortDescending { get; set; } = true;
+        public int PageNumber { get; set; } = 1;
+        public int PageSize { get; set; } = 10;
     }
 
-    public class GetAllBookingsQueryHandler : IRequestHandler<GetAllBookingsQuery, PagedResult<DtoBooking>>
+    public class GetPagedBookingsQueryHandler(IUnitOfWork _unitOfWork, IMapper _mapper) : IRequestHandler<GetPagedBookingsQuery, PagedResult<DtoBooking>>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-
-        public GetAllBookingsQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
+        public async Task<PagedResult<DtoBooking>> Handle(GetPagedBookingsQuery data, CancellationToken cancellationToken)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-        }
+            var allBookings = await _unitOfWork.Bookings.GetAllBookingsWithDetailsAsync();
+            var query = allBookings.AsEnumerable();
 
-        public async Task<PagedResult<DtoBooking>> Handle(GetAllBookingsQuery request, CancellationToken cancellationToken)
-        {
-            var bookings = await _unitOfWork.Bookings.GetAllAsync();
-            var queryableBookings = bookings.AsQueryable();
+            if (!string.IsNullOrWhiteSpace(data.UserId))
+                query = query.Where(b => b.UserId == data.UserId);
 
-            if (!string.IsNullOrEmpty(request.UserId))
-                queryableBookings = queryableBookings.Where(b => b.UserId == request.UserId);
-            
-            if (request.TripId.HasValue)
-                queryableBookings = queryableBookings.Where(b => b.TripId == request.TripId.Value);
-            
-            if (request.StartDate.HasValue)
-                queryableBookings = queryableBookings.Where(b => b.BookingDate >= request.StartDate.Value);
+            if (data.TripId.HasValue)
+                query = query.Where(b => b.TripId == data.TripId.Value);
 
-            if (request.EndDate.HasValue)
-                queryableBookings = queryableBookings.Where(b => b.BookingDate <= request.EndDate.Value);
-            
-            if (request.OnlyPastTrips.HasValue && request.OnlyPastTrips.Value)
-                queryableBookings = queryableBookings.Where(b => b.Trip != null && (b.Trip.Status == TripStatus.Completed || b.Trip.EndTime < DateTime.UtcNow.AddHours(3)));
-            
-            if (!string.IsNullOrEmpty(request.SortBy))
-            {
-                queryableBookings = request.SortBy.ToLower() switch
-                {
-                    "price" => request.SortDescending ? queryableBookings.OrderByDescending(b => b.Trip != null ? b.Trip.Price : 0) : queryableBookings.OrderBy(b => b.Trip != null ? b.Trip.Price : 0),
-                    "starttime" => request.SortDescending ? queryableBookings.OrderByDescending(b => b.Trip != null ? b.Trip.StartTime : DateTime.MinValue) : queryableBookings.OrderBy(b => b.Trip != null ? b.Trip.StartTime : DateTime.MinValue),
-                    "availableseats" => request.SortDescending ? queryableBookings.OrderByDescending(b => b.Trip != null ? b.Trip.AvailableSeats : 0) : queryableBookings.OrderBy(b => b.Trip != null ? b.Trip.AvailableSeats : 0),
-                    "type" => request.SortDescending ? queryableBookings.OrderByDescending(b => b.Trip != null ? b.Trip.Type : 0) : queryableBookings.OrderBy(b => b.Trip != null ? b.Trip.Type : 0),
-                    "status" => request.SortDescending ? queryableBookings.OrderByDescending(b => b.Trip != null ? b.Trip.Status : 0) : queryableBookings.OrderBy(b => b.Trip != null ? b.Trip.Status : 0),
-                    _ => request.SortDescending ? queryableBookings.OrderByDescending(b => b.BookingDate) : queryableBookings.OrderBy(b => b.BookingDate)
-                };
-            }
-            else
-                queryableBookings = request.SortDescending ? queryableBookings.OrderByDescending(b => b.BookingDate) : queryableBookings.OrderBy(b => b.BookingDate);
-            
+            if (data.StartDate.HasValue)
+                query = query.Where(b => b.BookingDate >= data.StartDate.Value);
 
-            var totalCount = queryableBookings.Count();
-            var pagedBookings = queryableBookings.Skip((request.PageNumber - 1) * request.PageSize).Take(request.PageSize).ToList();
+            if (data.EndDate.HasValue)
+                query = query.Where(b => b.BookingDate <= data.EndDate.Value);
+
+            if (data.OnlyActiveBookings)
+                query = query.Where(b => string.IsNullOrEmpty(b.CancellationReason));
+
+            query = data.SortDescending ? query.OrderByDescending(b => b.BookingDate) : query.OrderBy(b => b.BookingDate);
+
+            var totalCount = query.Count();
+            var pagedEntities = query.Skip((data.PageNumber - 1) * data.PageSize).Take(data.PageSize).ToList();
+            var mappedItems = _mapper.Map<List<DtoBooking>>(pagedEntities);
 
             return new PagedResult<DtoBooking>
             {
-                Items = _mapper.Map<List<DtoBooking>>(pagedBookings),
+                Items = mappedItems,
                 TotalCount = totalCount,
-                PageNumber = request.PageNumber,
-                PageSize = request.PageSize
+                PageNumber = data.PageNumber,
+                PageSize = data.PageSize
             };
         }
     }
