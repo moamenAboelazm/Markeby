@@ -1,13 +1,10 @@
 ﻿using DataBase.Contexts;
+using Library.Enums;
+using Library.Features.Bookings;
 using Library.IRepository;
 using Library.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataBase.Repository
 {
@@ -22,19 +19,14 @@ namespace DataBase.Repository
             _cache = cache;
         }
 
-        public async Task<IReadOnlyList<Booking>> GetUserBookingsAsync(string userId)
+        public async Task<IReadOnlyList<Booking>> GetAllBookingsWithDetailsAsync()
         {
-            string cacheKey = $"UserBookingsCacheKey_{userId}";
+            string cacheKey = "AllBookingsCacheKey";
 
             if (!_cache.TryGetValue(cacheKey, out IReadOnlyList<Booking>? bookings))
             {
-                bookings = await _context.Set<Booking>()
-                    .Include(b => b.Trip)
-                    .ThenInclude(t => t.Boat)
-                    .Where(b => b.UserId == userId)
-                    .OrderByDescending(b => b.BookingDate)
-                    .AsNoTracking()
-                    .ToListAsync();
+                bookings = await _context.Set<Booking>().Include(b => b.User).Include(b => b.Trip).ThenInclude(t => t.Boat)
+                    .AsNoTracking().ToListAsync();
 
                 var cacheOptions = new MemoryCacheEntryOptions()
                     .SetSlidingExpiration(TimeSpan.FromMinutes(2));
@@ -45,46 +37,45 @@ namespace DataBase.Repository
             return bookings ?? new List<Booking>();
         }
 
-        public async Task<IReadOnlyList<Booking>> GetBookingsByTripIdAsync(Guid tripId)
-        {
-            return await _context.Set<Booking>()
-                .Include(b => b.User)
-                .Where(b => b.TripId == tripId)
-                .OrderByDescending(b => b.BookingDate)
-                .AsNoTracking()
-                .ToListAsync();
-        }
-
         public async Task<Booking?> GetBookingWithDetailsAsync(Guid bookingId)
         {
-            return await _context.Set<Booking>()
-                .Include(b => b.Trip)
-                .ThenInclude(t => t.Boat)
-                .Include(b => b.User)
-                .FirstOrDefaultAsync(b => b.Id == bookingId);
+            return await _context.Set<Booking>().Include(b => b.Trip).ThenInclude(t => t.Boat)
+                .Include(b => b.User).FirstOrDefaultAsync(b => b.Id == bookingId);
         }
 
-        public async Task<IReadOnlyList<Booking>> GetBookingsByDateRangeAsync(DateTime startDate, DateTime endDate)
+        public async Task<SystemDashboardDto> GetSystemDashboardAsync()
         {
-            return await _context.Set<Booking>()
-                .Include(b => b.Trip)
-                .Where(b => b.BookingDate >= startDate && b.BookingDate <= endDate)
-                .OrderBy(b => b.BookingDate)
-                .AsNoTracking()
-                .ToListAsync();
+            return new SystemDashboardDto
+            {
+                TotalCompletedTrips = await _context.Set<Trip>().CountAsync(t => t.Status == TripStatus.Completed),
+                TotalCancelledTrips = await _context.Set<Trip>().CountAsync(t => t.Status == TripStatus.Cancelled),
+                TotalScheduledTrips = await _context.Set<Trip>().CountAsync(t => t.Status == TripStatus.Scheduled),
+
+                TotalSystemProfit = await _context.Set<Booking>().Where(b => string.IsNullOrEmpty(b.CancellationReason)).SumAsync(b => b.TotalPrice)
+            };
         }
 
-        public async Task<decimal> GetTotalRevenueByTripIdAsync(Guid tripId)
+        public async Task<TripDashboardDto?> GetTripDashboardAsync(Guid tripId)
         {
-            return await _context.Set<Booking>()
-                .Where(b => b.TripId == tripId)
+            var trip = await _context.Set<Trip>().Include(t => t.Boat).AsNoTracking().FirstOrDefaultAsync(t => t.Id == tripId);
+
+            if (trip == null)
+                return null;
+
+            var totalProfit = await _context.Set<Booking>().Where(b => b.TripId == tripId && string.IsNullOrEmpty(b.CancellationReason))
                 .SumAsync(b => b.TotalPrice);
+
+            return new TripDashboardDto
+            {
+                TicketsSold = trip.Boat.Capacity - trip.AvailableSeats,
+                TicketsRemaining = trip.AvailableSeats,
+                TotalTripProfit = totalProfit
+            };
         }
 
         public async Task<bool> HasUserBookedTripAsync(string userId, Guid tripId)
         {
-            return await _context.Set<Booking>()
-                .AnyAsync(b => b.UserId == userId && b.TripId == tripId);
+            return await _context.Set<Booking>().AnyAsync(b => b.UserId == userId && b.TripId == tripId);
         }
     }
 }

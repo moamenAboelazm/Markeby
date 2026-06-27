@@ -11,17 +11,8 @@ namespace Library.Features.Bookings.Commands
         public string? CancellationReason { get; set; }
     }
 
-    public class UpdateBookingCommandHandler : IRequestHandler<UpdateBookingCommand, bool>
+    public class UpdateBookingCommandHandler(IUnitOfWork _unitOfWork, IMemoryCache _cache) : IRequestHandler<UpdateBookingCommand, bool>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMemoryCache _cache;
-
-        public UpdateBookingCommandHandler(IUnitOfWork unitOfWork, IMemoryCache cache)
-        {
-            _unitOfWork = unitOfWork;
-            _cache = cache;
-        }
-
         public async Task<bool> Handle(UpdateBookingCommand request, CancellationToken cancellationToken)
         {
             var booking = await _unitOfWork.Bookings.GetByIdAsync(request.Id);
@@ -50,6 +41,8 @@ namespace Library.Features.Bookings.Commands
             _cache.Remove($"UserBookingsCacheKey_{booking.UserId}");
             _cache.Remove("AvailableUpcomingTripsCacheKey");
             _cache.Remove($"TripDetailsCacheKey_{booking.TripId}");
+            _cache.Remove("AllBookingsCacheKey");
+            _cache.Remove("AllTripsCacheKey");
 
             return true;
         }

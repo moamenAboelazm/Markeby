@@ -25,7 +25,7 @@ namespace DataBase.Repository
 
             if (!_cache.TryGetValue(cacheKey, out IReadOnlyList<Captain>? captains))
             {
-                captains = await _context.Set<Captain>().Include(c => c.Boats).Include(c => c.Trips).AsNoTracking().ToListAsync();
+                captains = await _context.Set<Captain>().Include(c => c.Trips).ThenInclude(t => t.Boat).AsNoTracking().ToListAsync();
 
                 var cacheOptions = new MemoryCacheEntryOptions()
                     .SetSlidingExpiration(TimeSpan.FromHours(1))

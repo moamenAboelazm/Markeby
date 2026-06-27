@@ -9,17 +9,8 @@ namespace Library.Features.Bookings.Commands
         public Guid Id { get; set; }
     }
 
-    public class DeleteBookingCommandHandler : IRequestHandler<DeleteBookingCommand, bool>
+    public class DeleteBookingCommandHandler(IUnitOfWork _unitOfWork, IMemoryCache _cache) : IRequestHandler<DeleteBookingCommand, bool>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMemoryCache _cache;
-
-        public DeleteBookingCommandHandler(IUnitOfWork unitOfWork, IMemoryCache cache)
-        {
-            _unitOfWork = unitOfWork;
-            _cache = cache;
-        }
-
         public async Task<bool> Handle(DeleteBookingCommand request, CancellationToken cancellationToken)
         {
             var booking = await _unitOfWork.Bookings.GetByIdAsync(request.Id);
@@ -41,6 +32,8 @@ namespace Library.Features.Bookings.Commands
             _cache.Remove($"UserBookingsCacheKey_{booking.UserId}");
             _cache.Remove("AvailableUpcomingTripsCacheKey");
             _cache.Remove($"TripDetailsCacheKey_{booking.TripId}");
+            _cache.Remove("AllBookingsCacheKey");
+            _cache.Remove("AllTripsCacheKey");
 
             return true;
         }

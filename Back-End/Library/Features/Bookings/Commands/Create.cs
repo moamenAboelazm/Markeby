@@ -15,19 +15,8 @@ namespace Library.Features.Bookings.Commands
         public string? SpecialRequests { get; set; }
     }
 
-    public class CreateBookingCommandHandler : IRequestHandler<CreateBookingCommand, Guid>
+    public class CreateBookingCommandHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IMemoryCache _cache) : IRequestHandler<CreateBookingCommand, Guid>
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-        private readonly IMemoryCache _cache;
-
-        public CreateBookingCommandHandler(IUnitOfWork unitOfWork, IMapper mapper, IMemoryCache cache)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-            _cache = cache;
-        }
-
         public async Task<Guid> Handle(CreateBookingCommand request, CancellationToken cancellationToken)
         {
             var trip = await _unitOfWork.Trips.GetByIdAsync(request.TripId);
@@ -55,6 +44,8 @@ namespace Library.Features.Bookings.Commands
             _cache.Remove($"UserBookingsCacheKey_{request.UserId}");
             _cache.Remove("AvailableUpcomingTripsCacheKey");
             _cache.Remove($"TripDetailsCacheKey_{request.TripId}");
+            _cache.Remove("AllBookingsCacheKey");
+            _cache.Remove("AllTripsCacheKey");
 
             return booking.Id;
         }

@@ -9,15 +9,8 @@ namespace Library.Features.Bookings.Queries
         public Guid TripId { get; set; }
     }
 
-    public class CheckUserBookedTripQueryHandler : IRequestHandler<CheckUserBookedTripQuery, bool>
+    public class CheckUserBookedTripQueryHandler(IUnitOfWork _unitOfWork) : IRequestHandler<CheckUserBookedTripQuery, bool>
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        public CheckUserBookedTripQueryHandler(IUnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
-
         public async Task<bool> Handle(CheckUserBookedTripQuery data, CancellationToken cancellationToken)
         {
             return await _unitOfWork.Bookings.HasUserBookedTripAsync(data.UserId, data.TripId);
