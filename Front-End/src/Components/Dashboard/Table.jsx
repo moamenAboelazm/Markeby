@@ -53,7 +53,7 @@ const Table = (props) => {
                     <PiDotOutlineFill className="text-[50px]" /> {d[h]}
                   </p>
                 ) : h === "name" && h !== "fullName" ? (
-                  <div className="flex gap-x-2">
+                  <div className="flex gap-x-2 items-center">
                     <img
                       src={`https://markeby.runasp.net${d["mainImageUrl"]}`}
                       className="w-[65px] h-[65px] rounded-md"
@@ -72,7 +72,11 @@ const Table = (props) => {
                       )}
                     </span>
                     <span>
-                      {d["hasFoodFacility"]===true?<FaUtensils className="text-cyan-700"/>:<FaUtensils className="text-gray-300"/>} 
+                      {d["hasFoodFacility"] === true ? (
+                        <FaUtensils className="text-cyan-700" />
+                      ) : (
+                        <FaUtensils className="text-gray-300" />
+                      )}
                     </span>
                   </div>
                 ) : (

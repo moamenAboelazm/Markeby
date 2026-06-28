@@ -14,47 +14,15 @@ import { FaXmark } from "react-icons/fa6";
 import { useFormik } from "formik";
 import { api } from "../../../Api/Axios";
 import { useNavigate } from "react-router-dom";
+import { BOATS } from "../../../Api/Api";
+import { AddShipSchema } from "../../../Schema/YUP";
 
 const AddShip = () => {
   const type = ["Available", "AtSea", "OutOfService"];
   const [images, setImages] = useState([]);
   const imagesRef = useRef(null);
-  const nav = useNavigate()
-  const yup = Yup.object({
-    Name: Yup.string()
-      .min(3, "Name must be at least 3 characters")
-      .max(50, "Name is too long")
-      .required("Name of vessel is required"),
+  const nav = useNavigate();
 
-    Description: Yup.string()
-      .min(10, "Description must be at least 10 characters")
-      .required("Description is required"),
-
-    Type: Yup.string()
-      .oneOf(["Available", "AtSea", "OutOfService"])
-      .required("Type of Boat is Required"),
-
-    Capacity: Yup.number()
-      .typeError("Capacity must be a number")
-      .positive("Capacity must be greater than 0")
-      .integer("Capacity must be integer")
-      .required("Capacity is required"),
-
-    YearBuilt: Yup.number()
-      .typeError("Year Built must be a number")
-      .min(1900, "Year is too old")
-      .max(new Date().getFullYear(), "Invalid year")
-      .required("Year Built is required"),
-
-    MaxSpeed: Yup.number()
-      .typeError("Max Speed must be a number")
-      .positive("Speed must be greater than 0")
-      .required("Max Speed is required"),
-
-    HasWifi: Yup.boolean(),
-
-    HasFoodFacility: Yup.boolean(),
-  });
   const formik = useFormik({
     initialValues: {
       Name: "",
@@ -67,7 +35,7 @@ const AddShip = () => {
       HasFoodFacility: true,
       Images: [],
     },
-    validationSchema: yup,
+    validationSchema: AddShipSchema,
     validateOnBlur: true,
     validateOnChange: true,
     onSubmit: async (values) => {
@@ -84,8 +52,8 @@ const AddShip = () => {
         data.append("Images", image);
       });
       try {
-        const res = await api.post("/Boats", data);
-        nav("/dashboard/captains")
+        const res = await api.post(BOATS, data);
+        nav("/dashboard/vessels");
       } catch (err) {
         console.log(err.message);
       }
@@ -104,7 +72,10 @@ const AddShip = () => {
       images.map((image, k) => {
         return (
           <div key={k} className=" relative">
-            <img src={URL.createObjectURL(image)} className=" rounded-md w-[95%] mx-auto h-[200px]" />
+            <img
+              src={URL.createObjectURL(image)}
+              className=" rounded-md w-[95%] mx-auto h-[200px]"
+            />
             <FaXmark
               onClick={(e) => deleteImage(image.name)}
               className=" absolute top-0 right-1 bg-red-600 text-[17px] text-background cursor-pointer w-[20px] h-[20px] rounded-full"
@@ -116,7 +87,6 @@ const AddShip = () => {
   );
   return (
     <form onSubmit={formik.handleSubmit}>
-
       <div className="top flex justify-between items-center my-[30px]">
         <h2 className="text-[50px] text-primary font-bold">Add New Vessel</h2>
         <button type="submit">
@@ -160,23 +130,15 @@ const AddShip = () => {
                 >
                   Type :{" "}
                 </label>
-                <select
+                <input
+                  type="text"
                   name="Type"
                   value={formik.values.Type}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   className="border border-gray-400 rounded-[20px] py-2 px-3 focus:outline-none focus:ring-2 focus:border-secondary valid:ring-secondary w-full"
-                >
-                  {formik.values.Type === "" && (
-                    <option value="">Select Type</option>
-                  )}
-
-                  {type.map((t, i) => (
-                    <option key={i} value={t}>
-                      {t}
-                    </option>
-                  ))}
-                </select>
+                  placeholder="Fishing..."
+                />
                 {formik.touched.Type && formik.errors.Type && (
                   <span className="text-[14px] text-red-600 my-2">
                     {formik.errors.Type}

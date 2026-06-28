@@ -12,25 +12,14 @@ import { useRole } from "../../../Hooks/UseRole";
 import { useNavigate, useParams } from "react-router-dom";
 import Switch from "../../../Components/Dashboard/Switch";
 import Loader from "../../../Components/Website/Loader";
+import { CAPTAIN } from "../../../Api/Api";
+import { EditiCaptainSchema } from "../../../Schema/YUP";
 const AddCaptain = () => {
   const { token } = useRole();
   const { id } = useParams();
   const nav = useNavigate();
   const [loading, setLoading] = useState(false);
-  const yup = Yup.object().shape({
-    FullName: Yup.string()
-      .min(2, "Full Name must be at least 2 characters")
-      .max(100, "Full Name must be less than 100 characters"),
 
-    Email: Yup.string().email("Invalid email address"),
-
-    PhoneNumber: Yup.string().max(11, "Phone number Must have 11 number"),
-    YearsOfExperience: Yup.number(),
-    Languages: Yup.string(),
-    ProfilePhoto: Yup.mixed(),
-    Bio: Yup.string(),
-    Rank: Yup.string(),
-  });
   const formik = useFormik({
     initialValues: {
       FullName: "",
@@ -43,7 +32,7 @@ const AddCaptain = () => {
       IsAvailable: true,
       ProfilePhoto: "",
     },
-    validationSchema: yup,
+    validationSchema: EditiCaptainSchema,
     validateOnBlur: true,
     validateOnChange: true,
     onSubmit: async (values, FormikHelper) => {
@@ -60,7 +49,7 @@ const AddCaptain = () => {
         data.append("YearsOfExperience", formik.values.YearsOfExperience);
         data.append("ProfilePhoto", formik.values.ProfilePhoto);
         data.append("Id", id);
-        const res = await api.put(`/Captains/${id}`, data);
+        const res = await api.put(CAPTAIN(id), data);
         nav("/dashboard/captains");
         console.log(res);
       } catch (err) {
@@ -76,7 +65,7 @@ const AddCaptain = () => {
   useEffect(() => {
     async function fetchCaptain() {
       try {
-        const res = api.get(`Captains/${id}`);
+        const res = api.get(CAPTAIN(id));
         res.then((d) => {
           console.log(d.data);
           formik.setFieldValue("FullName", d.data.fullName);
@@ -116,11 +105,6 @@ const AddCaptain = () => {
           <p className="text-[16px] text-gray-600 mt-2">
             Manage Professional credentials and sea serivce records
           </p>
-          {/* <div className="flex items-end text-[18px] gap-x-2">
-            Captain Status{" "}
-            <Switch enabled={formik.values.IsAvailable} formik={formik} />{" "}
-            {formik.values.IsAvailable ? "Active" : "On Leave"}
-          </div> */}
         </div>
         <div className="flex justify-between items-center flex-col gap-y-2">
           <button type="submit">

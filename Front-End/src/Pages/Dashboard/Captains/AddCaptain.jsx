@@ -10,29 +10,11 @@ import { api } from "../../../Api/Axios";
 import axios from "axios";
 import { useRole } from "../../../Hooks/UseRole";
 import { useNavigate } from "react-router-dom";
+import { AddCaptainSchema } from "../../../Schema/YUP";
 const AddCaptain = () => {
   const { token } = useRole();
   const nav = useNavigate();
-  const yup = Yup.object().shape({
-    FullName: Yup.string()
-      .min(2, "Full Name must be at least 2 characters")
-      .max(100, "Full Name must be less than 100 characters")
-      .required("Full Name is required"),
-    Email: Yup.string()
-      .email("Invalid email address")
-      .required("Email is required"),
-    PhoneNumber: Yup.string()
-      .required("Please Enter A Phone Number To Call You")
-      .required("Phone Number is Required")
-      .max(11, "Phone number Must have 11 number"),
-    YearsOfExperience: Yup.number().required(
-      "Please Enter A Years Of Experience",
-    ),
-    Languages: Yup.string().required("Please Enter A Languages"),
-    ProfilePhoto: Yup.mixed().required("Photo is required"),
-    Bio: Yup.string(),
-    Rank: Yup.string().required("Captain must Have A Rank"),
-  });
+
   const formik = useFormik({
     initialValues: {
       FullName: "",
@@ -45,7 +27,7 @@ const AddCaptain = () => {
       IsAvailable: true,
       ProfilePhoto: "",
     },
-    validationSchema: yup,
+    validationSchema: AddCaptainSchema,
     validateOnBlur: true,
     validateOnChange: true,
     onSubmit: async (values, FormikHelper) => {

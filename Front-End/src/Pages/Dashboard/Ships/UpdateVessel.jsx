@@ -14,49 +14,17 @@ import { FaXmark } from "react-icons/fa6";
 import { useFormik } from "formik";
 import { api } from "../../../Api/Axios";
 import { useNavigate, useParams } from "react-router-dom";
+import { BOAT } from "../../../Api/Api";
+import { EditiShipSchema } from "../../../Schema/YUP";
 
 const UpdateVessel = () => {
-  const type = ["Available", "AtSea", "OutOfService"];
+  const status = ["Available", "AtSea", "OutOfService"];
   const [images, setImages] = useState([]);
   const [mainImage, setMainImage] = useState("");
   const { id } = useParams();
   const imagesRef = useRef(null);
   const nav = useNavigate();
-  const yup = Yup.object({
-    Name: Yup.string()
-      .min(3, "Name must be at least 3 characters")
-      .max(50, "Name is too long")
-      .required("Name of vessel is required"),
 
-    Description: Yup.string()
-      .min(10, "Description must be at least 10 characters")
-      .required("Description is required"),
-
-    Type: Yup.string()
-      .oneOf(["Available", "AtSea", "OutOfService"])
-      .required("Type of Boat is Required"),
-
-    Capacity: Yup.number()
-      .typeError("Capacity must be a number")
-      .positive("Capacity must be greater than 0")
-      .integer("Capacity must be integer")
-      .required("Capacity is required"),
-
-    YearBuilt: Yup.number()
-      .typeError("Year Built must be a number")
-      .min(1900, "Year is too old")
-      .max(new Date().getFullYear(), "Invalid year")
-      .required("Year Built is required"),
-
-    MaxSpeed: Yup.number()
-      .typeError("Max Speed must be a number")
-      .positive("Speed must be greater than 0")
-      .required("Max Speed is required"),
-
-    HasWifi: Yup.boolean(),
-
-    HasFoodFacility: Yup.boolean(),
-  });
   const formik = useFormik({
     initialValues: {
       Name: "",
@@ -67,9 +35,10 @@ const UpdateVessel = () => {
       MaxSpeed: 1000,
       HasWifi: true,
       HasFoodFacility: true,
+      Status: "",
       Images: [],
     },
-    validationSchema: yup,
+    validationSchema: EditiShipSchema,
     validateOnBlur: true,
     validateOnChange: true,
     onSubmit: async (values) => {
@@ -78,6 +47,7 @@ const UpdateVessel = () => {
       data.append("Name", values.Name);
       data.append("Description", values.Description);
       data.append("Type", values.Type);
+      data.append("Status", values.Status);
       data.append("Capacity", values.Capacity);
       data.append("YearBuilt", values.YearBuilt);
       data.append("MaxSpeed", values.MaxSpeed);
@@ -87,7 +57,7 @@ const UpdateVessel = () => {
         data.append("Images", image);
       });
       try {
-        const res = await api.put(`/Boats/${id}`, data);
+        const res = await api.put(BOAT(id), data);
         nav("/dashboard/vessels");
       } catch (err) {
         console.log(err.message);
@@ -97,16 +67,17 @@ const UpdateVessel = () => {
   useEffect(() => {
     async function getVessel() {
       try {
-        const res = await api.get(`/Boats/${id}`);
+        const res = await api.get(BOAT(id));
         console.log(res.data);
         formik.setFieldValue("Name", res.data.name);
         formik.setFieldValue("Description", res.data.description);
-        formik.setFieldValue("Type", res.data.type);
+        formik.setFieldValue("Status", res.data.status);
         formik.setFieldValue("Capacity", res.data.capacity);
         formik.setFieldValue("YearBuilt", res.data.yearBuilt);
         formik.setFieldValue("MaxSpeed", res.data.maxSpeed);
         formik.setFieldValue("HasWifi", res.data.hasWifi);
         formik.setFieldValue("HasFoodFacility", res.data.hasFoodFacility);
+        formik.setFieldValue("Type", res.data.type);
         formik.setFieldValue("Images", res.data.images);
         setMainImage(res.data.mainImageUrl);
       } catch {}
@@ -164,28 +135,28 @@ const UpdateVessel = () => {
                   htmlFor="type"
                   className="text-[15px] my-2 font-light text-gray-800 block"
                 >
-                  Type :{" "}
+                  Status :{" "}
                 </label>
                 <select
-                  name="Type"
-                  value={formik.values.Type}
+                  name="Status"
+                  value={formik.values.Status}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   className="border border-gray-400 rounded-[20px] py-2 px-3 focus:outline-none focus:ring-2 focus:border-secondary valid:ring-secondary w-full"
                 >
-                  {formik.values.Type === "" && (
-                    <option value="">Select Type</option>
+                  {formik.values.Status === "" && (
+                    <option value="">Select Status...</option>
                   )}
 
-                  {type.map((t, i) => (
-                    <option key={i} value={t}>
-                      {t}
+                  {status.map((s, i) => (
+                    <option key={i} value={s}>
+                      {s}
                     </option>
                   ))}
                 </select>
-                {formik.touched.Type && formik.errors.Type && (
+                {formik.touched.Status && formik.errors.Status && (
                   <span className="text-[14px] text-red-600 my-2">
-                    {formik.errors.Type}
+                    {formik.errors.Status}
                   </span>
                 )}
               </div>
@@ -286,30 +257,22 @@ const UpdateVessel = () => {
                   </span>
                 )}
               </div>
-                            <div>
+              <div>
                 <label
                   htmlFor="type"
                   className="text-[15px] my-2 font-light text-gray-800 block"
                 >
                   Type :{" "}
                 </label>
-                <select
+                <input
+                  type="text"
                   name="Type"
                   value={formik.values.Type}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   className="border border-gray-400 rounded-[20px] py-2 px-3 focus:outline-none focus:ring-2 focus:border-secondary valid:ring-secondary w-full"
-                >
-                  {formik.values.Type === "" && (
-                    <option value="">Select Type</option>
-                  )}
-
-                  {type.map((t, i) => (
-                    <option key={i} value={t}>
-                      {t}
-                    </option>
-                  ))}
-                </select>
+                  id=""
+                />
                 {formik.touched.Type && formik.errors.Type && (
                   <span className="text-[14px] text-red-600 my-2">
                     {formik.errors.Type}

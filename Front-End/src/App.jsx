@@ -13,6 +13,7 @@ import UpdateCaptain from "./Pages/Dashboard/Captains/UpdateCaptain";
 import AddShip from "./Pages/Dashboard/Ships/AddShip";
 import Vessels from "./Pages/Dashboard/Ships/Vessels";
 import UpdateVessel from "./Pages/Dashboard/Ships/UpdateVessel";
+import AddTrip from "./Pages/Dashboard/Trips/AddTrip";
 const App = () => {
   return (
     <div className="bg-background min-h-screen">
@@ -30,6 +31,7 @@ const App = () => {
             <Route path="vessels" element={<Vessels />} />
             <Route path="addvessel" element={<AddShip />} />
             <Route path="vessels/:id" element={<UpdateVessel />} />
+            <Route path="addtrip" element={<AddTrip />} />
           </Route>
         </Route>
       </Routes>
