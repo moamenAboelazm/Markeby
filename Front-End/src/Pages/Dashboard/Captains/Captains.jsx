@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { LuUserPlus } from "react-icons/lu";
 import Table from "../../../Components/Dashboard/Table";
 import Loader from "../../../Components/Website/Loader";
+import { CAPTAIN, CAPTAINS_PAGED } from "../../../Api/Api";
 
 const Captains = () => {
   const head = ["fullName", "rank", "vessel", "status", "phoneNumber"];
@@ -24,15 +25,8 @@ const Captains = () => {
         setLoading(true);
         await api
           .get(
-            `/Captains/paged?PageNumber=${navgate.pageNumber}&PageSize=${navgate.pageSize}&limit=${navgate.limit}`,
+            `/Captains/paged?PageNumber=${navgate.pageNumber}&PageSize=${navgate.pageSize}`,
           )
-          //  {
-          // params: {
-          // page:navgate.pageNumber ,
-          // limit: navgate.limit,
-          // },
-          // }
-          // )
           .then((t) => {
             setNavgate((prev) => {
               return {
@@ -67,7 +61,7 @@ const Captains = () => {
     setSearch(e.target.value);
     setTimeout(async () => {
       try {
-        const res = await api.get("/Captains/paged", {
+        const res = await api.get(CAPTAINS_PAGED, {
           params: {
             SearchTerm: e.target.value,
           },
@@ -80,7 +74,7 @@ const Captains = () => {
   }
   async function handelDelete(id) {
     try {
-      let res = await api.delete(`/Captains/${id}`);
+      let res = await api.delete(CAPTAIN(id));
       setIsDelete((prev) => prev + 1);
     } catch (err) {
       console.log(err);

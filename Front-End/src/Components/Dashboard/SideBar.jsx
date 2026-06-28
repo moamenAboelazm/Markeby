@@ -1,6 +1,6 @@
 import React from "react";
 import { LuLayoutDashboard } from "react-icons/lu";
-import { MdOutlineAdminPanelSettings } from "react-icons/md";
+import { MdAddLocationAlt, MdOutlineAdminPanelSettings } from "react-icons/md";
 import { FaUsers } from "react-icons/fa6";
 import { FaRegCompass } from "react-icons/fa";
 import { IoSettingsSharp } from "react-icons/io5";
@@ -20,8 +20,12 @@ const SideBar = () => {
       icon: <FaUsers className="text-[18px]" />,
     },
     {
-      name: "Expeditions",
+      name: "Trips",
       icon: <FaRegCompass className="text-[18px]" />,
+    },
+    {
+      name:"Add Trip",
+       icon: <MdAddLocationAlt className="text-[18px]" />,
     },
     {
       name: "Captains",

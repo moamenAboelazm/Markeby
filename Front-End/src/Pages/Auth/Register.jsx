@@ -3,31 +3,13 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
-import * as Yup from "yup";
-import axios from "axios";
 import Loader from "../../Components/Website/Loader";
+import { api } from "../../Api/Axios";
+import { REGISTER } from "../../Api/Api";
+import { RgisterSchema } from "../../Schema/YUP";
 const Register = () => {
   const [loading, setLoading] = useState(false);
   const nav = useNavigate();
-  const yup = Yup.object().shape({
-    firstname: Yup.string()
-      .min(2, "First Name must be at least 2 characters")
-      .max(100, "First Name must be less than 100 characters")
-      .required("First Name is required"),
-    lastname: Yup.string()
-      .min(2, "Last Name must be at least 2 characters")
-      .max(100, "Last Name must be less than 100 characters")
-      .required("Last Name is required"),
-    email: Yup.string()
-      .email("Invalid email address")
-      .required("Email is required"),
-    password: Yup.string()
-      .min(6, "Password must be at least 6 characters")
-      .required("Password is required"),
-    confirmPassword: Yup.string()
-      .oneOf([Yup.ref("password"), null], "Passwords must match")
-      .required("Confirm Password is required"),
-  });
   const formik = useFormik({
     initialValues: {
       firstname: "",
@@ -36,25 +18,22 @@ const Register = () => {
       password: "",
       confirmPassword: "",
     },
-    validationSchema: yup,
+    validationSchema: RgisterSchema,
     validateOnBlur: true,
     validateOnChange: true,
     onSubmit: async (values, formikHelpers) => {
       try {
         setLoading(true);
-        const response = await axios.post(
-          "https://markeby.runasp.net/api/Authentication/create",
-          {
-            firstName: values.firstname,
-            lastName: values.lastname,
-            email: values.email,
-            password: values.password,
-            confirmPassword: values.confirmPassword,
-          },
-        );
+        const response = await api.post(REGISTER, {
+          firstName: values.firstname,
+          lastName: values.lastname,
+          email: values.email,
+          password: values.password,
+          confirmPassword: values.confirmPassword,
+        });
         nav("/login");
       } catch (error) {
-        if (error.response.status === 400) {
+        if (error.response?.status === 400) {
           formikHelpers.setFieldError("email", "Email already exists");
         } else {
           formikHelpers.setFieldError(

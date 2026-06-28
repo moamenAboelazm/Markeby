@@ -7,10 +7,10 @@ import Table from "../../../Components/Dashboard/Table";
 import Loader from "../../../Components/Website/Loader";
 import { FaPlus } from "react-icons/fa";
 import BoatCards from "../../../Components/Dashboard/BoatCards";
+import { ALL_BOATS, BOAT } from "../../../Api/Api";
 
 const Vessels = () => {
-    
-  const head = ["name", "type", "capacity", "status","amenities"];
+  const head = ["name", "type", "capacity", "status", "amenities"];
   const [boats, setBoats] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
@@ -29,13 +29,6 @@ const Vessels = () => {
           .get(
             `/Boats/all?PageNumber=${navgate.pageNumber}&PageSize=${navgate.pageSize}&limit=${navgate.limit}`,
           )
-          //  {
-          // params: {
-          // page:navgate.pageNumber ,
-          // limit: navgate.limit,
-          // },
-          // }
-          // )
           .then((t) => {
             setNavgate((prev) => {
               return {
@@ -45,8 +38,7 @@ const Vessels = () => {
               };
             });
             setBoats(t.data.items);
-            console.log(t.data.items)
-
+            console.log(t.data.items);
           });
       } catch (err) {
         console.log(err);
@@ -58,7 +50,7 @@ const Vessels = () => {
   }, [isDelete, navgate.pageNumber, navgate.limit, navgate.pageSize]);
   async function handelSearch() {
     try {
-      const res = await api.get("/Boats/all", {
+      const res = await api.get(ALL_BOATS, {
         params: {
           SearchTerm: search,
         },
@@ -72,7 +64,7 @@ const Vessels = () => {
     setSearch(e.target.value);
     setTimeout(async () => {
       try {
-        const res = await api.get("/Boats/all", {
+        const res = await api.get(ALL_BOATS, {
           params: {
             SearchTerm: e.target.value,
           },
@@ -85,7 +77,7 @@ const Vessels = () => {
   }
   async function handelDelete(id) {
     try {
-      let res = await api.delete(`/Boats/${id}`);
+      let res = await api.delete(BOAT(id));
       setIsDelete((prev) => prev + 1);
     } catch (err) {
       console.log(err);

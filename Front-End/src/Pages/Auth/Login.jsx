@@ -4,40 +4,31 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import Cookies from "universal-cookie";
-import * as Yup from "yup";
-import axios from "axios";
 import Loader from "../../Components/Website/Loader";
 import { jwtDecode } from "jwt-decode";
+import { api } from "../../Api/Axios";
+import { LOGIN } from "../../Api/Api";
+import { LoginSchema } from "../../Schema/YUP";
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const nav = useNavigate();
   const cookies = new Cookies();
-  const yup = Yup.object().shape({
-    email: Yup.string()
-      .email("Invalid email address")
-      .required("Email is required"),
-    password: Yup.string()
-      .min(6, "Password must be at least 6 characters")
-      .required("Password is required"),
-  });
+
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
-    validationSchema: yup,
+    validationSchema: LoginSchema,
     validateOnBlur: true,
     validateOnChange: true,
     onSubmit: async (values, formikHelpers) => {
       try {
         setLoading(true);
-        const response = await axios.post(
-          "https://markeby.runasp.net/api/Authentication/login",
-          {
-            email: values.email,
-            password: values.password,
-          },
-        );
+        const response = await api.post(LOGIN, {
+          email: values.email,
+          password: values.password,
+        });
         cookies.set("token", response.data.token);
         const decodedToken = jwtDecode(response.data.token);
         const roleFromToken =
@@ -69,9 +60,8 @@ const Login = () => {
       <div className="flex flex-col md:flex-row items-center justify-between min-h-screen">
         <div className="w-full md:w-1/2">
           <h2 className="text-[37px] text-center md:text-start lg:text-[50px] font-bold mb-4">
-                        Discover The Magic Beneath The Waves with{" "}
+            Discover The Magic Beneath The Waves with{" "}
             <span className="text-secondary">Markby</span>.
-
           </h2>
           <p className="text-md mb-4">
             Experience the beauty of Hurghada’s Red Sea, where vibrant fish,
@@ -81,13 +71,13 @@ const Login = () => {
             Set sail with Markby and create unforgettable moments with family
             and friends.
           </p>
-                    <p className="text-md mb-4">Your Next Sea Adventure Starts Here.</p>
+          <p className="text-md mb-4">Your Next Sea Adventure Starts Here.</p>
 
           <div className="flex flex-col md:flex-row items-center gap-4">
             <div className="flex flex-wrap justify-center -space-x-3">
               <img
                 className="size-12 rounded-full object-cover"
-               src="./public/assets/Bony.jpeg"
+                src="./public/assets/Bony.jpeg"
                 alt="userImage1"
               />
               <img
