@@ -24,7 +24,7 @@ namespace Identity.Authentication.Repositories
             if (!_validationResult.Success) return _validationResult;
 
             var mappedUser = mapper.Map<AppUser>(user);
-            mappedUser.UserName = user.Email;
+            mappedUser.UserName = user.FirstName + " " + user.LastName;
             mappedUser.PasswordHash = user.Password;
 
             var result = await userManagement.CreateUser(mappedUser);

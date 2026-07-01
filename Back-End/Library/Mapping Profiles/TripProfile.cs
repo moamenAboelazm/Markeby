@@ -24,9 +24,22 @@ namespace Library.Mapping_Profiles
             CreateMap<Trip, DtoTrip>()
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToString()))
-                .ForMember(dest => dest.BoatSeats , opt => opt.MapFrom(src => src.Boat.Capacity))
+                .ForMember(dest => dest.BoatSeats, opt => opt.MapFrom(src => src.Boat.Capacity))
                 .ForMember(dest => dest.BoatName, opt => opt.MapFrom(src => src.Boat != null ? src.Boat.Name : "Unassigned"))
                 .ForMember(dest => dest.CaptainName, opt => opt.MapFrom(src => src.Captain != null ? src.Captain.FullName : "Unassigned"));
+
+            CreateMap<Trip, DtoTripById>()
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToString()))
+                .ForMember(dest => dest.BoatSeats, opt => opt.MapFrom(src => src.Boat.Capacity))
+                .ForMember(dest => dest.BoatName, opt => opt.MapFrom(src => src.Boat != null ? src.Boat.Name : "Unassigned"))
+                .ForMember(dest => dest.CaptainName, opt => opt.MapFrom(src => src.Captain != null ? src.Captain.FullName : "Unassigned"))
+                .ForMember(dest => dest.ImagesURLs, opt => opt.MapFrom(src => src.Images != null ? src.Images.Select(i => i.ImageUrl).ToList() : new List<string>()))
+                .ForMember(dest => dest.CaptainImg, opt => opt.MapFrom(src => src.Captain != null ? src.Captain.ProfilePhotoUrl : null))
+                .ForMember(dest => dest.BoatImg, opt => opt.MapFrom(src =>
+                    src.Boat != null && src.Boat.Images != null && src.Boat.Images.Any() ? src.Boat.Images.FirstOrDefault().ImageUrl : null));
+                        
+
         }
     }
 }

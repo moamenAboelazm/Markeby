@@ -17,9 +17,9 @@ namespace Library.Features.Bookings.Commands
 
     public class CreateBookingCommandHandler(IUnitOfWork _unitOfWork, IMapper _mapper, IMemoryCache _cache) : IRequestHandler<CreateBookingCommand, Guid>
     {
-        public async Task<Guid> Handle(CreateBookingCommand request, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(CreateBookingCommand data, CancellationToken cancellationToken)
         {
-            var trip = await _unitOfWork.Trips.GetByIdAsync(request.TripId);
+            var trip = await _unitOfWork.Trips.GetByIdAsync(data.TripId);
             if (trip == null) throw new InvalidOperationException("Trip not found.");
 
             if (trip.StartTime <= DateTime.UtcNow.AddHours(3))
@@ -28,22 +28,22 @@ namespace Library.Features.Bookings.Commands
             if (trip.Status != TripStatus.Scheduled)
                 throw new InvalidOperationException("This trip is currently not available for booking.");
 
-            if (trip.AvailableSeats < request.NumberOfTickets)
-                throw new InvalidOperationException("Not enough available seats.");
+            if (trip.AvailableSeats < data.NumberOfTickets)
+                throw new InvalidOperationException($"Not enough available seats, there are only {trip.AvailableSeats} seats");
 
-            var booking = _mapper.Map<Booking>(request);
-            booking.TotalPrice = trip.Price * request.NumberOfTickets;
+            var booking = _mapper.Map<Booking>(data);
+            booking.TotalPrice = trip.Price * data.NumberOfTickets;
             booking.BookingDate = DateTime.UtcNow.AddHours(3);
 
-            trip.AvailableSeats -= request.NumberOfTickets;
+            trip.AvailableSeats -= data.NumberOfTickets;
             _unitOfWork.Trips.Update(trip);
 
             await _unitOfWork.Bookings.AddAsync(booking);
             await _unitOfWork.CompleteAsync();
 
-            _cache.Remove($"UserBookingsCacheKey_{request.UserId}");
+            _cache.Remove($"UserBookingsCacheKey_{data.UserId}");
             _cache.Remove("AvailableUpcomingTripsCacheKey");
-            _cache.Remove($"TripDetailsCacheKey_{request.TripId}");
+            _cache.Remove($"TripDetailsCacheKey_{data.TripId}");
             _cache.Remove("AllBookingsCacheKey");
             _cache.Remove("AllTripsCacheKey");
 

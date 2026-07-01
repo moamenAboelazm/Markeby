@@ -14,9 +14,7 @@ namespace DataBase.Repository
             var rootPath = _env.WebRootPath;
 
             if (string.IsNullOrWhiteSpace(rootPath))
-            {
                 rootPath = Path.Combine(_env.ContentRootPath, "wwwroot");
-            }
 
             Directory.CreateDirectory(rootPath);
 

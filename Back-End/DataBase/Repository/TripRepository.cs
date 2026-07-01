@@ -25,8 +25,8 @@ namespace DataBase.Repository
 
             if (!_cache.TryGetValue(cacheKey, out Trip? trip))
             {
-                trip = await _context.Set<Trip>().Include(t => t.Boat).Include(t => t.Captain).Include(t => t.Bookings)
-                    .Include(t => t.Passengers).FirstOrDefaultAsync(t => t.Id == id);
+                trip = await _context.Set<Trip>().Include(t => t.Boat).ThenInclude(b => b.Images).Include(t => t.Captain).Include(t => t.Bookings)
+                    .Include(t => t.Passengers).Include(t => t.Images).AsNoTracking().FirstOrDefaultAsync(t => t.Id == id);
 
                 if (trip != null)
                 {

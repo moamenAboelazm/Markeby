@@ -1,4 +1,7 @@
-﻿namespace Library.Features.Users
+﻿using Library.Enums;
+using Library.Models;
+
+namespace Library.Features.Users
 {
     public class DtoGetUser
     {
@@ -12,4 +15,18 @@
         public int Age { get; set; }
         public IEnumerable<string> Roles { get; set; } = new List<string>();
     }
+    public class DtoGetUserProfile : DtoGetUser
+    {
+        public IEnumerable<DtoBookingsInProfile> Bookings { get; set; } = new List<DtoBookingsInProfile>();
+    }
+
+    public class DtoBookingsInProfile
+    {
+        public string Id { get; set; }
+        public string TripTitle { get; set; }
+        public DateTime StartDate { get; set; }
+        public TripStatus TripStatus { get; set; }
+        public double TotalPrice { get; set; }
+    }
+
 }
