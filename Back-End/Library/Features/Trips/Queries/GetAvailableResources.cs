@@ -33,7 +33,7 @@ namespace Library.Features.Trips.Queries
                     Name = b.Name
                 }).ToList();
 
-            var allCaptains = await _unitOfWork.Captains.GetAllAsync(); 
+            var allCaptains = await _unitOfWork.Captains.GetAllAsync();
             var availableCaptains = allCaptains.Where(c => !busyCaptainIds.Contains(c.Id) && c.IsAvailable)
                 .Select(c => new AvailableCaptainDto
                 {

@@ -21,6 +21,8 @@ namespace Library.MappingProfiles
                     opt => opt.MapFrom(src =>
                         DateTime.UtcNow.Year - src.BirthDate.Year -
                         (DateTime.UtcNow.DayOfYear < src.BirthDate.DayOfYear ? 1 : 0)));
+
+            CreateMap<AppUser, DtoGetUserProfile>().IncludeBase<AppUser, DtoGetUser>();
         }
     }
 }
