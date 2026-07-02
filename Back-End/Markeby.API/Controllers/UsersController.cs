@@ -10,9 +10,9 @@ public class UsersController(IMediator _mediator) : ControllerBase
 {
     [HttpGet]
     [Authorize(Roles = "Admin")]
-    public async Task<IActionResult> GetAllUsers()
+    public async Task<IActionResult> GetAllUsers([FromQuery] GetPagedUsersQuery query)
     {
-        var result = await _mediator.Send(new GetAllUsers());
+        var result = await _mediator.Send(query);
         return Ok(result);
     }
 
@@ -38,7 +38,7 @@ public class UsersController(IMediator _mediator) : ControllerBase
 
     [HttpPut("profile")]
     [Authorize]
-    public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileCommand command)
+    public async Task<IActionResult> UpdateProfile([FromForm] UpdateProfileCommand command)
     {
         var result = await _mediator.Send(command);
         return Ok(result);
