@@ -38,7 +38,6 @@ const Vessels = () => {
               };
             });
             setBoats(t.data.items);
-            console.log(t.data.items);
           });
       } catch (err) {
         console.log(err);
@@ -90,7 +89,7 @@ const Vessels = () => {
     <div>
       <div className="top flex justify-between items-center">
         <div>
-          <h2 className="text-[35px] text-secondary">Vessel Management</h2>
+          <h2 className="text-[50px] text-secondary font-bold">Vessel Management</h2>
           <p className="text-gray-700">
             Oversee your fleet leaders and crew assignments.
           </p>

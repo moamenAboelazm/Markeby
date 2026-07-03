@@ -51,7 +51,6 @@ const AddCaptain = () => {
         data.append("Id", id);
         const res = await api.put(CAPTAIN(id), data);
         nav("/dashboard/captains");
-        console.log(res);
       } catch (err) {
         console.log(err.response?.data);
       } finally {
@@ -67,7 +66,6 @@ const AddCaptain = () => {
       try {
         const res = api.get(CAPTAIN(id));
         res.then((d) => {
-          console.log(d.data);
           formik.setFieldValue("FullName", d.data.fullName);
           formik.setFieldValue("YearsOfExperience", d.data.yearsOfExperience);
           formik.setFieldValue("Email", d.data.email);
@@ -108,7 +106,7 @@ const AddCaptain = () => {
         </div>
         <div className="flex justify-between items-center flex-col gap-y-2">
           <button type="submit">
-            <Btn text={"Update Captain"} class={"ml-12"} />
+            <Btn text={"Update Captain"} className={"ml-12"} />
           </button>
         </div>
       </div>

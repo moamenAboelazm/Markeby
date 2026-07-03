@@ -6,13 +6,28 @@ import { LuUserPlus } from "react-icons/lu";
 import Table from "../../../Components/Dashboard/Table";
 import Loader from "../../../Components/Website/Loader";
 import { CAPTAIN, CAPTAINS_PAGED } from "../../../Api/Api";
+import { FaPlus } from "react-icons/fa";
+import TripsCards from "../../../Components/Dashboard/TripsCards";
+import Btn from "../../../Components/Utils/Btn";
 
-const Captains = () => {
-  const head = ["fullName", "rank", "vessel", "status", "phoneNumber"];
-  const [captains, setCaptains] = useState([]);
+const Trips = () => {
+  const head = [
+    "title",
+    "type",
+    "status",
+    "price",
+    "startLocation",
+    "startTime",
+    "endTime",
+    "captainName",
+    "boatName",
+    "availableSeats",
+  ];
+  const [trips, setTrips] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [isDelete, setIsDelete] = useState(0);
+  const [part, setPart] = useState(true);
   const [navgate, setNavgate] = useState({
     pageNumber: 1,
     pageSize: 3,
@@ -25,7 +40,7 @@ const Captains = () => {
         setLoading(true);
         await api
           .get(
-            `/Captains/paged?PageNumber=${navgate.pageNumber}&PageSize=${navgate.pageSize}`,
+            `/Trips/all?PageNumber=${navgate.pageNumber}&PageSize=${navgate.pageSize}`,
           )
           .then((t) => {
             setNavgate((prev) => {
@@ -35,7 +50,7 @@ const Captains = () => {
                 totalPages: t.data.totalPages,
               };
             });
-            setCaptains(t.data.items);
+            setTrips(t.data.items);
           });
       } catch (err) {
         console.log(err);
@@ -47,12 +62,8 @@ const Captains = () => {
   }, [isDelete, navgate.pageNumber, navgate.limit, navgate.pageSize]);
   async function handelSearch() {
     try {
-      const res = await api.get("/Captains/paged", {
-        params: {
-          SearchTerm: search,
-        },
-      });
-      setCaptains(res.data.items);
+      const res = await api.get(`Trips/all?title=${search}`);
+      setTrips(res.data.items);
     } catch (err) {
       console.log(err);
     }
@@ -61,20 +72,16 @@ const Captains = () => {
     setSearch(e.target.value);
     setTimeout(async () => {
       try {
-        const res = await api.get(CAPTAINS_PAGED, {
-          params: {
-            SearchTerm: e.target.value,
-          },
-        });
-        setCaptains(res.data.items);
+        const res = await api.get(`/Trips/all?title=${e.target.value}`);
+        setTrips(res.data.items);
       } catch (err) {
         console.log(err);
       }
-    }, 3000);
+    }, 1000);
   }
   async function handelDelete(id) {
     try {
-      let res = await api.delete(CAPTAIN(id));
+      let res = await api.delete(`/Trips/${id}`);
       setIsDelete((prev) => prev + 1);
     } catch (err) {
       console.log(err);
@@ -87,45 +94,55 @@ const Captains = () => {
     <div>
       <div className="top flex justify-between items-center">
         <div>
-          <h2 className="text-[50px] text-secondary font-bold">Captain Management</h2>
+          <h2 className="text-[50px] text-secondary font-bold">Trips Management</h2>
           <p className="text-gray-700">
             Oversee your fleet leaders and crew assignments.
           </p>
         </div>
         <Link
-          to={"/dashboard/addcaptain"}
+          to={"/dashboard/addtrip"}
           className="flex items-center gap-x-2 bg-secondary py-2 px-3 text-[18px] text-white rounded-md hover:bg-primary transition-all duration-300"
         >
-          <LuUserPlus /> Add New Captain
+          <FaPlus /> Add New Trip
         </Link>
       </div>
       <div className="cards">
-        <CaptainsCards />
+        <TripsCards />
       </div>
       <div className="bg-gray-100 shadow-md rounded-md">
         <div className="flex justify-between items-center py-[50px] w-[95%] mx-auto">
           <h3 className="text-[30px] font-medium text-secondary">
-            Captain Registry
+            Trips Registry
           </h3>
-          <div className=" border border-neutral-700 rounded-md overflow-hidden relative">
-            <input
-              type="text"
-              value={search}
-              onChange={handelinputSearch}
-              placeholder="Seach By Name Of The Captain!"
-              className="border-none outline-none px-2 my-2 w-[350px]"
+          <div className="flex gap-x-2 items-center">
+            <div className=" border border-neutral-700 rounded-md overflow-hidden relative">
+              <input
+                type="text"
+                value={search}
+                onChange={handelinputSearch}
+                placeholder="Seach By Name Of The Trip!"
+                className="border-none outline-none px-2 my-2 w-[350px]"
+              />
+              <button
+                onClick={handelSearch}
+                className="bg-primary w-20 h-[120%] text-background absolute top-0 right-0 pb-2 flex items-center justify-center cursor-pointer hover:bg-secondary"
+              >
+                Search
+              </button>
+            </div>
+            <Btn
+              text="Swap"
+              onClick={() => {
+               setPart((prev) => !prev);
+              }}
             />
-            <button
-              onClick={handelSearch}
-              className="bg-primary w-20 h-[120%] text-background absolute top-0 right-0 pb-2 flex items-center justify-center cursor-pointer hover:bg-secondary"
-            >
-              Search
-            </button>
           </div>
         </div>
         <Table
-          head={head}
-          data={captains}
+          head={part?head.slice(0, 5):head.slice(5, head.length)}
+          data={trips}
+          pageNumber={navgate.pageNumber}
+          pageSize={navgate.pageSize}
           delete={handelDelete}
           setNavgate={setNavgate}
           navgate={navgate}
@@ -135,4 +152,4 @@ const Captains = () => {
   );
 };
 
-export default Captains;
+export default Trips;

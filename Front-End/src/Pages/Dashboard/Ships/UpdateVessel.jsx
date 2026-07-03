@@ -68,7 +68,6 @@ const UpdateVessel = () => {
     async function getVessel() {
       try {
         const res = await api.get(BOAT(id));
-        console.log(res.data);
         formik.setFieldValue("Name", res.data.name);
         formik.setFieldValue("Description", res.data.description);
         formik.setFieldValue("Status", res.data.status);
@@ -84,7 +83,6 @@ const UpdateVessel = () => {
     }
     getVessel();
   }, [id]);
-  console.log(formik.values);
   function handelimage(e) {
     setImages((prev) => [...prev, ...e.target.files]);
     formik.setFieldValue("Images", [...e.target.files]);
@@ -97,7 +95,7 @@ const UpdateVessel = () => {
       <div className="top flex justify-between items-center my-[30px]">
         <h2 className="text-[50px] text-primary font-bold">Update Vessel</h2>
         <button type="submit">
-          <Btn text={"Update"} class={"mr-12"} />
+          <Btn text={"Update"} className={"mr-12"} />
         </button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 ">

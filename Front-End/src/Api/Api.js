@@ -3,6 +3,7 @@ export const LOGIN = "/Authentication/login";
 export const CAPTAINS_PAGED = "/Captains/paged";
 export const BOATS = "/Boats"
 export const ALL_BOATS = "/Boats/all";
+export const IMGES_URL = "https://markeby.runasp.net"
 export function CAPTAINS(pageNumber, pageSize) {
   return `/${CAPTAINS_PAGED}?PageNumber=${pageNumber}&PageSize=${pageSize}`;
 }
