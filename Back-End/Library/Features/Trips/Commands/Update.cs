@@ -34,13 +34,13 @@ namespace Library.Features.Trips.Commands
 
             if (trip.BoatId != data.BoatId || trip.StartTime != data.StartTime || trip.EndTime != data.EndTime)
             {
-                var isBoatAvailable = await _unitOfWork.Boats.IsBoatAvailableAsync(data.BoatId, data.StartTime, data.EndTime);
+                var isBoatAvailable = await _unitOfWork.Boats.IsBoatAvailableForUpdateTripAsync(data.BoatId, data.Id , data.StartTime, data.EndTime);
                 if (!isBoatAvailable) throw new InvalidOperationException("Boat is not available.");
             }
 
             if (trip.CaptainId != data.CaptainId || trip.StartTime != data.StartTime || trip.EndTime != data.EndTime)
             {
-                var isCaptainAvailable = await _unitOfWork.Captains.IsCaptainAvailableAsync(data.CaptainId, data.StartTime, data.EndTime);
+                var isCaptainAvailable = await _unitOfWork.Captains.IsCaptainAvailableForUpdateTripAsync(data.CaptainId, data.Id, data.StartTime, data.EndTime);
                 if (!isCaptainAvailable) throw new InvalidOperationException("Captain is not available.");
             }
 

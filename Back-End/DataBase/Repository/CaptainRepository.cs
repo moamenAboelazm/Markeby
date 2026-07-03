@@ -82,5 +82,12 @@ namespace DataBase.Repository
 
             return !hasConflict;
         }
+        public async Task<bool> IsCaptainAvailableForUpdateTripAsync(Guid captainId, Guid tripId , DateTime startTime, DateTime endTime)
+        {
+            var hasConflict = await _context.Set<Trip>()
+                .AnyAsync(t => t.Id != tripId && t.CaptainId == captainId && t.Status != TripStatus.Cancelled && t.StartTime < endTime && t.EndTime > startTime);
+
+            return !hasConflict;
+        }
     }
 }
