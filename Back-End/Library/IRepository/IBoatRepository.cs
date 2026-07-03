@@ -11,5 +11,6 @@ namespace Library.IRepository
         Task<IReadOnlyList<Boat>> GetBoatsByCaptainIdAsync(Guid captainId);
         Task<BoatDashboardStatsDto> GetDashboardStatsAsync();
         Task<bool> IsBoatAvailableAsync(Guid boatId, DateTime startTime, DateTime endTime);
+        Task<bool> IsBoatAvailableForUpdateTripAsync(Guid boatId, Guid tripId , DateTime startTime, DateTime endTime);
     }
 }

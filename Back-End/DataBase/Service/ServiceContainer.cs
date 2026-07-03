@@ -81,7 +81,7 @@ namespace DataBase.Service
             services.AddAutoMapper(cfg => { }, typeof(UserProfile).Assembly);
 
             // 5. MediatR Registration
-            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAllUsers).Assembly));
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetPagedUsersQuery).Assembly));
 
             // 6. Repositories & Unit of Work
             services.AddScoped(typeof(IAppLoger<>), typeof(SerilogerAppAdapter<>));

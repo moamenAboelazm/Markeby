@@ -50,6 +50,7 @@ namespace Library.Features.Trips.Commands
             var trip = _mapper.Map<Trip>(data);
             trip.Status = TripStatus.Scheduled;
             trip.Images ??= new List<TripImage>();
+            trip.AvailableSeats = Math.Min(trip.AvailableSeats, trip.Boat.Capacity);
 
             if (data.Images != null && data.Images.Any())
             {
@@ -59,6 +60,7 @@ namespace Library.Features.Trips.Commands
                     trip.Images.Add(new TripImage { ImageUrl = imageUrl });
                 }
             }
+
 
             await _unitOfWork.Trips.AddAsync(trip);
             await _unitOfWork.CompleteAsync();
