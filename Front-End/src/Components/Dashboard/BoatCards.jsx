@@ -13,7 +13,6 @@ const BoatCards = () => {
       try {
         const res = await api.get("/Boats/dashboard-stats");
         setInfo(res.data);
-        console.log(res.data);
       } catch (err) {
         console.log(err);
       }

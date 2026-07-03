@@ -90,7 +90,7 @@ const AddShip = () => {
       <div className="top flex justify-between items-center my-[30px]">
         <h2 className="text-[50px] text-primary font-bold">Add New Vessel</h2>
         <button type="submit">
-          <Btn text={"Add to fleet"} class={"mr-12"} />
+          <Btn text={"Add to fleet"} className={"mr-12"} />
         </button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 ">

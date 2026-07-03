@@ -44,7 +44,6 @@ const AddTrip = () => {
       BoatId: "",
       CaptainId: "",
       Price: "",
-      Capacity: "",
       AvailableSeats: "",
       Images: [],
     },
@@ -53,7 +52,7 @@ const AddTrip = () => {
     validateOnChange: true,
     onSubmit: async (values) => {
       const data = new FormData();
-      data.append("Titel", values.Titel);
+      data.append("Title", values.Titel);
       data.append("Description", values.Description);
       data.append("Type", values.Type);
       data.append("StartLocation", values.StartLocation);
@@ -62,15 +61,13 @@ const AddTrip = () => {
       data.append("BoatId", values.BoatId);
       data.append("CaptainId", values.CaptainId);
       data.append("Price", values.Price);
-      data.append("Capacity", values.Capacity);
       data.append("AvailableSeats", values.AvailableSeats);
       values.Images.forEach((image) => {
         data.append("Images", image);
       });
-      console.log(values);
       try {
         const res = await api.post("/Trips", data);
-        nav("/dashboard/vessels");
+        nav("/dashboard/trips");
       } catch (err) {
         console.log(err);
       }
@@ -132,7 +129,7 @@ const AddTrip = () => {
           </p>
         </div>
         <button type="submit">
-          <Btn text={"Publish Trip"} class={"mr-12"} />
+          <Btn text={"Publish Trip"} className={"mr-12"} />
         </button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 ">
@@ -409,29 +406,7 @@ const AddTrip = () => {
                   htmlFor="name"
                   className="text-[15px] my-2 font-light text-gray-800 block"
                 >
-                  Max Capacity:
-                </label>
-                <input
-                  type="number"
-                  value={formik.values.Capacity}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  name="Capacity"
-                  placeholder="$ 0.00"
-                  className="border border-gray-400 rounded-[20px] py-2 px-3 focus:outline-none focus:ring-2 focus:border-secondary valid:ring-secondary w-full"
-                />
-                {formik.touched.Capacity && formik.errors.Capacity && (
-                  <span className="text-[14px] text-red-600 my-2">
-                    {formik.errors.Capacity}
-                  </span>
-                )}
-              </div>
-              <div>
-                <label
-                  htmlFor="name"
-                  className="text-[15px] my-2 font-light text-gray-800 block"
-                >
-                  Available Seats:
+                  Available Seats :
                 </label>
                 <input
                   type="number"
@@ -439,7 +414,7 @@ const AddTrip = () => {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   name="AvailableSeats"
-                  placeholder="$ 0.00"
+                  placeholder="0"
                   className="border border-gray-400 rounded-[20px] py-2 px-3 focus:outline-none focus:ring-2 focus:border-secondary valid:ring-secondary w-full"
                 />
                 {formik.touched.AvailableSeats &&

@@ -87,7 +87,7 @@ const Captains = () => {
     <div>
       <div className="top flex justify-between items-center">
         <div>
-          <h2 className="text-[35px] text-secondary">Captain Management</h2>
+          <h2 className="text-[50px] text-secondary font-bold">Captain Management</h2>
           <p className="text-gray-700">
             Oversee your fleet leaders and crew assignments.
           </p>

@@ -273,7 +273,7 @@ const AddCaptain = () => {
             </p>
           </div>
           <button type="submit">
-            <Btn text={"Add Captain"} class={"ml-12"} />
+            <Btn text={"Add Captain"} className={"ml-12"} />
           </button>
         </div>
       </div>

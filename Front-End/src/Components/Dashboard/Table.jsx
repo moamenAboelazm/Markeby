@@ -5,13 +5,15 @@ import { FiEdit } from "react-icons/fi";
 import Pagenate from "./Pagenate";
 import { Link } from "react-router-dom";
 import { FaUtensils } from "react-icons/fa";
+import { FaEye } from "react-icons/fa6";
+import { IMGES_URL } from "../../Api/Api";
 const Table = (props) => {
   const headShow = props.head.map((h, k) => {
     return (
       <th
         key={k}
         scope="col"
-        class="px-6 py-2 text-[18px] font-medium uppercase"
+        className="px-2 py-2 text-[18px] font-medium uppercase"
       >
         {h === "phoneNumber" ? "phone" : h === "fullName" ? "Full Name" : h}
       </th>
@@ -19,17 +21,20 @@ const Table = (props) => {
   });
   const bodyShow = props.data.map((d, i) => {
     return (
-      <tr className=" border-b border-gray-300 bg-background hover:bg-[#f8fbff] transition-all duration-300 ease-in">
+      <tr
+        key={i}
+        className=" border-b border-gray-300 bg-background hover:bg-[#f8fbff] transition-all duration-300 ease-in"
+      >
         {props.head.map((h, l) => {
           return (
-            <td key={l} className="px-6 py-4 capitalize">
+            <td key={l} className="px-2 py-3 capitalize">
               {
                 h === "fullName" ? (
                   <div className="flex gap-x-2 items-center">
                     {d["profilePhotoUrl"] !== null ? (
                       <img
                         className="w-[50px] h-[50px] rounded-full object-cover"
-                        src={`https://markeby.runasp.net${d["profilePhotoUrl"]}`}
+                        src={`${IMGES_URL}${d["profilePhotoUrl"]}`}
                       />
                     ) : (
                       <p className="w-[70px] h-[70px] rounded-full bg-secondary flex items-center justify-center text-background text-[25px]">
@@ -48,14 +53,14 @@ const Table = (props) => {
                 ) : h === "status" ? (
                   <p
                     className={`
-                    ${d[h].toUpperCase() === "ACTIVE" || d[h].toUpperCase() === "AVAILABLE" ? " text-[#a63a14]" : d[h].toUpperCase() === "INACTIVE" || d[h].toLowerCase() === "atsea" ? " text-secondary" : " text-tertiary "} text-[14px] rounded-[30px] text-center flex  items-center gap-x-[-25px] `}
+                    ${d[h].toUpperCase() === "ACTIVE" || d[h].toUpperCase() === "AVAILABLE" || d[h].toLowerCase() === "scheduled" ? " text-[#a63a14]" : d[h].toUpperCase() === "INACTIVE" || d[h].toLowerCase() === "atsea" || d[h].toLowerCase() === "ongoing" ? " text-secondary" : " text-tertiary "} text-[14px] rounded-[30px] text-center flex  items-center gap-x-[-25px] `}
                   >
                     <PiDotOutlineFill className="text-[50px]" /> {d[h]}
                   </p>
                 ) : h === "name" && h !== "fullName" ? (
                   <div className="flex gap-x-2 items-center">
                     <img
-                      src={`https://markeby.runasp.net${d["mainImageUrl"]}`}
+                      src={`${IMGES_URL}${d["mainImageUrl"]}`}
                       className="w-[65px] h-[65px] rounded-md"
                     />
                     <h3 className="text-[23px] text-secondary">{d[h]}</h3>
@@ -79,6 +84,36 @@ const Table = (props) => {
                       )}
                     </span>
                   </div>
+                ) : h === "startTime" || h === "endTime" ? (
+                  <p className="text-[16px]">
+                    {new Date(d[h]).toLocaleString("en-EG")}
+                  </p>
+                ) : h === "profile" ? (
+                  d["profileImgUrl"] !== null ? (
+                    <Link to={`protoflio/${d["id"]}`}>
+                      <img
+                        src={`${IMGES_URL}${d["profilePhotoUrl"]}`}
+                        className="w-[50px] h-[50px] rounded-full object-cover"
+                      />
+                    </Link>
+                  ) : (
+                    <Link
+                      to={`/protoflio/${d["id"]}`}
+                      className="w-[50px] h-[50px] rounded-full bg-gray-300 flex items-center justify-center text-[20px] font-bold text-tertiary"
+                    >
+                      {d["userName"][0].toUpperCase()}
+                    </Link>
+                  )
+                ) : h === "roles" ? (
+                  d[h][0] === "Admin" ? (
+                    <p className="text-[20px] bg-primary text-white py-1 px-2 rounded-[25px] flex justify-center items-center  uppercase hover:scale-110 transition-all duration-300">
+                      {d[h][0]}
+                    </p>
+                  ) : (
+                    <p className="text-[20px] bg-tertiary text-white py-1 px-2 rounded-[25px] flex justify-center items-center lowercase hover:scale-110 transition-all duration-300 ">
+                      {d[h][0]}
+                    </p>
+                  )
                 ) : (
                   <p className="text-[16px]">{d[h]}</p>
                 )
@@ -88,28 +123,38 @@ const Table = (props) => {
             </td>
           );
         })}
-        <td className="flex justify-between items-center px-4 py-6">
+        <td className="flex items-center px-3 py-6 gap-x-3 text-[20px]">
+          <Link
+            to={`protoflio/${d["id"]}`}
+            className="text-tertiary hover:text-secondary hover:scale-110 text-[25px] transition-all ease-in duration-300"
+          >
+            <FaEye />
+          </Link>
           <Link
             to={d["id"]}
             className="text-secondary hover:text-primary hover:scale-110 text-[25px] transition-all ease-in duration-300"
           >
             <FiEdit />
           </Link>
-          <MdDelete
-            onClick={() => props.delete(d["id"])}
-            className="text-red-500 hover:scale-110 cursor-pointer text-[30px] duration-300 "
-          />
+          {props.isHasNoDelete ? null : (
+            <MdDelete
+              onClick={() => props.delete(d["id"])}
+              className="text-red-500 hover:scale-110 cursor-pointer text-[30px] duration-300 "
+            />
+          )}
         </td>
       </tr>
     );
   });
   return (
-    <div class="relative overflow-x-auto bg-neutral-primary-soft shadow-xs">
-      <table class="w-full text-sm text-left rtl:text-right text-body">
-        <thead class="text-sm text-body bg-neutral-secondary-soft">
+    <div className="relative overflow-x-scroll bg-neutral-primary-soft shadow-xs">
+      <table className="w-full text-sm text-left rtl:text-right text-body">
+        <thead className="text-sm text-body bg-neutral-secondary-soft">
           <tr>
             {headShow}
-            <th class="px-6 py-2 text-[18px] font-medium uppercase">Actions</th>
+            <th className="px-6 py-2 text-[18px] font-medium uppercase">
+              Actions
+            </th>
           </tr>
         </thead>
         <tbody>{bodyShow}</tbody>

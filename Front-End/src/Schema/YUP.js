@@ -105,12 +105,6 @@ export const EditiShipSchema = Yup.object({
     .oneOf(["Available", "AtSea", "OutOfService"])
     .required("Type of Boat is Required"),
 
-  Capacity: Yup.number()
-    .typeError("Capacity must be a number")
-    .positive("Capacity must be greater than 0")
-    .integer("Capacity must be integer")
-    .required("Capacity is required"),
-
   YearBuilt: Yup.number()
     .typeError("Year Built must be a number")
     .min(1900, "Year is too old")
@@ -155,10 +149,6 @@ export const AddTripSchema = Yup.object({
     .positive("Price must be positive")
     .required("Price is required"),
 
-  Capacity: Yup.number()
-    .typeError("Capacity must be number")
-    .positive()
-    .required("Capacity is required"),
 
   AvailableSeats: Yup.number()
     .typeError("Seats must be number")
