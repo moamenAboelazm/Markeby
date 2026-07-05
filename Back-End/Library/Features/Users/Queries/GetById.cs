@@ -2,6 +2,7 @@
 using Library.Models;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Library.Features.Users.Queries
 {
@@ -14,11 +15,12 @@ namespace Library.Features.Users.Queries
     {
         public async Task<DtoGetUserProfile> Handle(GetUserById data, CancellationToken cancellationToken)
         {
-            var user = await _userManager.FindByIdAsync(data.Id);
+            var user = await _userManager.Users.AsNoTracking().Include(u => u.Bookings).ThenInclude(b => b.Trip)
+                .FirstOrDefaultAsync(u => u.Id == data.Id, cancellationToken);
 
             if (user == null)
-                return null;
-            
+                throw new Exception("User not found.");
+
             var dtoUser = _mapper.Map<DtoGetUserProfile>(user);
             dtoUser.Roles = await _userManager.GetRolesAsync(user);
 
