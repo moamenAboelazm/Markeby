@@ -47,49 +47,7 @@ Markeby strictly follows **Clean Architecture** principles, ensuring a separatio
 
 ---
 
-## 🚀 Getting Started
-
-### Prerequisites
-* [.NET 8 SDK](https://dotnet.microsoft.com/download)
-* [SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads) (Local or Cloud)
-* IDE (Visual Studio 2022, VS Code, or Rider)
-
-### Setup Instructions
-
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/your-username/markeby.git
-    cd markeby
-    ```
-
-2.  **Configure the Database & JWT:**
-    Open `appsettings.json` or `appsettings.Development.json` and update the `ConnectionStrings` and `JWT` settings:
-    ```json
-    "ConnectionStrings": {
-      "MyConnectionStr": "Server=YOUR_SERVER; Database=MarkebyDb; User Id=YOUR_USER; Password=YOUR_PASSWORD; Encrypt=True; TrustServerCertificate=True;"
-    },
-    "JWT": {
-      "Key": "your-very-secure-and-long-secret-key-here!",
-      "Issuer": "MarkebyAPI",
-      "Audience": "MarkebyUsers"
-    }
-    ```
-
-3.  **Apply Migrations:**
-    Open the Package Manager Console (PMC) or terminal and run:
-    ```bash
-    dotnet ef database update
-    ```
-
-4.  **Run the Application:**
-    ```bash
-    dotnet run
-    ```
-    Navigate to `https://localhost:port/swagger` to explore the API endpoints.
-
----
-
-## 📝 API Endpoints Overview
+## 📝 Some API Endpoints Overview
 
 * `POST /api/Auth/register` - Register a new user.
 * `POST /api/Auth/login` - Authenticate and get a JWT token.
