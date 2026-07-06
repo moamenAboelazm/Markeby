@@ -1,4 +1,4 @@
-﻿using Library.Models;
+﻿using Library.Enums;
 
 namespace Library.Features.Boats
 {
@@ -27,7 +27,22 @@ namespace Library.Features.Boats
         public bool HasWifi { get; set; }
         public bool HasFoodFacility { get; set; }
         public string Status { get; set; } = string.Empty;
-        public List<DtoBoatImage> Images { get; set; } = new();
+        public IReadOnlyList<DtoBoatImage> Images { get; set; } = new List<DtoBoatImage>();
+        public IReadOnlyList<DtoBoatTripsTable> Trips { get; set; } = new List<DtoBoatTripsTable>();
+
+    }
+
+    public class DtoBoatTripsTable
+    {
+        public Guid Id { get; set; }
+        public string Title { get; set; }
+        public string CaptainName { get; set; }
+        public string CaptainImg { get; set; }
+        public string StartLocation { get; set; } = string.Empty;
+        public TripType Type { get; set; }
+        public TripStatus Status { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
     }
 
     public class DtoBoatImage

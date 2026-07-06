@@ -43,7 +43,7 @@ namespace DataBase.Repository
 
             if (!_cache.TryGetValue(cacheKey, out Captain? captain))
             {
-                captain = await _context.Set<Captain>().Include(c => c.Boats).Include(c => c.Trips).AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
+                captain = await _context.Set<Captain>().Include(c => c.Trips).ThenInclude(t => t.Boat).ThenInclude(b => b.Images).AsNoTracking().FirstOrDefaultAsync(c => c.Id == id);
 
                 if (captain != null)
                 {
@@ -82,6 +82,7 @@ namespace DataBase.Repository
 
             return !hasConflict;
         }
+       
         public async Task<bool> IsCaptainAvailableForUpdateTripAsync(Guid captainId, Guid tripId , DateTime startTime, DateTime endTime)
         {
             var hasConflict = await _context.Set<Trip>()
