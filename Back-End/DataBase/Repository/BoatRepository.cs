@@ -43,7 +43,7 @@ namespace DataBase.Repository
 
             if (!_cache.TryGetValue(cacheKey, out Boat? boat))
             {
-                boat = await _context.Set<Boat>().Include(b => b.Captains).Include(b => b.Trips).Include(b => b.Images).AsNoTracking().FirstOrDefaultAsync(b => b.Id == id);
+                boat = await _context.Set<Boat>().Include(b => b.Captains).Include(b => b.Trips).ThenInclude(t => t.Captain).Include(b => b.Images).AsNoTracking().FirstOrDefaultAsync(b => b.Id == id);
 
                 if (boat != null)
                 {

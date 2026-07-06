@@ -16,7 +16,12 @@ namespace Library.Features.Boats.Queries
 
             if (boat == null) return null;
 
-            return _mapper.Map<DtoBoat>(boat);
+            var mappedBoat = _mapper.Map<DtoBoat>(boat);
+            var trips = _mapper.Map<IReadOnlyList<DtoBoatTripsTable>>(boat.Trips);
+
+            mappedBoat.Trips = trips;
+
+            return mappedBoat;
         }
     }
 }

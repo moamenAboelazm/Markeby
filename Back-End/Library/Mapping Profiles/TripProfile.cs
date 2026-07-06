@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Library.Features.Boats;
+using Library.Features.Captains;
 using Library.Features.Trips;
 using Library.Features.Trips.Commands;
 using Library.Models;
@@ -38,8 +40,16 @@ namespace Library.Mapping_Profiles
                 .ForMember(dest => dest.CaptainImg, opt => opt.MapFrom(src => src.Captain != null ? src.Captain.ProfilePhotoUrl : null))
                 .ForMember(dest => dest.BoatImg, opt => opt.MapFrom(src =>
                     src.Boat != null && src.Boat.Images != null && src.Boat.Images.Any() ? src.Boat.Images.FirstOrDefault().ImageUrl : null));
-                        
 
+            CreateMap<Trip, DtoCaptainTripsTable>()
+                .ForMember(dest => dest.BoatName, opt => opt.MapFrom(src => src.Boat != null ? src.Boat.Name : string.Empty))
+                .ForMember(dest => dest.BoatImg, opt => opt.MapFrom(src =>src.Boat != null && src.Boat.Images != null && src.Boat.Images.Any()?
+                src.Boat.Images.First().ImageUrl: null));
+           
+            CreateMap<Trip, DtoBoatTripsTable>()
+                .ForMember(dest => dest.CaptainName, opt => opt.MapFrom(src => src.Captain.FullName))
+                .ForMember(dest => dest.CaptainImg, opt => opt.MapFrom(src => src.Captain.ProfilePhotoUrl));
+                
         }
     }
 }
