@@ -49,11 +49,11 @@ Markeby strictly follows **Clean Architecture** principles, ensuring a separatio
 
 ## 📝 Some API Endpoints Overview
 
-* `POST /api/Auth/register` - Register a new user.
-* `POST /api/Auth/login` - Authenticate and get a JWT token.
+* `POST /api/Authentication/create` - Register a new user.
+* `POST /api/Authentication/login` - Authenticate and get a JWT token.
 * `GET /api/Users/profile` - Get the current user's profile and bookings.
-* `GET /api/Trips` - Get paginated trips (supports filters for Admin/User views).
-* `GET /api/Boats/dashboard` - Get paginated boat statistics for Admin.
+* `GET /api/Trips/all` - Get paginated trips (supports filters for Admin/User views).
+* `GET /api/Boats/dashboard-stats` - Get paginated boat statistics for Admin.
 * `POST /api/Boats` - Add a new boat with images (Admin only).
 
 ---
