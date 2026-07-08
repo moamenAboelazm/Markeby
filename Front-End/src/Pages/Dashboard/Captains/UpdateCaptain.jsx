@@ -14,12 +14,12 @@ import Switch from "../../../Components/Dashboard/Switch";
 import Loader from "../../../Components/Website/Loader";
 import { CAPTAIN } from "../../../Api/Api";
 import { EditiCaptainSchema } from "../../../Schema/YUP";
+import Err404 from "../../../Components/Utils/Err404";
 const AddCaptain = () => {
   const { token } = useRole();
   const { id } = useParams();
   const nav = useNavigate();
   const [loading, setLoading] = useState(false);
-
   const formik = useFormik({
     initialValues: {
       FullName: "",
@@ -64,24 +64,26 @@ const AddCaptain = () => {
   useEffect(() => {
     async function fetchCaptain() {
       try {
-        const res = api.get(CAPTAIN(id));
-        res.then((d) => {
-          formik.setFieldValue("FullName", d.data.fullName);
-          formik.setFieldValue("YearsOfExperience", d.data.yearsOfExperience);
-          formik.setFieldValue("Email", d.data.email);
-          formik.setFieldValue("Languages", d.data.languages);
-          formik.setFieldValue("Bio", d.data.bio);
-          formik.setFieldValue("PhoneNumber", d.data.phoneNumber);
-          formik.setFieldValue("Rank", d.data.rank);
-          formik.setFieldValue("IsAvailable", d.data.IsAvailable);
-          setImage(`https://markeby.runasp.net${d.data["profilePhotoUrl"]}`);
-        });
+        const res = await api.get(CAPTAIN(id));
+
+        formik.setFieldValue("FullName", res.data.fullName);
+        formik.setFieldValue("YearsOfExperience", res.data.yearsOfExperience);
+        formik.setFieldValue("Email", res.data.email);
+        formik.setFieldValue("Languages", res.data.languages);
+        formik.setFieldValue("Bio", res.data.bio);
+        formik.setFieldValue("PhoneNumber", res.data.phoneNumber);
+        formik.setFieldValue("Rank", res.data.rank);
+        formik.setFieldValue("IsAvailable", res.data.IsAvailable);
+        setImage(`https://markeby.runasp.net${res.data["profilePhotoUrl"]}`);
       } catch (err) {
-        console.log(err);
+        if (err.response?.status === 400) {
+          nav("/err404");
+        }
       }
     }
     fetchCaptain();
   }, [id]);
+  console.log(formik.values);
   function handelimage(e) {
     const file = e.target.files.item(0);
     if (file) {
@@ -106,7 +108,7 @@ const AddCaptain = () => {
         </div>
         <div className="flex justify-between items-center flex-col gap-y-2">
           <button type="submit">
-            <Btn text={"Update Captain"} className={"ml-12"} />
+            <Btn text={"Save Changes"} className={"ml-12"} />
           </button>
         </div>
       </div>

@@ -128,7 +128,7 @@ const UpdateTrip = () => {
         formik.setFieldValue("Images", res.data.imagesURLs);
         setImages(res.data.imagesURLs);
       } catch (err) {
-        console.log(err.data);
+        nav("/err404");
       }
     }
     getTrip();
@@ -184,7 +184,7 @@ const UpdateTrip = () => {
           </p>
         </div>
         <button type="submit">
-          <Btn text={"Publish Trip"} className={"mr-12"} />
+          <Btn text={"Save Changes"} className={"mr-12"} />
         </button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 ">

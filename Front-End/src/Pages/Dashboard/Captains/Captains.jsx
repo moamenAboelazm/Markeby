@@ -63,7 +63,7 @@ const Captains = () => {
       try {
         const res = await api.get(CAPTAINS_PAGED, {
           params: {
-            SearchTerm: e.target.value,
+            fullName: e.target.value,
           },
         });
         setCaptains(res.data.items);

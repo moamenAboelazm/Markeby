@@ -38,7 +38,7 @@ const Login = () => {
         cookies.set("reftoken", response.data.refreshToken);
         if (roleFromToken === "Admin") {
           cookies.set("role", roleFromToken);
-          nav("/dashboard");
+          nav("/dashboard/users");
         } else {
           nav("/");
         }
@@ -77,7 +77,7 @@ const Login = () => {
             <div className="flex flex-wrap justify-center -space-x-3">
               <img
                 className="size-12 rounded-full object-cover"
-                src="./public/assets/Bony.jpeg"
+                src="/assets/Bony.jpeg"
                 alt="userImage1"
               />
               <img

@@ -12,7 +12,7 @@ import { PiBoatFill } from "react-icons/pi";
 import { FaUser, FaUsers } from "react-icons/fa6";
 
 const Users = () => {
-  const head = ["profile","userName", "email", "age", "roles"];
+  const head = ["profile", "userName", "email", "age", "roles"];
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
@@ -42,7 +42,7 @@ const Users = () => {
             });
             setUsers(t.data.items);
             setTotalUsers(t.data.totalCount);
-            console.log(t)
+    
           });
       } catch (err) {
         console.log(err);
@@ -86,22 +86,25 @@ const Users = () => {
     <div>
       <div className="top flex justify-between items-center mb-[30px]">
         <div>
-          <h2 className="text-[50px] text-secondary font-bold">Users Management</h2>
+          <h2 className="text-[50px] text-secondary font-bold">
+            Users Management
+          </h2>
           <p className="text-gray-700 w-[480px] text-[17px]">
-           Overview of all users registered in the system, including their details and status.
+            Overview of all users registered in the system, including their
+            details and status.
           </p>
         </div>
-              <div className="px-2 py-3 w-[85%] mx-auto rounded-md shadow-md flex flex-wrap justify-between items-start hover:-translate-y-1.5 transition-all duration-300">
-                <FaUsers className="text-[40px]  text-background rounded-full bg-secondary" />
-                <div>
-                  <h3 className="text-[23px] text-primary uppercase font-light">
-                    Total Users
-                  </h3>
-                  <span className="text-primary text-[23px] font-bold">
-                    {totalUsers}
-                  </span>
-                </div>
-              </div>
+        <div className="px-2 py-3 w-[85%] mx-auto rounded-md shadow-md flex flex-wrap justify-between items-start hover:-translate-y-1.5 transition-all duration-300">
+          <FaUsers className="text-[40px]  text-background rounded-full bg-secondary" />
+          <div>
+            <h3 className="text-[23px] text-primary uppercase font-light">
+              Total Users
+            </h3>
+            <span className="text-primary text-[23px] font-bold">
+              {totalUsers}
+            </span>
+          </div>
+        </div>
       </div>
       <div className="bg-gray-100 shadow-md rounded-md">
         <div className="flex justify-between items-center py-[50px] w-[95%] mx-auto">
