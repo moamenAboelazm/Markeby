@@ -24,7 +24,11 @@ const Topbar = () => {
   ];
   return (
     <div className="fixed inset-0 w-full h-16 bg-background z-50 flex items-center justify-between px-[100px] shadow-md py-[40px]">
-      <div className="logo">
+      <div className="logo flex justify-between items-center">
+        <img
+          src="/assets/Logo.jpeg"
+          className="w-[50px] h-[50px] rounded-full"
+        />
         <h1 className="text-[35px] text-primary font-light uppercase letter-spacing-[2px]">
           Markeby
         </h1>

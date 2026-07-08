@@ -13,7 +13,7 @@ const ProtectedRoutes = () => {
         const res = await api.get(`Users/${id}`);
         setUser(res.data.lastName);
       } catch (err) {
-        nav("/");
+        nav("/err404");
       }
     }
     getCurrentUser();
@@ -26,10 +26,10 @@ const ProtectedRoutes = () => {
         ""
       )
     ) : (
-      <Navigate to={"/login"} replace={true} />
+      <Navigate to={"/err404"} replace={true} />
     )
   ) : (
-    <Navigate to={"/login"} replace={true} />
+    <Navigate to={"/err404"} replace={true} />
   );
 };
 

@@ -4,9 +4,10 @@ import Cookie from "universal-cookie";
 const LogOut = () => {
   const cookies = new Cookie();
   const handleLogout = () => {
-    cookies.remove("token");
-    cookies.remove("role");
-    window.location.href = "/login";
+    cookies.remove("token", { path: "/" });
+    cookies.remove("role", { path: "/" });
+    cookies.remove("reftoken", { path: "/" });
+    window.location.href = "/login"; // Redirect to login page or any other page
   };
   return (
     <button

@@ -7,6 +7,7 @@ import { PiDotOutlineFill } from "react-icons/pi";
 import Loader from "../../../Components/Website/Loader";
 import { MdSchedule } from "react-icons/md";
 import { AiTwotoneSchedule } from "react-icons/ai";
+import Gallery from "../../../Components/Utils/Gallery";
 
 const Protoflio = () => {
   const { id } = useParams();
@@ -27,6 +28,7 @@ const Protoflio = () => {
     }
     getTrip();
   }, [id]);
+  console.log(trip);
   if (loading) {
     return <Loader />;
   }
@@ -140,7 +142,7 @@ const Protoflio = () => {
         <h3 className="text-[27px] capitalize text-secondary font-semibold mb-[30px]">
           Gallery
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+        {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
           {trip.imagesURLs?.map((img, key) => {
             return (
               <img
@@ -151,7 +153,8 @@ const Protoflio = () => {
               />
             );
           })}
-        </div>
+        </div> */}
+        <Gallery images={trip.imagesURLs}/>
       </div>
     </div>
   );

@@ -34,7 +34,7 @@ const Table = (props) => {
                     {d["profilePhotoUrl"] !== null ? (
                       <img
                         className="w-[50px] h-[50px] rounded-full object-cover"
-                        src={`${IMGES_URL}${d["profilePhotoUrl"]}`}
+                        src={`${IMGES_URL}/${d["profilePhotoUrl"]}`}
                       />
                     ) : (
                       <p className="w-[70px] h-[70px] rounded-full bg-secondary flex items-center justify-center text-background text-[25px]">
@@ -68,7 +68,7 @@ const Table = (props) => {
                 ) : h === "capacity" ? (
                   <p className="text-[18px] font-medium">{d[h]} Pax</p>
                 ) : h === "amenities" ? (
-                  <div className="flex justify-between items-center text-[25px]">
+                  <div className="flex gap-x-3  text-[25px] w-[70px]">
                     <span className="text-secondary">
                       {d["hasWifi"] === true ? (
                         <MdOutlineWifi />
@@ -92,16 +92,17 @@ const Table = (props) => {
                   d["profileImgUrl"] !== null ? (
                     <Link to={`protoflio/${d["id"]}`}>
                       <img
-                        src={`${IMGES_URL}${d["profilePhotoUrl"]}`}
+                         src={`${IMGES_URL}${d["profileImgUrl"]}`}
                         className="w-[50px] h-[50px] rounded-full object-cover"
                       />
                     </Link>
                   ) : (
                     <Link
-                      to={`/protoflio/${d["id"]}`}
+                      to={`protoflio/${d["id"]}`}
                       className="w-[50px] h-[50px] rounded-full bg-gray-300 flex items-center justify-center text-[20px] font-bold text-tertiary"
                     >
-                      {d["userName"][0].toUpperCase()}
+                      {d["firstName"][0].toUpperCase()}
+                      {d["lastName"][0].toUpperCase()}
                     </Link>
                   )
                 ) : h === "roles" ? (

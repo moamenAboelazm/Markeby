@@ -79,7 +79,11 @@ const UpdateVessel = () => {
         formik.setFieldValue("Type", res.data.type);
         formik.setFieldValue("Images", res.data.images);
         setMainImage(res.data.mainImageUrl);
-      } catch {}
+      } catch (err) {
+        if (err.response?.status === 400) {
+          nav("/err404");
+        }
+      }
     }
     getVessel();
   }, [id]);
@@ -95,7 +99,7 @@ const UpdateVessel = () => {
       <div className="top flex justify-between items-center my-[30px]">
         <h2 className="text-[50px] text-primary font-bold">Update Vessel</h2>
         <button type="submit">
-          <Btn text={"Update"} className={"mr-12"} />
+          <Btn text={"Save Changes"} className={"mr-12"} />
         </button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 ">

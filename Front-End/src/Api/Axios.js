@@ -36,7 +36,7 @@ api.interceptors.response.use(
       } catch (err) {
         cookie.remove("token");
         cookie.remove("reftoken");
-        window.location.href = "/login";
+        window.location.href = "/err404"; // Redirect to login page or any other page
       }
     }
 
