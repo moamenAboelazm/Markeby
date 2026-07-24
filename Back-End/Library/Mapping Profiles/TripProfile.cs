@@ -41,6 +41,12 @@ namespace Library.Mapping_Profiles
                 .ForMember(dest => dest.BoatImg, opt => opt.MapFrom(src =>
                     src.Boat != null && src.Boat.Images != null && src.Boat.Images.Any() ? src.Boat.Images.FirstOrDefault().ImageUrl : null));
 
+            CreateMap<Trip, DtoTripforUser>()
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToString()))
+                .ForMember(dest => dest.BoatSeats, opt => opt.MapFrom(src => src.Boat.Capacity))
+                .ForMember(dest => dest.Img, opt => opt.MapFrom(src => src.Images != null && src.Images.Any() ? src.Images.FirstOrDefault().ImageUrl : null));      
+            
             CreateMap<Trip, DtoCaptainTripsTable>()
                 .ForMember(dest => dest.BoatName, opt => opt.MapFrom(src => src.Boat != null ? src.Boat.Name : string.Empty))
                 .ForMember(dest => dest.BoatImg, opt => opt.MapFrom(src =>src.Boat != null && src.Boat.Images != null && src.Boat.Images.Any()?
