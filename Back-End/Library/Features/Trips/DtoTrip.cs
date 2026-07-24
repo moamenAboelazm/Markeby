@@ -20,6 +20,22 @@ namespace Library.Features.Trips
         public string Status { get; set; } = string.Empty;
     }
 
+    public class DtoTripforUser
+    {
+        public Guid Id { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string StartLocation { get; set; } = string.Empty;
+        public decimal Price { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
+        public int BoatSeats { get; set; }
+        public int AvailableSeats { get; set; }
+        public string Type { get; set; } = string.Empty;
+        public string Status { get; set; } = string.Empty;
+        public string? Img { get; set; }
+    }
+
     public class DtoTripById
     {
         public Guid Id { get; set; }

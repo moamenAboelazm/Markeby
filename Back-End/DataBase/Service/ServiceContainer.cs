@@ -9,6 +9,7 @@ using Library.Features.Users.Queries;
 using Library.IRepository;
 using Library.MappingProfiles;
 using Library.Models;
+using Library.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -91,6 +92,7 @@ namespace DataBase.Service
             services.AddScoped<ITripRepository, TripRepository>();
             services.AddScoped<IBookingRepository, BookingRepository>();
             services.AddScoped<ICaptainRepository, CaptainRepository>();
+            services.AddScoped<IDashboardRepository, DashboardRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             // 7. Services & Managements
